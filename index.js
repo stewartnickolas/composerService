@@ -32,7 +32,15 @@ async function authRequired(req, res, next) {
     res.sendStatus(401);
 };
 
+app.use(express.static('public'));
 app.use('/composer', authRequired, require('./routers/composerRouter'));
+
+const errorHandler = (error, request, response, next) => {
+    // Error handling middleware functionality
+    log.error(error);
+    next(error);
+}
+app.use(errorHandler);
 
 (async () => {
     const dataLayer = require('./model/dataLayer');

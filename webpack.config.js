@@ -6,7 +6,7 @@ module.exports = {
     cache: true,
     output: {
         path: __dirname,
-        filename: './dist/composerAppDist.js'
+        filename: './public/composerAppDist.js'
     },
     module: {
         rules: [

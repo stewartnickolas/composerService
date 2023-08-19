@@ -80,6 +80,10 @@ async function loadFormId(formId, formName) {
                             f._type = 'module';
                             break;
                         }
+                        case 'com.preludedynamics.composer.data.elements.FieldData': {
+                            f._type = 'field';
+                            break;
+                        }
                     }
                 });
             })

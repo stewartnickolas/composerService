@@ -213,7 +213,7 @@ const WrappedHtml = (props) => {
           case 'date':
               const dateFormat = getStudyAttribute("date.format", props.studyStore.studyData.studyAttributes, "dd-mm-yyyy")
               return <span><input name={f.fieldName} placeholder={dateFormat} className={commonClassName} readOnly={true}/>
-                <img src="/vision/images/calendar.svg" class="calendar_anchor" style={{marginLeft: '-20px', paddingRight: '5px'}}/></span>;
+                <img src="/images/calendar.svg" class="calendar_anchor" style={{marginLeft: '-20px', paddingRight: '5px'}}/></span>;
           case 'time':
               return <input type="time" name={f.fieldName} placeholder={f.fieldPlaceholder} className={commonClassName} readOnly={f.readOnly}/>;
           case 'set.today':
@@ -291,7 +291,11 @@ const WrappedHtml = (props) => {
             );
           default:
               console.log("unrecognized field type:"  + f.fieldType);
+              console.log(f);
               return;
+              // return (
+              //   <div>Unkown</div>
+              // )
       }
   }
 

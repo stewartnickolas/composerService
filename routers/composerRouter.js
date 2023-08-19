@@ -15,6 +15,8 @@ router.get('/loadForm/:formId', async (req, res, next) => {
             const msg =  "No form found for id: " + req.params.formId;
             res.status(BAD_REQUEST).send(msg);
         } else {
+            const fs = require('fs');
+            fs.writeFileSync(__dirname + '/form.js', 'module.exports = ' + JSON.stringify(form, null, 4));
             res.json(form);
         }
     } catch (err) {
@@ -47,8 +49,13 @@ router.post('/saveForm', (req, res) => {
     // req.query.formRefId
 });
 
-router.post('/changeFormState', (req, res) => {
-    console.log(req.body);
+router.post('/changeFormState', async (req, res, next) => {
+    try {   
+        res.json(composerService.changeFormState(req.body));
+    } catch (err) {
+        log.error(err);
+        res.status(BAD_REQUEST).send(err);
+    }
 });
 
 router.post('/saveStudy', (req, res) => {
@@ -61,9 +68,9 @@ router.get('/loadStudy/:studyId', async (req, res, next) => {
             const msg =  "No study found for id: " + req.query.studyId;
             res.status(BAD_REQUEST).send(msg);
         } else {
-            const fs = require('fs');
-            fs.writeFileSync(__dirname + '/foo.js', 'module.exports = ' + JSON.stringify(study.toJSON(), null, 4));
-            res.json(require('./foo.js'));
+            // const fs = require('fs');
+            // fs.writeFileSync(__dirname + '/foo.js', 'module.exports = ' + JSON.stringify(study.toJSON(), null, 4));
+            res.json(study);
             // res.json(require('./cache/study'));
         }
     } catch (err) {

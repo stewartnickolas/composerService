@@ -65,17 +65,28 @@ function patchNullRows(form) {
     return corruptedSections.length > 0;
 }
 
-
 async function loadFormId(formId, formName) {
     const FormModel = await dataLayer.getModel("vision",dataLayer.model.ComposerForm);
     if (FormModel) {
-        const form = await FormModel.findById(dataLayer.makeId(formId));
+        let form = await FormModel.findById(dataLayer.makeId(formId));
         if (form) {
-            patchNullRows(form);
+            form = form.toJSON();
+            patchNullRows(form);            
+            (form.sections || []).forEach(section => {
+                section.fields = collectTypes(section, '_type', 'field');
+                (section.fields || []).forEach(f => {
+                    switch (f._class) {
+                        case 'com.preludedynamics.composer.data.elements.Module': {
+                            f._type = 'module';
+                            break;
+                        }
+                    }
+                });
+            })
             return form;
         }
     }
-    throw new Error(`${dataLayer.model.ComposerFor} not found`);
+    throw new Error(`${dataLayer.model.ComposerForm} not found`);
 }
 async function loadSnapshot(snapshotId) {
     const ComposerSnapshotModel = await dataLayer.getModel("vision",dataLayer.model.ComposerSnapshot);
@@ -97,9 +108,33 @@ async function loadStudy(studyId) {
     }
     throw new Error(`${dataLayer.model.ComposerStudy} not found`);
 }
+async function changeFormState(data) {
+    console.log(data.refId);
+    // const formRef = 
+    // FormRef formRef = (FormRef) data.studyData.findNode(ComposerElement.Type.formRef, data.refId);
+    // String state = data.state;
+}
 
+function collectTypes(object, propName, propValue, result = []) {
+    if (! object) return;
+    if (Array.isArray(object)) {
+        object.forEach(v => collectTypes(v, propName, propValue, result));
+        return result;
+    }
+    if (typeof object === 'object') {
+        if (object[propName] === propValue) {
+            result.push(object);
+            return result;
+        }
+        Object.keys(object).forEach(key => {
+            collectTypes(object[key], propName, propValue, result)
+        });
+    }
+    return result;
+}
 module.exports = {
     loadFormId,
     loadSnapshot,
-    loadStudy
+    loadStudy,
+    changeFormState
 }

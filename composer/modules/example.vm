@@ -1,0 +1,59 @@
+<div style="text-align: center">
+  <span class="nowrap">
+    <b style="font-size: 1.5em"> An Example Module </b>
+    <app:info>
+       Modules
+      are defined through a combination of two files.  A config.json file and a .vm template file.  All modules are stored
+      in the /global/composer/modules folder, and can be activated for a study by adding the name of the module (first part of the file name)
+      to the list of modules defined in the "Predefined Forms" section of the study setup.  Once a module has been enabled for the study,
+      it will appear as a module that can be dragged and dropped onto a form.
+      <p/>
+      In a module .vm file, you can use any standard JSP tags or HTML tags.  The .config.json file must be in a valid JSON format.  If you have trouble getting
+      a new custom module to display, check the log for parsing errors.
+    </app:info>  
+    <div class="small_text" style="color: #777">
+      This is a sample module to demonstrate the usage of the module feature of Composer.
+      <br/>
+      A module provides an easy way to add additional functionality to Composer through the use of VM templates. 
+    </div>
+  </span>
+  <br/>
+  Here's a $textField!
+  <app:info>
+    You can define pieces of a module that can be replaced with user provided values using standard Velocity Markup syntax, like the textField here.  
+    Each piece of the template that you allow a user to modify needs to be defined in the .config.json file as a 'field'.  Note: Use 'text' fields sparingly, and provide a description of the
+    expected input for each one, since there is currently no error checking applied to the values that users enter.  Use 'select' and 'checkbox' types where possible.
+  </app:info>
+
+  <table>
+    <tr>
+      <td class="heading_medium">
+        Toggled Section
+        <app:info>
+          Sometimes it may be useful to toggle sections of a template either on or off.  You can do that by using a 'checkbox' field type, 
+          which will translate to a true/false value in the template based on the user selection.  You can then use that value to drive a VM if statement.
+        </app:info>
+      </td>
+      <td class="heading_medium">
+        Select Option
+        <app:info>
+          Using a 'select' field type is a good way to limit user input to a set of pre-defined options.  In this example, it's simply displaying the value,
+          but it could also be used to drive more complex conditional logic.
+        </app:info>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        #if(${toggleSection})
+          You chose to show this section!
+        #else
+          <div style="color: #DDD">You chose to hide the section...</div>
+        #end
+      </td>
+      <td>
+        You chose this value from a list of options: $selectField
+      </td>
+    </tr>
+  </table>
+</div>
+

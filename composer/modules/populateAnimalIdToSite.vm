@@ -1,0 +1,4 @@
+#[[
+<jsp:useBean id="populateAnimalIdToSite" class="com.preludedynamics.composer.moduleSupport.PopulateAnimalIdToSite"/>
+${populateAnimalIdToSite.populate(currentForm, pageContext.getSession())}
+]]#

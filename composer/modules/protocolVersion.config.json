@@ -1,0 +1,6 @@
+{
+  "name": "protocolVersion",
+  "label": "Protocol Version",
+  "description": "Add this module to a site level form to control protocol version logic. Please contact your Prelude PM for additional setup instructions.",
+  "moduleType": "jspf"
+}

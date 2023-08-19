@@ -74,6 +74,7 @@ module.exports = {
     createMongoID,
     findById,
     model: {
-
+        ComposerForm:'ComposerForm',
+        ComposerSnapshot:'ComposerSnapshot'
     }
 }

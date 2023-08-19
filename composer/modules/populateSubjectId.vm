@@ -1,0 +1,21 @@
+<c:set var="fieldName" value="${fieldName}"/>
+<c:set var="categoryName" value="${categoryName}"/>
+#[[
+<jsp:useBean id="populateSubjectId" class="com.preludedynamics.composer.moduleSupport.PopulateSubjectIdToSite"/>
+${populateSubjectId.populate(currentForm, categoryName, fieldName, i, pageContext)}
+]]#
+
+## Need to remove the last row which is empty from the category
+<script>
+    $(document).ready(function () {
+      const patientListSize = ${patientListSize};
+      if (typeof(patientListSize) === 'number') {
+          const hasHeader = document.querySelectorAll('[data-section-name="${categoryName}"] td.heading_sticky').length != 0;
+          const rows = Array.from(document.querySelectorAll('[data-section-name="${categoryName}"] tr'));
+          const rowsToRemove = rows.slice(patientListSize + (hasHeader?1:0));
+          for (const r of rowsToRemove) {
+              r.parentNode.removeChild(r);
+          }
+      }
+    });
+</script>

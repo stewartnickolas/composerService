@@ -1,0 +1,4 @@
+<div>
+  <% String javaString = "some string"; %>
+  <app:text valueKey="example_jspf_field" value="<%= javaString %>"/>
+</div>

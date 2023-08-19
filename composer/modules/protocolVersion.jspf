@@ -1,0 +1,108 @@
+<app:category name="Protocol_Version_Effective">
+    <div id="section_1" class="sectionWrapper" data-section-name="Current_Version">
+        <div class="sectionHeader heading_high" style="margin: 0px;">
+   <span class="sectionLabel">
+    <app:label>
+        Protocol Version Effective
+    </app:label>
+   </span>
+        </div>
+        <div class="section">
+            <div class="errorsAndWarnings">
+                <jsp:include page="/components/errors_and_warnings.jsp">
+                    <jsp:param name="errorCategoryName" value="Protocol_Version_Effective" />
+                </jsp:include>
+            </div>
+            <div class="rowPublish center" id="row_1">
+                <table class="editTable" style="text-align: left; width: 100%; " id="table_0">
+                    <tr>
+                        <td class="heading_medium">
+                            <app:label unfiltered="true" styleClass="columnHeaderLabel">
+                                Protocol Version Effective
+                            </app:label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tableCellPublish showCells" style="text-align: center;  " title="Protocol Version Effective">
+                            <v:textLabel color="#000000" layoutOrientation="vertical" fieldLabelContentSource="text">
+                                Current Protocol Version in effect for this site:</br>
+                                <app:writeFormElement field="protocol_effective" />
+                            </v:textLabel>
+                            <app:hidden valueKey="protocol_effective" />
+                            <v:textLabel color="#000000" layoutOrientation="vertical" fieldLabelContentSource="text">
+                                Protocol Version does not go into effective until Protocol Version Number and Date Effective is entered. Date Effective must not be in the future.
+                            </v:textLabel>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</app:category>
+<app:category name="Protocol_Version" indexed="true">
+    <div id="section_0" class="sectionWrapper" data-section-name="Protocol_Version">
+        <div class="sectionHeader heading_high">
+   <span class="sectionLabel">
+    <app:label>
+        Protocol Version
+    </app:label>
+   </span>
+        </div>
+        <div class="section">
+            <div class="errorsAndWarnings">
+                <jsp:include page="/components/errors_and_warnings.jsp">
+                    <jsp:param name="errorCategoryName" value="Protocol_Version" />
+                </jsp:include>
+            </div>
+            <div class="rowPublish tableLeft" id="row_0">
+                <table class="editTable" style="text-align: left; width: 100%; " id="table0">
+                    <tr>
+                        <td></td>
+                        <td class="heading_medium heading_sticky">
+                            <app:label unfiltered="true" styleClass="columnHeaderLabel">
+                                Protocol Version Number
+                            </app:label>
+                        </td>
+                        <td class="heading_medium heading_sticky">
+                            <app:label unfiltered="true" styleClass="columnHeaderLabel">
+                                Date Effective
+                            </app:label>
+                        </td>
+                        <td class="heading_medium heading_sticky">
+                            <app:label unfiltered="true" styleClass="columnHeaderLabel">
+                                Protocol Upload
+                            </app:label>
+                        </td>
+                    </tr>
+                    <app:iterate id="table0" name="currentCategory" property="indexedList" indexId="i" offset="1">
+                        <app:constraint type="notBlank" fields="protocol_version_number,date_effective" errorHandle="warning">
+                            <app:trigger type="or" fields="protocol_version_number,date_effective" />
+                        </app:constraint>
+                        <calculate:setValue calculatedField="protocol_effective" fields="protocol_version_number">
+                            <app:trigger type="notBlank" fields="protocol_version_number,date_effective" />
+                            <app:trigger type="notFuture" fields="date_effective" />
+                        </calculate:setValue>
+                        <tr>
+                            <td class="tableCellIndex showCells" rowspan="1">${i}</td>
+                            <td class="tableCellPublish showCells" style="text-align: center;  " title="Protocol Version Number">
+                                <v:text valueKey="protocol_version_number" size="5" labelAlign="hidden" layoutOrientation="vertical">
+                                    Protocol Version Number
+                                </v:text>
+                            </td>
+                            <td class="tableCellPublish showCells" style="text-align: center;  " title="Date Effective">
+                                <v:date valueKey="date_effective" labelAlign="hidden" layoutOrientation="vertical">
+                                    Date Effective
+                                </v:date>
+                            </td>
+                            <td class="tableCellPublish showCells" style="text-align: center;  " title="Protocol Upload">
+                                <v:file valueKey="protocol_upload" layoutOrientation="vertical">
+                                    Upload File:
+                                </v:file>
+                            </td>
+                        </tr>
+                    </app:iterate>
+                </table>
+            </div>
+        </div>
+    </div>
+</app:category>

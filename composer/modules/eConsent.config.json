@@ -1,0 +1,64 @@
+{
+  "name": "eConsent",
+  "label": "eConsent Module",
+  "description": "Add this module to add eConsent.",
+  "fields": [
+    {
+      "name": "uploadLevel",
+      "label": "The level that the consent will be uploaded on",
+      "description": "Consent versions may be site-specific or study-wide",
+      "fieldType": "select",
+      "fieldOptions": [
+        {
+          "name": "site",
+          "label": "Site-specific"
+        },
+        {
+          "name": "study",
+          "label": "Study-wide"
+        }
+      ]
+    },
+    {
+      "name": "completeConsent",
+      "label": "File name of completed consent",
+      "description": "This will be the field name/file name of the completed consent document (ex. complete_consent)",
+      "fieldType": "text"
+    },
+    {
+      "name": "pdfForm",
+      "label": "Form name where consent versions will be uploaded",
+      "description": "Type in the full form path that the consent versions will be uploaded on (ex. form.name.econsent.uploads)",
+      "fieldType": "text"
+    },
+    {
+      "name": "roles_can_edit",
+      "label": "Role codes that can edit consent version dropdown",
+      "description": "These are the role codes that can edit the consent version dropdown",
+      "fieldType": "text"
+    },
+    {
+      "name": "enableWithdraw",
+      "label": "Enable consent withdraw option",
+      "description": "Choose to enable the ability to withdraw consent within module",
+      "fieldType": "select",
+      "fieldOptions": [
+        {
+          "name": "enable",
+          "label": "enable"
+        },
+        {
+          "name": "disable",
+          "label": "disable"
+        }
+      ]
+    },
+    {
+      "name": "completeConsentWithdraw",
+      "label": "File name of completed consent withdraw",
+      "description": "This will be the field name/file name of the completed consent withdraw document (ex. complete_consent_withdraw)",
+      "fieldType": "text"
+    }
+  ]
+}
+

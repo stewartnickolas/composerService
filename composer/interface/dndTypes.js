@@ -1,0 +1,15 @@
+export const DND_Type = {
+  GROUP: "group",
+  FORM: "formRef",
+  TOOL: "tool",
+  TOOL_TABLE: "toolTable",
+  TOOL_SECTION: "toolSection",
+  FIELD: "field",
+  MODULE: "module",
+  TABLE: "table",
+  SECTION: "section",
+  ROW: "row",
+  TRASH: "trash",
+  EDITCHECK: "editCheck",
+  COLUMN: "column",
+};

@@ -1,0 +1,403 @@
+#if ( !${require_change_reason} && ${require_change_reason} != false )
+## only if not defined for backwards compatibility
+## '!x' checks if x is not defined *or false*, 'x != false' then excludes cases where false
+  #set ( $require_change_reason = "true" )
+#end
+
+<table class="center">
+  <tr>
+    <td class="left">
+      <app:text valueKey="$med_name" #if ($cdash && !$cdash.isEmpty())
+                cdash="$cdash" #end #if ($roles_can_edit_field && !$roles_can_edit_field.isEmpty())
+                canEdit="$roles_can_edit_field" #end size="30" controlsDisplay="true" onchange="submit();" label="Medication Field"/>
+    </td>
+  </tr>
+  <tr>
+    <td class="left">
+      <span class="small_text"><app:label>Coded Medication (Active Ingredient) Name:</app:label></span><br/>
+      <span class="nowrap">
+        <app:display field="$med_name" value="'notBlank'" autoIndex="true" visible="true">
+          <app:autocomplete styleId="product_name" #if ($roles_can_edit && !$roles_can_edit.isEmpty()) canEdit="$roles_can_edit" #end requireChangeReason="$require_change_reason" db="VetAtc" valueKey="product_name" size="30" changesState="false" label="Product Name"/>
+          <app:displayToggleControl attributeName="moreInfo" autoIndex="true" scope="session" image="/vision/images/openClose.png"/>
+        </app:display>
+      </span>
+      <app:calculate type="DBLookup" db="VetAtc" fields="product_name" calculatedField="preferred_term"
+                     autoIndex="true" customArg="Atc Preferred Term" priority="-2"/>
+      <app:calculate type="DBLookup" db="VetAtc" fields="product_name" calculatedField="preferred_code"
+                     autoIndex="true" customArg="Atc Code" priority="-2"/>
+      <app:calculate type="DBLookupAtcPaths" db="VetAtc" fields="preferred_code" calculatedField="atc_code2"
+                     autoIndex="true" customArg="Code2" priority="-1"/>
+      <app:calculate type="DBLookupAtcPaths" db="VetAtc" fields="preferred_code" calculatedField="atc_term2"
+                     autoIndex="true" customArg="Text2" priority="-1"/>
+      <app:calculate type="DBLookupAtcPaths" db="VetAtc" fields="preferred_code" calculatedField="atc_code4"
+                     autoIndex="true" customArg="Code4" priority="-1"/>
+      <app:calculate type="DBLookupAtcPaths" db="VetAtc" fields="preferred_code" calculatedField="atc_term4"
+                     autoIndex="true" customArg="Text4" priority="-1"/>
+      <app:calculate type="DBLookupAtcPaths" db="VetAtc" fields="preferred_code" calculatedField="atc_code5"
+                     autoIndex="true" customArg="Code5" priority="-1"/>
+      <app:calculate type="DBLookupAtcPaths" db="VetAtc" fields="preferred_code" calculatedField="atc_term5"
+                     autoIndex="true" customArg="Text5" priority="-1"/>
+      <app:calculate type="DBLookupAtcPaths" db="VetAtc" fields="preferred_code" calculatedField="atc_code6"
+                     autoIndex="true" customArg="Code6" priority="-1"/>
+      <app:calculate type="DBLookupAtcPaths" db="VetAtc" fields="preferred_code" calculatedField="atc_term6"
+                     autoIndex="true" customArg="Text6" priority="-1"/>
+      <calculate:setBlank calculatedField="product_name" autoIndex="true" priority="-3" initializeBlank="false">
+        <app:trigger type="fieldChanged" fields="$med_name" autoIndex="true"/>
+      </calculate:setBlank>
+      <app:displayToggle makeHidden="true" attributeName="moreInfo" autoIndex="true" scope="session">
+        <p class="label smallish_font">
+          <app:label field="preferred_term">Preferred Term</app:label>
+        </p>
+        <p class="nowrap">
+          <app:line valueKey="preferred_term" readonly="true" styleClass="width_95"/>
+        </p>
+        <p class="label smallish_font">
+          <app:label field="preferred_code">Preferred Code</app:label>
+        </p>
+        <p class="nowrap">
+          <app:line valueKey="preferred_code" readonly="true" styleClass="width_95"/>
+        </p>
+        <p class="label smallish_font">
+          <app:label field="atc_term6">ATC Term (6)</app:label>
+        </p>
+        <p>
+          <app:line valueKey="atc_term6" readonly="true" styleClass="width_95"/>
+        </p>
+        <p class="label smallish_font">
+          <app:label field="atc_term5">ATC Term (5)</app:label>
+        </p>
+        <p>
+          <app:line valueKey="atc_term5" readonly="true" styleClass="width_95"/>
+        </p>
+        <p class="label smallish_font">
+          <app:label field="atc_term4">ATC Term (4)</app:label>
+        </p>
+        <p>
+          <app:line valueKey="atc_term4" readonly="true" styleClass="width_95"/>
+        </p>
+        <p class="label smallish_font">
+          <app:label field="atc_term2">ATC Term (2)</app:label>
+        </p>
+        <p>
+          <app:line valueKey="atc_term2" readonly="true" styleClass="width_95"/>
+        </p>
+        <p class="label smallish_font">
+          <app:label field="atc_code6">ATC Codes (6)</app:label>
+        </p>
+        <p>
+          <app:line valueKey="atc_code6" readonly="true" styleClass="width_95"/>
+        </p>
+      </app:displayToggle>
+      <app:hidden valueKey="atc_code5" label="ATC Code(5)"/>
+      <app:hidden valueKey="atc_code4" label="ATC Code(4)"/>
+      <app:hidden valueKey="atc_code2" label="ATC Code(2)"/>
+      #if(${additional_coding})
+        <br/>
+        <span class="nowrap">
+  <app:display field="$med_name" value="'notBlank'" autoIndex="true" visible="true">
+    <app:autocomplete styleId="product_2_name" #if ($roles_can_edit && !$roles_can_edit.isEmpty()) canEdit="$roles_can_edit" #end requireChangeReason="$require_change_reason" db="VetAtc" valueKey="product_2_name" size="30" changesState="false" label="Product Name"/>
+   <app:displayToggleControl attributeName="moreInfo_2" autoIndex="true" scope="session" image="/vision/images/openClose.png"/>
+ </app:display>
+</span>
+        <calculate:dbLookup db="VetAtc" fields="product_2_name" calculatedField="preferred_term_2"
+                            autoIndex="true" customArg="Atc Preferred Term" priority="-2"/>
+        <calculate:dbLookup db="VetAtc" fields="product_2_name" calculatedField="preferred_code_2"
+                            autoIndex="true" customArg="Atc Code" priority="-2"/>
+        <calculate:DBLookupAtcPaths db="VetAtc" fields="preferred_code_2" calculatedField="atc_code2_2"
+                                    autoIndex="true" customArg="Code2" priority="-1"/>
+        <calculate:DBLookupAtcPaths db="VetAtc" fields="preferred_code_2" calculatedField="atc_term2_2"
+                                    autoIndex="true" customArg="Text2" priority="-1"/>
+        <calculate:DBLookupAtcPaths db="VetAtc" fields="preferred_code_2" calculatedField="atc_code4_2"
+                                    autoIndex="true" customArg="Code4" priority="-1"/>
+        <calculate:DBLookupAtcPaths db="VetAtc" fields="preferred_code_2" calculatedField="atc_term4_2"
+                                    autoIndex="true" customArg="Text4" priority="-1"/>
+        <calculate:DBLookupAtcPaths db="VetAtc" fields="preferred_code_2" calculatedField="atc_code5_2"
+                                    autoIndex="true" customArg="Code5" priority="-1"/>
+        <calculate:DBLookupAtcPaths db="VetAtc" fields="preferred_code_2" calculatedField="atc_term5_2"
+                                    autoIndex="true" customArg="Text5" priority="-1"/>
+        <calculate:DBLookupAtcPaths db="VetAtc" fields="preferred_code_2" calculatedField="atc_code6_2"
+                                    autoIndex="true" customArg="Code6" priority="-1"/>
+        <calculate:DBLookupAtcPaths db="VetAtc" fields="preferred_code_2" calculatedField="atc_term6_2"
+                                    autoIndex="true" customArg="Text6" priority="-1"/>
+        <calculate:setBlank calculatedField="product_2_name" autoIndex="true" priority="-3" initializeBlank="false">
+          <app:trigger type="fieldChanged" fields="$med_name" autoIndex="true"/>
+        </calculate:setBlank>
+        <app:displayToggle makeHidden="true" attributeName="moreInfo_2" autoIndex="true" scope="session">
+          <p class="label smallish_font">
+            <app:label field="preferred_term_2">Preferred Term</app:label>
+          </p>
+          <p class="nowrap">
+            <app:line valueKey="preferred_term_2" readonly="true" styleClass="width_95"/>
+          </p>
+          <p class="label smallish_font">
+            <app:label field="preferred_code_2">Preferred Code</app:label>
+          </p>
+          <p class="nowrap">
+            <app:line valueKey="preferred_code_2" readonly="true" styleClass="width_95"/>
+          </p>
+          <p class="label smallish_font">
+            <app:label field="atc_term6_2">ATC Term (6)</app:label>
+          </p>
+          <p>
+            <app:line valueKey="atc_term6_2" readonly="true" styleClass="width_95"/>
+          </p>
+          <p class="label smallish_font">
+            <app:label field="atc_term5_2">ATC Term (5)</app:label>
+          </p>
+          <p>
+            <app:line valueKey="atc_term5_2" readonly="true" styleClass="width_95"/>
+          </p>
+          <p class="label smallish_font">
+            <app:label field="atc_term4_2">ATC Term (4)</app:label>
+          </p>
+          <p>
+            <app:line valueKey="atc_term4_2" readonly="true" styleClass="width_95"/>
+          </p>
+          <p class="label smallish_font">
+            <app:label field="atc_term2_2">ATC Term (2)</app:label>
+          </p>
+          <p>
+            <app:line valueKey="atc_term2_2" readonly="true" styleClass="width_95"/>
+          </p>
+          <p class="label smallish_font">
+            <app:label field="atc_code6_2">ATC Codes (6)</app:label>
+          </p>
+          <p>
+            <app:line valueKey="atc_code6_2" readonly="true" styleClass="width_95"/>
+          </p>
+        </app:displayToggle>
+        <app:hidden valueKey="atc_code5_2" label="ATC Code(5)"/>
+        <app:hidden valueKey="atc_code4_2" label="ATC Code(4)"/>
+        <app:hidden valueKey="atc_code2_2" label="ATC Code(2)"/>
+        <br/>
+        <span class="nowrap">
+  <app:display field="$med_name" value="'notBlank'" autoIndex="true" visible="true">
+    <app:autocomplete styleId="product_3_name" db="VetAtc" #if ($roles_can_edit && !$roles_can_edit.isEmpty()) canEdit="$roles_can_edit" #end requireChangeReason="$require_change_reason" valueKey="product_3_name" size="30" changesState="false" label="Product Name"/>
+   <app:displayToggleControl attributeName="moreInfo_3" autoIndex="true" scope="session" image="/vision/images/openClose.png"/>
+ </app:display>
+  </span>
+        <calculate:dbLookup db="VetAtc" fields="product_3_name" calculatedField="preferred_term_3"
+                            autoIndex="true" customArg="Atc Preferred Term" priority="-2"/>
+        <calculate:dbLookup db="VetAtc" fields="product_3_name" calculatedField="preferred_code_3"
+                            autoIndex="true" customArg="Atc Code" priority="-2"/>
+        <calculate:DBLookupAtcPaths db="VetAtc" fields="preferred_code_3" calculatedField="atc_code2_3"
+                                    autoIndex="true" customArg="Code2" priority="-1"/>
+        <calculate:DBLookupAtcPaths db="VetAtc" fields="preferred_code_3" calculatedField="atc_term2_3"
+                                    autoIndex="true" customArg="Text2" priority="-1"/>
+        <calculate:DBLookupAtcPaths db="VetAtc" fields="preferred_code_3" calculatedField="atc_code4_3"
+                                    autoIndex="true" customArg="Code4" priority="-1"/>
+        <calculate:DBLookupAtcPaths db="VetAtc" fields="preferred_code_3" calculatedField="atc_term4_3"
+                                    autoIndex="true" customArg="Text4" priority="-1"/>
+        <calculate:DBLookupAtcPaths db="VetAtc" fields="preferred_code_3" calculatedField="atc_code5_3"
+                                    autoIndex="true" customArg="Code5" priority="-1"/>
+        <calculate:DBLookupAtcPaths db="VetAtc" fields="preferred_code_3" calculatedField="atc_term5_3"
+                                    autoIndex="true" customArg="Text5" priority="-1"/>
+        <calculate:DBLookupAtcPaths db="VetAtc" fields="preferred_code_3" calculatedField="atc_code6_3"
+                                    autoIndex="true" customArg="Code6" priority="-1"/>
+        <calculate:DBLookupAtcPaths db="VetAtc" fields="preferred_code_3" calculatedField="atc_term6_3"
+                                    autoIndex="true" customArg="Text6" priority="-1"/>
+        <calculate:setBlank calculatedField="product_3_name" autoIndex="true" priority="-3" initializeBlank="false">
+          <app:trigger type="fieldChanged" fields="$med_name" autoIndex="true"/>
+        </calculate:setBlank>
+        <app:displayToggle makeHidden="true" attributeName="moreInfo_3" autoIndex="true" scope="session">
+          <p class="label smallish_font">
+            <app:label field="preferred_term_3">Preferred Term</app:label>
+          </p>
+          <p class="nowrap">
+            <app:line valueKey="preferred_term_3" readonly="true" styleClass="width_95"/>
+          </p>
+          <p class="label smallish_font">
+            <app:label field="preferred_code_3">Preferred Code</app:label>
+          </p>
+          <p class="nowrap">
+            <app:line valueKey="preferred_code_3" readonly="true" styleClass="width_95"/>
+          </p>
+          <p class="label smallish_font">
+            <app:label field="atc_term6_3">ATC Term (6)</app:label>
+          </p>
+          <p>
+            <app:line valueKey="atc_term6_3" readonly="true" styleClass="width_95"/>
+          </p>
+          <p class="label smallish_font">
+            <app:label field="atc_term5_3">ATC Term (5)</app:label>
+          </p>
+          <p>
+            <app:line valueKey="atc_term5_3" readonly="true" styleClass="width_95"/>
+          </p>
+          <p class="label smallish_font">
+            <app:label field="atc_term4_3">ATC Term (4)</app:label>
+          </p>
+          <p>
+            <app:line valueKey="atc_term4_3" readonly="true" styleClass="width_95"/>
+          </p>
+          <p class="label smallish_font">
+            <app:label field="atc_term2_3">ATC Term (2)</app:label>
+          </p>
+          <p>
+            <app:line valueKey="atc_term2_3" readonly="true" styleClass="width_95"/>
+          </p>
+          <p class="label smallish_font">
+            <app:label field="atc_code6_3">ATC Codes (6)</app:label>
+          </p>
+          <p>
+            <app:line valueKey="atc_code6_3" readonly="true" styleClass="width_95"/>
+          </p>
+        </app:displayToggle>
+        <app:hidden valueKey="atc_code5_3" label="ATC Code(5)"/>
+        <app:hidden valueKey="atc_code4_3" label="ATC Code(4)"/>
+        <app:hidden valueKey="atc_code2_3" label="ATC Code(2)"/>
+      #end
+    </td>
+  </tr>
+</table>
+
+<%--Calculations to push coding information to project level coding form--%>
+<%--account for missing form(s) to maintain backward compatibility--%>
+
+<c:set var="studyFormName" value="conmed.form.name.conmed.coding"/>
+<c:if test="${theStudy.configHasForm(studyFormName)}">
+  <app:present form="study:info.form.name.admin" field="conmed_project_coding">
+    <% String ownerId = currentForm.getOwner().getUniqueId();
+    pageContext.setAttribute("ownerId", ownerId);
+    %>
+    <%-- Coding #1 --%>
+    <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/product_name_${ownerId}"
+                        fields="product_name" autoIndex="true" priority="2" initializeBlank="false">
+      <app:trigger type="fieldChanged" autoIndex="true" fields="product_name"/>
+    </calculate:setValue>
+    <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/preferred_term_${ownerId}"
+                        fields="preferred_term" autoIndex="true" priority="2" initializeBlank="false">
+      <app:trigger type="fieldChanged" autoIndex="true" fields="product_name"/>
+    </calculate:setValue>
+    <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/preferred_code_${ownerId}"
+                        fields="preferred_code" autoIndex="true" priority="2" initializeBlank="false">
+      <app:trigger type="fieldChanged" autoIndex="true" fields="product_name"/>
+    </calculate:setValue>
+    <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_code6_${ownerId}"
+                        fields="atc_code6" autoIndex="true" priority="2" initializeBlank="false">
+      <app:trigger type="fieldChanged" autoIndex="true" fields="product_name"/>
+    </calculate:setValue>
+    <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_term6_${ownerId}"
+                        fields="atc_term6" autoIndex="true" priority="2" initializeBlank="false">
+      <app:trigger type="fieldChanged" autoIndex="true" fields="product_name"/>
+    </calculate:setValue>
+    <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_code5_${ownerId}"
+                        fields="atc_code5" autoIndex="true" priority="2" initializeBlank="false">
+      <app:trigger type="fieldChanged" autoIndex="true" fields="product_name"/>
+    </calculate:setValue>
+    <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_term5_${ownerId}"
+                        fields="atc_term5" autoIndex="true" priority="2" initializeBlank="false">
+      <app:trigger type="fieldChanged" autoIndex="true" fields="product_name"/>
+    </calculate:setValue>
+    <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_code4_${ownerId}"
+                        fields="atc_code4" autoIndex="true" priority="2" initializeBlank="false">
+      <app:trigger type="fieldChanged" autoIndex="true" fields="product_name"/>
+    </calculate:setValue>
+    <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_term4_${ownerId}"
+                        fields="atc_term4" autoIndex="true" priority="2" initializeBlank="false">
+      <app:trigger type="fieldChanged" autoIndex="true" fields="product_name"/>
+    </calculate:setValue>
+    <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_code2_${ownerId}"
+                        fields="atc_code2" autoIndex="true" priority="2" initializeBlank="false">
+      <app:trigger type="fieldChanged" autoIndex="true" fields="product_name"/>
+    </calculate:setValue>
+    <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_term2_${ownerId}"
+                        fields="atc_term2" autoIndex="true" priority="2" initializeBlank="false">
+      <app:trigger type="fieldChanged" autoIndex="true" fields="product_name"/>
+    </calculate:setValue>
+
+    #if(${additional_coding})
+      <%-- Coding #2 --%>
+      <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/product_2_name_${ownerId}"
+                          fields="product_2_name" autoIndex="true" priority="3" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="product_2_name"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/preferred_term_2_${ownerId}"
+                          fields="preferred_term_2" autoIndex="true" priority="3" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="product_2_name"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/preferred_code_2_${ownerId}"
+                          fields="preferred_code_2" autoIndex="true" priority="3" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="product_2_name"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_code6_2_${ownerId}"
+                          fields="atc_code6_2" autoIndex="true" priority="3" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="product_2_name"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_term6_2_${ownerId}"
+                          fields="atc_term6_2" autoIndex="true" priority="3" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="product_2_name"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_code5_2_${ownerId}"
+                          fields="atc_code5_2" autoIndex="true" priority="3" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="product_2_name"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_term5_2_${ownerId}"
+                          fields="atc_term5_2" autoIndex="true" priority="3" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="product_2_name"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_code4_2_${ownerId}"
+                          fields="atc_code4_2" autoIndex="true" priority="3" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="product_2_name"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_term4_2_${ownerId}"
+                          fields="atc_term4_2" autoIndex="true" priority="3" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="product_2_name"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_code2_2_${ownerId}"
+                          fields="atc_code2_2" autoIndex="true" priority="3" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="product_2_name"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_term2_2_${ownerId}"
+                          fields="atc_term2_2" autoIndex="true" priority="3" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="product_2_name"/>
+      </calculate:setValue>
+
+      <%-- Coding #3 --%>
+      <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/product_3_name_${ownerId}"
+                          fields="product_3_name" autoIndex="true" priority="3" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="product_3_name"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/preferred_term_3_${ownerId}"
+                          fields="preferred_term_3" autoIndex="true" priority="3" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="product_3_name"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/preferred_code_3_${ownerId}"
+                          fields="preferred_code_3" autoIndex="true" priority="3" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="product_3_name"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_code6_3_${ownerId}"
+                          fields="atc_code6_3" autoIndex="true" priority="3" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="product_3_name"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_term6_3_${ownerId}"
+                          fields="atc_term6_3" autoIndex="true" priority="3" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="product_3_name"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_code5_3_${ownerId}"
+                          fields="atc_code5_3" autoIndex="true" priority="3" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="product_3_name"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_term5_3_${ownerId}"
+                          fields="atc_term5_3" autoIndex="true" priority="3" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="product_3_name"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_code4_3_${ownerId}"
+                          fields="atc_code4_3" autoIndex="true" priority="3" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="product_3_name"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_term4_3_${ownerId}"
+                          fields="atc_term4_3" autoIndex="true" priority="3" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="product_3_name"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_code2_3_${ownerId}"
+                          fields="atc_code2_3" autoIndex="true" priority="3" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="product_3_name"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:conmed.form.name.conmed.coding/C${ownerId}/atc_term2_3_${ownerId}"
+                          fields="atc_term2_3" autoIndex="true" priority="3" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="product_3_name"/>
+      </calculate:setValue>
+    #end
+  </app:present>
+</c:if>

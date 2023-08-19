@@ -222,7 +222,7 @@ const ComposerForm = new Schema({
 
 }, { timestamps:true, collection: 'forms' });
 
-const ComposerSnapShot = new Schema({
+const ComposerSnapshot = new Schema({
 
     formData:{ // TODO This should be Form, no?
         clientId:String,
@@ -249,6 +249,6 @@ const ComposerSnapShot = new Schema({
 module.exports = {
     ComposerStudy: mongoose.model('studies', ComposerStudy),
     ComposerForm: mongoose.model('forms', ComposerForm),
-    ComposerSnapShot:mongoose.model('formSnapshot', ComposerSnapShot)
+    ComposerSnapshot:mongoose.model('formSnapshot', ComposerSnapshot)
 }
 

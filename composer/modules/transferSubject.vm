@@ -1,0 +1,24 @@
+  <tr>
+    <td class="heading_medium" colspan="10"><app:label>Transfer</app:label> <app:label>patient.word</app:label></td>
+  </tr>
+  <tr>
+    <td class="right lightly_boxed" width='50%'>
+      Transfer to <app:label>site.id</app:label>:
+      <app:select valueKey="move_to_site" size="1" changesState="false" #if ($roles_can_edit && !$roles_can_edit.isEmpty()) canEdit="$roles_can_edit" #end>
+        <app:option value=""></app:option>
+        <% for (Site aSite : theStudy.getSiteList()) {%>
+        <app:option value="<%=aSite.getUniqueId()%>"><%=aSite.getName()%></app:option>
+        <% }%>
+      </app:select>
+    </td>
+    <td class="left lightly_boxed" width='50%'>
+      When: <app:text readonly="true" valueKey="when_moved" size="30" reinitialize="false" />
+      <calculate:movePatient fields="move_to_site" calculatedField="when_moved" priority="50" initializeBlank="false">
+        <app:trigger type="fieldChanged" fields="move_to_site"/>
+      </calculate:movePatient>
+      <app:hidden valueKey="transfer_date"/>
+      <calculate:subString calculatedField="transfer_date" fields="when_moved" value="11" priority="51" recalculate="false" initializeBlank="false">
+        <app:trigger type="notBlank" fields="when_moved"/>
+      </calculate:subString>
+    </td>
+  </tr>

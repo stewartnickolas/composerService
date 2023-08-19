@@ -1,0 +1,7 @@
+{
+  "name": "loginProfile",
+  "label": "Login Profile Module",
+  "description": "Add this module to add the Subject/Owner Profile to any jsp.",
+  "moduleType": "jspf"
+}
+

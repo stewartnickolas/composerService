@@ -1,0 +1,13 @@
+{
+  "name": "transferSubject",
+  "label": "Transfer Subject",
+  "description": "Transfers a subject from one site to another. This module should be added to a Section on a Composer form.",
+  "fields": [
+    {
+      "name": "roles_can_edit",
+      "label": "Role codes that can transfer subject",
+      "description": "These are the role codes that can transfer a subject. If left blank, the edit privileges will be applied from the Form Permissions.",
+      "fieldType": "text"
+    }
+  ]
+}

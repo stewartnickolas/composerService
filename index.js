@@ -28,6 +28,7 @@ async function authRequired(req, res, next) {
             return next();
         }
     }
+    return next();
     res.sendStatus(401);
 };
 

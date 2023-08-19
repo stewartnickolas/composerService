@@ -1,0 +1,94 @@
+<app:text valueKey="$med_name" styleClass="width_90" controlsDisplay="true"/>
+<app:category name="Coding" canEdit="$roles_can_edit" indexed="true">
+    <app:display field="$med_name" value="'notBlank'" visible="false" autoIndex="true">
+        <table class="normal_no_bottom_border small_font">
+            <tr>
+                <td class="heading_low" colspan=2><app:label>Coded Name:</app:label></td>
+            </tr>
+            <app:constraint id="in the dictionary" type="matchDictionary" autoIndex="true" fields="coded_name" db="WhoDrugDB" errorHandle="warning"/>
+            <tr>
+                <td class="center lightly_boxed" colspan="2">
+                    <app:autocomplete styleId="coded_name" db="WhoDrugDB" valueKey="coded_name" size="30" changesState="false"/>
+                    <app:displayToggleControl attributeName="codes" scope="session" autoIndex="true"/>
+                </td>
+            </tr>
+            <app:displayToggle htmlTag="tr" makeHidden="true" attributeName="codes" autoIndex="true" scope="session">
+                <td class="center lightly_boxed"> </td>
+                <td class="left lightly_boxed nowrap">
+                    <table class="center">
+                        <tr>
+                            <td class="right" width="25%">Generic:</td>
+                            <td class="left">
+                                <span class="blue_text nowrap"><app:radio valueKey="generic" readonly="true" value="Y"/>Yes</span>
+                                <span class="blue_text nowrap"><app:radio valueKey="generic" readonly="true" value="N"/>No</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="right">Preferred:</td>
+                            <td class="left">
+                                <span class="blue_text nowrap"><app:radio valueKey="preferred" readonly="true" value="Y"/>Yes</span>
+                                <span class="blue_text nowrap"><app:radio valueKey="preferred" readonly="true" value="N"/>No</span>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </app:displayToggle>
+            <app:displayToggle htmlTag="tr" makeHidden="true" attributeName="codes" autoIndex="true" scope="session">
+                <td class="right lightly_boxed"><app:label>Drug Name/Code</app:label></td>
+                <td class="left lightly_boxed">
+                    <app:text valueKey="drug_name" readonly="true"/> /
+                    <app:text valueKey="drug_code" readonly="true" size="11"/>
+                </td>
+            </app:displayToggle>
+            <app:displayToggle htmlTag="tr" makeHidden="true" attributeName="codes" autoIndex="true" scope="session">
+                <td class="right lightly_boxed"><app:label>Ingredients</app:label></td>
+                <td class="left lightly_boxed">
+                    <app:text valueKey="ingredients" readonly="true"/>
+                </td>
+            </app:displayToggle>
+            <app:displayToggle htmlTag="tr" makeHidden="true" attributeName="codes" autoIndex="true" scope="session">
+                <td class="right lightly_boxed"><app:label>ATC Term/Code (4)</app:label></td>
+                <td class="left lightly_boxed nowrap">
+                    <app:text valueKey="atc_term4" readonly="true"/> /
+                    <app:text valueKey="atc_code4" readonly="true" size="10"/>
+                </td>
+            </app:displayToggle>
+            <app:displayToggle htmlTag="tr" makeHidden="true" attributeName="codes" autoIndex="true" scope="session">
+                <td class="right lightly_boxed"><app:label>ATC Term/Code (3)</app:label></td>
+                <td class="left lightly_boxed nowrap">
+                    <app:text valueKey="atc_term3" readonly="true"/> /
+                    <app:text valueKey="atc_code3" readonly="true" size="10"/>
+                </td>
+            </app:displayToggle>
+            <app:displayToggle htmlTag="tr" makeHidden="true" attributeName="codes" autoIndex="true" scope="session">
+                <td class="right lightly_boxed"><app:label>ATC Term/Code (2)</app:label></td>
+                <td class="left lightly_boxed nowrap">
+                    <app:text valueKey="atc_term2" readonly="true"/> /
+                    <app:text valueKey="atc_code2" readonly="true" size="10"/>
+                </td>
+            </app:displayToggle>
+            <app:displayToggle htmlTag="tr" makeHidden="true" attributeName="codes" autoIndex="true" scope="session">
+                <td class="right lightly_boxed"><app:label>ATC Term/Code (1)</app:label></td>
+                <td class="left lightly_boxed nowrap">
+                    <app:text valueKey="atc_term1" readonly="true"/> /
+                    <app:text valueKey="atc_code1" readonly="true" size="10"/>
+                </td>
+            </app:displayToggle>
+        </table>
+    </app:display>
+</app:category>
+<calculate:dbLookup db="WhoDrugDB" calculatedField="drug_name" fields="coded_name" autoIndex="true" customArg="Drug Name" priority="1"/>
+<calculate:dbLookup db="WhoDrugDB" calculatedField="drug_code" fields="coded_name" autoIndex="true" customArg="Drug Code" priority="1"/>
+<calculate:dbLookup db="WhoDrugDB" calculatedField="ingredients" fields="coded_name" autoIndex="true" customArg="Ingredients" priority="1"/>
+<calculate:dbLookup db="WhoDrugDB" calculatedField="generic" fields="coded_name" autoIndex="true" customArg="Generic" priority="1"/>
+<calculate:dbLookup db="WhoDrugDB" calculatedField="preferred" fields="coded_name" autoIndex="true" customArg="Preferred" priority="1"/>
+<calculate:dbLookup db="WhoDrugDB" calculatedField="atc_term4" fields="coded_name" autoIndex="true" customArg="Atc Text" priority="1"/>
+<calculate:dbLookup db="WhoDrugDB" calculatedField="atc_code4" fields="coded_name" autoIndex="true" customArg="Atc Code" priority="1"/>
+
+<calculate:dbLookupWhoAtcPaths db="WhoAtc" calculatedField="atc_code1" fields="atc_code4" autoIndex="true" customArg="Code1" priority="2"/>
+<calculate:dbLookupWhoAtcPaths db="WhoAtc" calculatedField="atc_term1" fields="atc_code4" autoIndex="true" customArg="Text1" priority="2"/>
+<calculate:dbLookupWhoAtcPaths db="WhoAtc" calculatedField="atc_code2" fields="atc_code4" autoIndex="true" customArg="Code2" priority="2"/>
+<calculate:dbLookupWhoAtcPaths db="WhoAtc" calculatedField="atc_term2" fields="atc_code4" autoIndex="true" customArg="Text2" priority="2"/>
+<calculate:dbLookupWhoAtcPaths db="WhoAtc" calculatedField="atc_code3" fields="atc_code4" autoIndex="true" customArg="Code3" priority="2"/>
+<calculate:dbLookupWhoAtcPaths db="WhoAtc" calculatedField="atc_term3" fields="atc_code4" autoIndex="true" customArg="Text3" priority="2"/>
+                

@@ -1,0 +1,5 @@
+<bean:define id="sitePatients" name="theSite" property="patientList"/>
+<app:select valueKey="$fieldName">
+    <app:option value=""></app:option>
+    <app:optionsFromFormOwner form="$subjectLevelForm" ownerType="patient" field="$subjectLevelField" population="sitePatients"/>
+</app:select>

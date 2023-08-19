@@ -1,0 +1,25 @@
+{
+  "name": "selectSubjectData",
+  "label": "Select Subject Data",
+  "description": "This module adds a dropdown of all options inputted into a field on the subject level in the specific site (ex. dropdown list of all subject IDs in the site).",
+  "fields": [
+    {
+      "name": "fieldName",
+      "label": "Field Name",
+      "description": "Field name of the dropdown",
+      "fieldType": "text"
+    },
+    {
+      "name": "subjectLevelForm",
+      "label": "Form name on the subject level",
+      "description": "The subject level form name where the field is (ex. demographics.form.name.demographics).",
+      "fieldType": "text"
+    },
+    {
+      "name": "subjectLevelField",
+      "label": "Field name on the subject level",
+      "description": "The field name that you would like to use as options in the dropdown (ex. subject_id).",
+      "fieldType": "text"
+    }
+  ]
+}

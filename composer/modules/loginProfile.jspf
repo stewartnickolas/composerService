@@ -1,0 +1,455 @@
+<%@page import="com.bobbingsoftware.generator.PasswordGenerator"%>
+<%@page import="com.perceptivec.form.editCheck.calculation.CalculationErrorException"%>
+<%@ include file="/components/doctype.jspf" %>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.*" %>
+<%--The following are required values passed in to the page_header.jspf--%>
+<% String title_key = null;%>
+<% String page_orientation = "landscape";
+%>
+<%-----------------------------------------------------------------------%>
+<%--
+String userAgent = request.getHeader("User-Agent") != null ? request.getHeader("User-Agent").toLowerCase() : "";
+  boolean android = userAgent.contains("android");
+  boolean ios = userAgent.contains("ipad") || userAgent.contains("ipod") || userAgent.contains("iphone");--%>
+<%--<script>
+  $(document).ready(function(){
+    initMarks();
+  });
+</script> --%>
+<script type="text/javascript" src="/vision/interface/js/utils.js"></script>
+<script type="text/javascript" src="../vasScaleScoring.js"></script>
+<script type="text/javascript" src="/vision/interface/js/jquery-ui.1.11.4.js?2"></script>
+
+<logic:equal name='<%= Constants.STUDY_KEY%>' property="allowsPatientLogon" value="true">
+    <% if (!"Z".contains(loggedOnUser.getRoleCode())) {%>
+    <app:category name="Patient_Profile" canExport="false">
+        <table class="dont_print normal_no_bottom_border" summary="profile">
+            <tr>
+                <td colspan="10">
+                  <jsp:include page="/components/errors_and_warnings_page.jsp"/>
+                  <app:hidden valueKey="password_is_now_readonly" canExport="false" label="Password is now read-only"/>
+                </td>
+              </tr>
+              <calculate:setValue calculatedField="password_is_now_readonly" value="true" priority="2">
+                <app:trigger type="plausibleEmail" fields="notification_address"/>
+                <app:trigger type="match" fields="patient_password,patient_password_confirm"/>
+              </calculate:setValue>
+              <calculate:setBlank calculatedField="resend_login_info" priority="21" initializeBlank="false">
+                <app:trigger type="fieldChanged" fields="resend_login"/>
+              </calculate:setBlank>
+            </table>
+          </app:category>
+          <% }%>
+        </logic:equal>
+        <app:constraint type="plausibleEmail" fields="notification_address" errorHandle="warning">
+          <app:trigger type="equals" fields="notification_preference" value="email"/>
+        </app:constraint>
+        <app:constraint type="lessThanState" fields="disable_login" value="form.state.in.review" errorMsg="Login should be disabled before form can be reviewed." errorHandle="warning">
+          <app:trigger type="blank" fields="disable_login"/>
+        </app:constraint>
+        <logic:equal name='<%= Constants.STUDY_KEY%>' property="allowsPatientLogon" value="true">
+          <app:category name="Patient_Profile" canExport="false">
+            <table class="dont_print normal_table" summary="profile">
+              <tr>
+                <td colspan="9">
+                  <jsp:include page="/components/errors_and_warnings.jsp">
+                    <jsp:param name="errorCategoryName" value="Patient_Profile" />
+                  </jsp:include>
+                </td>
+              </tr>
+              <app:constraint type="and" fields="email_address">
+                <app:trigger type="blank" fields="disable_login"/>
+              </app:constraint>
+              <app:constraint type="notBlank" fields="notification_preference"/>
+              <app:constraint type="and" fields="phone_number">
+                <app:trigger type="equals" fields="notification_preference" value="text"/>
+                <app:trigger type="blank" fields="disable_login"/>
+              </app:constraint>
+              <tr>
+                <td class="bottom_padded top_padded center" colspan="10">Username: <span class="blue_text">
+                    <%
+                      String usernameForm = theStudy.getAttribute("patient.logon.username.form");
+                      String usernameField = theStudy.getAttribute("patient.logon.username.field");
+                      String demographicsForm = theStudy.getAttribute("patient.demographics");
+                      String identifierForm = demographicsForm;
+                      String identifierFieldName = theStudy.getIdFieldName(Constants.VIEW_PATIENT_KEY);
+                      if (Form.hasValue(usernameForm) && Form.hasValue(usernameField)) {
+                        identifierForm = usernameForm;
+                        identifierFieldName = usernameField;
+                      }
+                    %>
+                    <app:writeFormElement name='<%= Constants.PATIENT_KEY%>' form="<%=identifierForm%>"
+                                          formField="<%=identifierFieldName%>"/>
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td class="heading_medium" colspan="4"><app:label field="notification_preference">Signup Notification Preference</app:label>
+                  <app:hidden valueKey="notification_address" label="Notification address"/>
+                  <app:hidden valueKey="notify_login_changed" label="Notify of login change"/>
+                  <app:hidden valueKey="notify_initial_login" label="Notify of initial login"/>
+                </td>
+              </tr>
+
+              <app:display htmlTag="tr" field="logon_not_done" value="'blank'" visible="true">
+                <td class="lightly_boxed center" colspan="4">
+                  <table align="center">
+                    <tr>
+                      <td class="nowrap blue_text">
+                        <app:radio valueKey="notification_preference" value="email"/>Email&nbsp;&nbsp;
+                        <app:radio valueKey="notification_preference" value="text"/>Text
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </app:display>
+              <tr>
+                <td class="heading_medium" rowspan="2" width="25%">
+                  Email Address
+                </td>
+                <td class="heading_medium" rowspan="2" width="25%">
+                  Text<br/>
+                  <span class="smallish_font">Enter telephone number (without dashes)</span>
+                </td>
+                <td class="heading_medium" colspan="2" width="50%">
+                  <app:checkbox valueKey="resend_login_info" controlsDisplay="true" showChanges="false" label="Resend login checkbox"/>Check box to resend Login information
+                  <app:hidden valueKey="resend_login" label="Resend login calculation"/>
+                  <app:hidden valueKey="auto_generate_password" label="Auto-generate password"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="heading_medium" width="25%">
+                  Password<br/>
+                  <span class="smallish_font">Enter initial Password and Confirm<br/>(or leave blank to auto generate).</span>
+                </td>
+                <td class="heading_medium" width="25%">Confirm Password</td>
+              </tr>
+
+                <%--Notification addresses calculations--%>
+              <calculate:setBlank calculatedField="notification_address" priority="1" initializeBlank="false" >
+                <app:trigger type="equals" fields="disable_login" value="on"/>
+              </calculate:setBlank>
+              <calculate:setBlank calculatedField="email_address" priority="1" initializeBlank="false">
+                <app:trigger type="equals" fields="disable_login" value="on"/>
+              </calculate:setBlank>
+              <calculate:setBlank calculatedField="phone_number" priority="1" initializeBlank="false">
+                <app:trigger type="equals" fields="disable_login" value="on"/>
+              </calculate:setBlank>
+
+
+              <calculate:setValue calculatedField="notification_address" fields="email_address" priority="1">
+                <app:trigger type="equals" fields="notification_preference" value="email"/>
+                <app:trigger type="blank" fields="disable_login"/>
+              </calculate:setValue>
+              <calculate:setValue calculatedField="notification_address" fields="phone_number" priority="1.1">
+                <app:trigger type="equals" fields="notification_preference" value="text"/>
+                <app:trigger type="blank" fields="disable_login"/>
+              </calculate:setValue>
+
+              <%
+                final Context context = new Context(pageContext);
+                class SetPassword extends com.perceptivec.form.editCheck.calculation.AbstractCalculation {
+
+                  @Override
+                  public String calculate() throws CalculationErrorException {
+                    LOG.debug("SetPassword.calculate for " + context.formOwner);
+                    final PasswordGenerator passwordGenerator = new PasswordGenerator(RANDOM, "Abcdefg1".toCharArray());
+                    final String newPassword = passwordGenerator.get(0);
+                    context.formOwner.setPassword(newPassword);
+                    return newPassword;
+                  }
+                }
+                com.perceptivec.form.editCheck.calculation.Calculation.SCRIPTLET = new SetPassword();
+              %>
+              <calculate:scriptlet calculatedField="patient_password" priority="2" initializeBlank="false">
+                <app:trigger type="notBlank" fields="disable_login"/>
+              </calculate:scriptlet>
+              <app:notPresent field="disable_login">
+                <%--first calc to auto generate pw if user's preference is email (must be plausible email address)--%>
+                <calculate:setValue calculatedField="auto_generate_password" value="on" priority="1.2" recalculate="true">
+                  <app:trigger type="plausibleEmail" fields="notification_address"/>
+                  <app:trigger type="equals" fields="notification_preference" value="email"/>
+                  <app:trigger type="notBlank" fields="notification_address"/>
+                  <app:trigger type="blank" fields="disable_login"/>
+                  <app:trigger type="blank" fields="patient_password"/>
+                  <app:trigger type="blank" fields="patient_password_confirm"/>
+                </calculate:setValue>
+                <%--second calc to auto generate pw if user's preference is text--%>
+                <calculate:setValue calculatedField="auto_generate_password" value="on" priority="1.2" recalculate="true">
+                  <app:trigger type="equals" fields="notification_preference" value="text"/>
+                  <app:trigger type="notBlank" fields="notification_address"/>
+                  <app:trigger type="minCharacters" fields="notification_address" value="10"/>
+                  <app:trigger type="blank" fields="disable_login"/>
+                  <app:trigger type="blank" fields="patient_password"/>
+                  <app:trigger type="blank" fields="patient_password_confirm"/>
+                </calculate:setValue>
+                <%-- Two password fields must be entered/set on the same save to update patient profile.
+                If save is done before two password fields match then both password fields are blanked out to force user to re-enter passwords.
+                The priority is set after auto_generate_password is turned on. --%>
+                <app:hidden valueKey="passwords_dont_match" canExport="false" label="Passwords don't match"/>
+                <calculate:setValue calculatedField="passwords_dont_match" priority="1.3" value="true">
+                  <app:trigger type="notMatch" fields="patient_password,patient_password_confirm" />
+                  <app:trigger type="blank" fields="disable_login"/>
+                </calculate:setValue>
+                <%-- Two additional calcs since above notMatch only compares fields with data entered --%>
+                <calculate:setValue calculatedField="passwords_dont_match" priority="1.3" value="true">
+                  <app:trigger type="notBlank" fields="patient_password" />
+                  <app:trigger type="blank" fields="patient_password_confirm" />
+                  <app:trigger type="blank" fields="disable_login"/>
+                </calculate:setValue>
+                <calculate:setValue calculatedField="passwords_dont_match" priority="1.3" value="true">
+                  <app:trigger type="blank" fields="patient_password" />
+                  <app:trigger type="notBlank" fields="patient_password_confirm" />
+                  <app:trigger type="blank" fields="disable_login"/>
+                </calculate:setValue>
+                <%-- Blanking out passwords if they don't match --%>
+                <calculate:setBlank calculatedField="patient_password" doNotInitializeBlank="true" priority="2">
+                  <app:trigger type="equals" fields="passwords_dont_match" value="true" />
+                  <app:trigger type="blank" fields="disable_login"/>
+                </calculate:setBlank>
+                <calculate:setBlank calculatedField="patient_password_confirm" doNotInitializeBlank="true" priority="2">
+                  <app:trigger type="equals" fields="passwords_dont_match" value="true" />
+                  <app:trigger type="blank" fields="disable_login"/>
+                </calculate:setBlank>
+                <%-- Let users know that passwords don't match --%>
+                <app:constraint type="notBlank" fields="patient_password" errorHandle="error" errorMsg="'Password' must match the 'Confirm Password'.">
+                  <app:trigger type="equals" fields="passwords_dont_match" value="true" />
+                  <app:trigger type="blank" fields="disable_login"/>
+                </app:constraint>
+                <%-- end password match logic --%>
+                <%-- begin password min 6 character logic (similar to above password match logic. See note) --%>
+                <app:hidden valueKey="password_passes_size_check" canExport="true" value="true" label="Password passes size check?"/>
+                <calculate:setValue calculatedField="password_passes_size_check" priority="1.3" value="true">
+                  <app:trigger type="minCharacters" fields="patient_password" value="6" />
+                  <app:trigger type="blank" fields="disable_login"/>
+                </calculate:setValue>
+                <calculate:setValue calculatedField="password_passes_size_check" priority="1.3" value="true">
+                  <app:trigger type="blank" fields="patient_password"/>
+                  <app:trigger type="blank" fields="disable_login"/>
+                </calculate:setValue>
+                <calculate:setValue calculatedField="patient_password" doNotInitializeBlank="true" priority="2" value="">
+                  <app:trigger type="blank" fields="password_passes_size_check" />
+                  <app:trigger type="blank" fields="disable_login"/>
+                </calculate:setValue>
+                <calculate:setValue calculatedField="patient_password_confirm" doNotInitializeBlank="true" priority="2" value="">
+                  <app:trigger type="blank" fields="password_passes_size_check" />
+                  <app:trigger type="blank" fields="disable_login"/>
+                </calculate:setValue>
+                <app:constraint type="notBlank" fields="patient_password" errorHandle="error" errorMsg="Field 'patient password' must have at least 6 characters.">
+                  <app:trigger type="blank" fields="password_passes_size_check" />
+                  <app:trigger type="blank" fields="disable_login"/>
+                </app:constraint>
+                <%
+                  class BlankPassword extends com.perceptivec.form.editCheck.calculation.AbstractCalculation {
+
+                    @Override
+                    public String calculate() throws CalculationErrorException {
+                      LOG.debug("BlankPassword.calculate for " + context.formOwner);
+                      context.formOwner.setPassword("");
+                      return "";
+                    }
+                  }
+                  com.perceptivec.form.editCheck.calculation.Calculation.SCRIPTLET = new BlankPassword();
+                %>
+                <app:hidden valueKey="blank_password" canExport="false" label="Blank password"/>
+                <calculate:scriptlet calculatedField="blank_password" priority="2" initializeBlank="false" recalculate="true">
+                  <app:trigger type="blank" fields="password_passes_size_check" />
+                  <app:trigger type="blank" fields="disable_login"/>
+                </calculate:scriptlet>
+                <%-- end password min 6 character logic --%>
+                <%
+                  final Context context1 = new Context(pageContext);
+                  class SetPassword1 extends com.perceptivec.form.editCheck.calculation.AbstractCalculation {
+
+                    @Override
+                    public String calculate() throws CalculationErrorException {
+                      LOG.debug("SetPassword.calculate for " + context.formOwner);
+                      final PasswordGenerator passwordGenerator = new PasswordGenerator(RANDOM, "Abcdefg1".toCharArray());
+                      final String newPassword = passwordGenerator.get(0);
+                      context.formOwner.setPassword(newPassword);
+                      return newPassword;
+                    }
+                  }
+                  com.perceptivec.form.editCheck.calculation.Calculation.SCRIPTLET = new SetPassword();
+                %>
+                <calculate:scriptlet calculatedField="patient_password" priority="3" initializeBlank="false" recalculate="true">
+                  <app:trigger type="equals" fields="auto_generate_password" value="on"/>
+                </calculate:scriptlet>
+                <calculate:setValue calculatedField="patient_password_confirm" fields="patient_password" priority="4" initializeBlank="false">
+                  <app:trigger type="equals" fields="auto_generate_password" value="on"/>
+                  <app:trigger type="fieldChanged" fields="patient_password"/>
+                </calculate:setValue>
+              </app:notPresent>
+
+                <%--Calculations: notifications - initial, password change, notification address change, resend--%>
+                <%--notify initial login calc if notification preference is email--%>
+              <app:calculate type="notify" calculatedField="notify_initial_login" roles="formField:notification_address" recalculate="false" initializeBlank="false"
+                             fields='<%="patient_password," + identifierForm + "/" + identifierFieldName%>' priority="19"
+                             expression="This is a notification that your logon password has been set to %. Your username is %. When you first logon, please click on the Login Profile tab and enter a forgotten password prompt and answer." >
+                <app:trigger type="notBlank" fields="patient_password"/>
+                <app:trigger type="equals" fields="notification_preference" value="email"/>
+                <app:trigger type="match" fields="patient_password,patient_password_confirm"/>
+                <app:trigger type="plausibleEmail" fields="notification_address"/>
+                <app:trigger type="blank" fields="disable_login"/>
+              </app:calculate>
+
+                <%--notify initial login calc if notification preference is text--%>
+              <app:calculate type="notify" calculatedField="notify_initial_login" roles="formField:notification_address" recalculate="false" initializeBlank="false"
+                             fields='<%="patient_password," + identifierForm + "/" + identifierFieldName%>' priority="19"
+                             expression="This is a notification that your logon password has been set to %. Your username is %. When you first logon, please click on the Login Profile tab and enter a forgotten password prompt and answer." >
+                <app:trigger type="notBlank" fields="patient_password"/>
+                <app:trigger type="equals" fields="notification_preference" value="text"/>
+                <app:trigger type="minCharacters" fields="notification_address" value="10"/>
+                <app:trigger type="match" fields="patient_password,patient_password_confirm"/>
+                <app:trigger type="blank" fields="disable_login"/>
+              </app:calculate>
+
+              <app:present field="notify_initial_login">
+                <%--notify login change calc if notification preference is email--%>
+                <app:calculate type="notify" calculatedField="notify_login_changed" roles="formField:notification_address" initializeBlank="false"
+                               fields='<%="patient_password," + identifierForm + "/" + identifierFieldName%>'
+                               priority="20"
+                               expression="This is a notification that your logon password has been set to %. Your username is %. When you first logon, please enter a forgotten password prompt and answer." >
+                  <app:trigger type="fieldChanged" fields="patient_password,patient_password_confirm,email_address"/>
+                  <app:trigger type="match" fields="patient_password,patient_password_confirm"/>
+                  <app:trigger type="plausibleEmail" fields="notification_address"/>
+                  <app:trigger type="equals" fields="notification_preference" value="email"/>
+                  <app:trigger type="blank" fields="disable_login"/>
+                </app:calculate>
+
+                <%--notify login change calc if notification preference is text--%>
+                <app:calculate type="notify" calculatedField="notify_login_changed" roles="formField:notification_address" initializeBlank="false"
+                               fields='<%="patient_password," + identifierForm + "/" + identifierFieldName%>'
+                               priority="20"
+                               expression="This is a notification that your logon password has been set to %. Your username is %. When you first logon, please enter a forgotten password prompt and answer." >
+                  <app:trigger type="fieldChanged" fields="patient_password,patient_password_confirm,phone_number"/>
+                  <app:trigger type="match" fields="patient_password,patient_password_confirm"/>
+                  <app:trigger type="equals" fields="notification_preference" value="text"/>
+                  <app:trigger type="minCharacters" fields="notification_address" value="10"/>
+                  <app:trigger type="blank" fields="disable_login"/>
+                </app:calculate>
+
+                <%--notify resend calc if notification preference is email--%>
+                <app:calculate type="notify" calculatedField="resend_login" roles="formField:notification_address" initializeBlank="false"
+                               fields='<%="patient_password," + identifierForm + "/" + identifierFieldName%>'
+                               priority="20"
+                               expression="This is a notification that your logon password has been set to %. Your username is %. When you first logon, enter a forgotten password prompt and answer." >
+                  <app:trigger type="notBlank" fields="resend_login_info"/>
+                  <app:trigger type="match" fields="patient_password,patient_password_confirm"/>
+                  <app:trigger type="plausibleEmail" fields="notification_address"/>
+                  <app:trigger type="equals" fields="notification_preference" value="email"/>
+                  <app:trigger type="blank" fields="disable_login"/>
+                </app:calculate>
+
+                <%--notify resend calc if notification preference is text--%>
+                <app:calculate type="notify" calculatedField="resend_login" roles="formField:notification_address" initializeBlank="false"
+                               fields='<%="patient_password," + identifierForm + "/" + identifierFieldName%>'
+                               priority="20"
+                               expression="This is a notification that your logon password has been set to %. Your username is %. When you first logon, enter a forgotten password prompt and answer." >
+                  <app:trigger type="notBlank" fields="resend_login_info"/>
+                  <app:trigger type="match" fields="patient_password,patient_password_confirm"/>
+                  <app:trigger type="minCharacters" fields="notification_address" value="10"/>
+                  <app:trigger type="equals" fields="notification_preference" value="text"/>
+                  <app:trigger type="blank" fields="disable_login"/>
+                </app:calculate>
+              </app:present>
+              <calculate:setBlank calculatedField="resend_login_info" priority="21" initializeBlank="false">
+                <app:trigger type="fieldChanged" fields="resend_login"/>
+              </calculate:setBlank>
+              <app:display htmlTag="tr" field="disable_login" value="<%=com.perceptivec.Constants.BLANK%>" visible="true">
+                <td class="center lightly_boxed"><app:text valueKey="email_address" size="30" label="Email address"/></td>
+
+                <td class="center lightly_boxed">
+                <span class="blue_text">&nbsp;
+                </span><br/>
+                  Phone Number:<br/><app:text valueKey="phone_number" size="30" type="numeric" label="Phone Number"/><br/>
+                  <app:constraint type="minCharacters" fields="phone_number" value="10"/>
+                </td>
+                <app:category name="Masked_Fields" obfuscated="true">
+                  <td class="center lightly_boxed"><app:masked valueKey="patient_password" showChanges="false" canExport="false" label="Patient password"/></td>
+                  <td class="center lightly_boxed"><app:masked valueKey="patient_password_confirm" showChanges="false" canExport="false" label="Patient password confirm"/></td>
+                </app:category>
+              </app:display>
+            </table>
+            <%
+              String showThisClass = "hidden";
+              if (theStudy.canUserSeeSecurityQuestion(loggedOnUser, lms)) {
+                showThisClass = "normal_no_bottom_border";
+              }
+            %>
+            <table class='<%=showThisClass%>'>
+              <tr>
+                <td colspan="2" class="heading_medium">The following information will be used in case you forget your password.</td>
+              </tr>
+              <tr>
+                <td class="heading_low" width="50%">Forgotten Password Prompt</td>
+                <td class="heading_low" width="50%">Password Prompt Answer</td>
+              </tr>
+              <tr>
+                <td class="center lightly_boxed">
+                  <app:text valueKey="forgottenPasswordPrompt" size="50" canExport="false" blindedTo='<%= theStudy.getRolesThat("cantSeeSecurityQuestion") %>' label="Forgotten password prompt"/>
+                  <app:hidden valueKey="password_changed" label="Password changed"/>
+                  <br/> (e.g., "mother's maiden name," "favorite animal")
+                </td>
+                <td class="center lightly_boxed">
+                  <app:text valueKey="forgottenPasswordResponse" size="50" canExport="false" blindedTo='<%= theStudy.getRolesThat("cantSeeSecurityQuestion")%>' label="Forgotten password response"/>
+                </td>
+              </tr>
+            </table>
+            <table class="normal_no_bottom_border">
+              <tr>
+                <td class="bottom_padded top_padded italic center lightly_boxed"  colspan="10">
+                  Disable Log-in  (Check <span class="underline">only</span> after this case completes or is removed from the study) <app:checkbox valueKey="disable_login" controlsDisplay="true" onchange="submit();" label="Disable Login"/>
+                </td>
+              </tr>
+            </table>
+          </app:category>
+          <app:present name='<%=com.perceptivec.Constants.STUDY_KEY%>' form="info.form.name.admin" field="epro_app">
+            <app:category name="Download">
+              <%@include file="/defaults/patient/ownerProfile_downloadSection.jspf"%>
+            </app:category>
+          </app:present>
+        </logic:equal>
+        <c:if test="${view == Constants.VIEW_COMPOSER_PREVIEW_PATIENT}">
+          <table class="normal_no_bottom_border">
+            <tr>
+              <td class="center red_text" colspan="10">The Signed User Agreement section is not available in Composer Preview mode.</td>
+            </tr>
+          </table>
+        </c:if>
+        <c:if test="${view != Constants.VIEW_COMPOSER_PREVIEW_PATIENT}">
+          <table class="normal_table">
+            <tr>
+              <td colspan="10" class="heading_high">
+                Signed User Agreements
+              </td>
+            </tr>
+            <tr>
+              <td class="heading_medium">
+                Date/Time Signed
+              </td>
+              <td class="heading_medium">
+                Agreement ID
+              </td>
+              <td class="heading_medium">
+                Agreement Name
+              </td>
+            </tr>
+            <c:forEach var="signature" items="${currentOwner.getSignedAgreements()}">
+              <tr>
+                <td class="lightly_boxed">
+                    ${signature.getDateTimeSigned(theStudy.getDateTimeFormat())}
+                </td>
+                <td class="lightly_boxed">
+                    ${signature.getId()}
+                </td>
+                <td class="lightly_boxed">
+                    ${signature.getName()}
+                </td>
+            </tr>
+        </c:forEach>
+    </table>
+</c:if>
+

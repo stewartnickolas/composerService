@@ -1,0 +1,38 @@
+{
+  "name": "example",
+  "label": "Example Module",
+  "fields": [
+    {
+      "name": "textField",
+      "label": "Replace This",
+      "description": "Allows a section of a template to be replaced directly with text entered by the user.  Use with caution, as there is currently no error checking to prevent them from entering invalid values.",
+      "fieldType": "text"
+    },
+    {
+      "name": "toggleSection",
+      "label": "Show the section",
+      "description": "Using a boolean value may be useful for instances where you want to conditionally toggle between two options.  It will show up as a checkbox for the user, and true/false in the template.",
+      "fieldType": "checkbox"
+    },
+    {
+      "name": "selectField",
+      "label": "Pick one",
+      "description": "Replaces a piece of the template in the same way as the text field option, but limits the input to values in the select",
+      "fieldType": "select",
+      "fieldOptions": [
+        {
+          "name": "option1",
+          "label": "Option 1"
+        },
+        {
+          "name": "option2",
+          "label": "Option 2"
+        },
+        {
+          "name": "option3",
+          "label": "Option 3"
+        }
+      ]
+    }
+  ]
+}

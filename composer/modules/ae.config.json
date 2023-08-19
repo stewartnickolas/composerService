@@ -1,0 +1,52 @@
+{
+  "name": "ae",
+  "label": "AE Module",
+  "fields": [
+    {
+    "name": "description",
+    "label": "Name for AE field",
+    "description": "This is the name that will be used to store the value in the database. It will be created by the module, and should not already exist on the form. To use this field in calculations and constraints, the field name will need to be manually typed in followed by <enter>.  If referencing this field on another form, the full path (i.e., groupName.form.name.formName/field_name) will need to be typed in followed by <enter>. Please contact your Prelude PM for assistance.",
+    "fieldType": "text"
+  },
+    {
+      "name": "cdash",
+      "label": "Short name for AE field (CDASH)",
+      "description": "Define an optional short database (or CDASH) name here. Typical format is 8 characters (all upper case).",
+      "fieldType": "text"
+    },
+    {
+      "name": "roles_can_edit_field",
+      "label": "Role codes that can edit AE field",
+      "description": "These are the role codes that can edit the main AE description field within this module. If left blank, the edit privileges will be applied to the field from the Form Permissions.",
+      "fieldType": "text"
+    },
+    {
+      "name": "roles_can_edit",
+      "label": "Role codes that can edit coding field(s)",
+      "description": "These are the role codes that can edit the coding field(s) within this module. If left blank, the edit privileges will be applied to the coding field(s) from the Form Permissions.",
+      "fieldType": "text"
+    },
+    {
+      "name": "additional_coding",
+      "label": "Additional coding lines",
+      "description": "Select this option for up to 3 lines of coding.",
+      "fieldType": "checkbox"
+    },
+    {
+      "name": "require_change_reason",
+      "label": "Require change reason for coded term(s)",
+      "description": "By default change reasons are required. Set this to false if change reasons should not be required on the low_level_term(s).",
+      "fieldType": "select",
+      "fieldOptions": [
+        {
+          "name": "true",
+          "label": "true"
+        },
+        {
+          "name": "false",
+          "label": "false"
+        }
+      ]
+    }
+    ]
+    }

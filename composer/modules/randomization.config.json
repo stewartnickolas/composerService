@@ -1,0 +1,7 @@
+{
+  "name": "randomization",
+  "label": "Randomization Module",
+  "description": "This module should be added to an eligibility form. The form should have two sections with yes/no OR true/false questions (typically Inclusion and Exclusion Sections). Once built and published, please fill out the Randomization Settings at the project level.",
+  "moduleType": "jspf"
+}
+

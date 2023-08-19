@@ -1,0 +1,18 @@
+{
+  "name": "conmed_human",
+  "label": "ConMed Module WHODrug Coding Option",
+  "description": "This module provides a dictionary lookup for medication names.  It should only be used in an indexed section on the form.",
+  "fields": [{
+    "name": "med_name",
+    "label": "Name for Medication Field",
+    "description": "This is the name that will be used to store the value in the database.  It will be created by the module, and should not already exist on the form",
+    "fieldType": "text"
+  },
+    {
+      "name": "roles_can_edit",
+      "label": "Role codes that can edit coding field(s)",
+      "description": "These are the role codes that can edit the coding field(s) within this module. If left blank, the edit privileges will be applied to the coding field(s) from the Form Permissions.",
+      "fieldType": "text"
+    }
+  ]
+}

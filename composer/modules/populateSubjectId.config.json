@@ -1,0 +1,19 @@
+{
+  "name": "populateSubjectId",
+  "label": "Populate Subject ID",
+  "description": "This module generates a list of fields whose values are the IDs of the selected site's subjects. The module should be placed in a category above the category where the IDs will be saved.",
+  "fields": [
+    {
+      "name": "fieldName",
+      "label": "Field Name",
+      "description": "Field name where IDs will be saved.",
+      "fieldType": "text"
+    },
+    {
+      "name": "categoryName",
+      "label": "Category Name",
+      "description": "Category name where IDs will be saved. This should be repeating.",
+      "fieldType": "text"
+    }
+  ]
+}

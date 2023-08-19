@@ -1,0 +1,235 @@
+#if ( !${require_change_reason} && ${require_change_reason} != false )
+## only if not defined for backwards compatibility
+## '!x' checks if x is not defined *or false*, 'x != false' then excludes cases where false
+  #set ( $require_change_reason = "true" )
+#end
+
+<table class="center">
+  <tr>
+    <td class="left">
+      <app:text valueKey="$description" #if ($cdash && !$cdash.isEmpty()) cdash="$cdash" #end size="30" controlsDisplay="true" #if ($roles_can_edit_field && !$roles_can_edit_field.isEmpty()) canEdit="$roles_can_edit_field" #end onchange="submit();" label="AE Field"/>
+    </td>
+  </tr>
+  <tr>
+    <td class="left">
+      <app:label>Low Level Term</app:label><br/>
+      <span class="nowrap">
+        <app:display field="$description" value="'notBlank'" autoIndex="true" visible="true">
+          <app:autocomplete styleId="low_level_term" db="VeDDRA" #if ($roles_can_edit && !$roles_can_edit.isEmpty()) canEdit="$roles_can_edit" #end requireChangeReason="$require_change_reason" valueKey="low_level_term" size="30" changesState="false" label="Low Level Term"/>
+          <app:displayToggleControl attributeName="codes1" scope="session" autoIndex="true"/>
+        </app:display>
+      </span>
+      <app:displayToggle makeHidden="true" attributeName="codes1" autoIndex="true" scope="session">
+        <p class="label smallish_font width50"><app:label field="low_level_code">Low Level Code</app:label></p>
+        <p class="nowrap width70"> <app:line valueKey="low_level_code" readonly="true" styleClass="width_95"/></p>
+        <p class="label smallish_font width50"><app:label field="preferred_term">Preferred Term</app:label></p>
+        <p class="nowrap width70"> <app:line valueKey="preferred_term" readonly="true" styleClass="width_95"/></p>
+        <p class="label smallish_font width50"><app:label field="preferred_code">Preferred Code</app:label></p>
+        <p class="nowrap width70"> <app:line valueKey="preferred_code" readonly="true" styleClass="width_95"/></p>
+        <p class="label smallish_font width50"><app:label field="high_level_term">High Level Term</app:label></p>
+        <p class="width70"> <app:line valueKey="high_level_term" readonly="true" styleClass="width_95"/></p>
+        <p class="label smallish_font width50"><app:label field="high_level_code">High Level Code</app:label></p>
+        <p class="width70"> <app:line valueKey="high_level_code" readonly="true" styleClass="width_95"/></p>
+        <p class="label smallish_font width50"><app:label field="soc_term">SOC Term</app:label></p>
+        <p class="width70"> <app:line valueKey="soc_term" readonly="true" styleClass="width_95"/></p>
+        <p class="label smallish_font width50"><app:label field="soc_code">SOC Code</app:label></p>
+        <p class="width70"> <app:line valueKey="soc_code" readonly="true" styleClass="width_95"/></p>
+      </app:displayToggle>
+      <app:constraint id="in the dictionary" type="matchDictionary" autoIndex="true" fields="low_level_term" db="VeDDRA" errorHandle="warning"/>
+      <app:calculate type="dbLookup" calculatedField="soc_term" fields="low_level_term" autoIndex="true" db="VeDDRA" customArg="System Organ Class (SOC) Term" priority="-2"/>
+      <app:calculate type="dbLookup" calculatedField="soc_code" fields="low_level_term" autoIndex="true" db="VeDDRA" customArg="SOC Key" priority="-2"/>
+      <app:calculate type="dbLookup" calculatedField="preferred_term" fields="low_level_term" autoIndex="true" db="VeDDRA" customArg="Preferred Term (PT)" priority="-2"/>
+      <app:calculate type="dbLookup" calculatedField="preferred_code" fields="low_level_term" autoIndex="true" db="VeDDRA" customArg="PT Key" priority="-2"/>
+      <app:calculate type="dbLookup" calculatedField="high_level_term" fields="low_level_term" autoIndex="true" db="VeDDRA" customArg="High Level Term (HLT)" priority="-2"/>
+      <app:calculate type="dbLookup" calculatedField="high_level_code" fields="low_level_term" autoIndex="true" db="VeDDRA" customArg="HLT Key" priority="-2"/>
+      <app:calculate type="dbLookup" calculatedField="low_level_code" fields="low_level_term" autoIndex="true" db="VeDDRA" customArg="LLT Key" priority="-2"/>
+      <calculate:setBlank calculatedField="low_level_term" autoIndex="true" priority="-1" initializeBlank="false">
+        <app:trigger type="fieldChanged" fields="$description" autoIndex="true"/>
+      </calculate:setBlank>
+      #if(${additional_coding})
+        <br/>
+        <span class="nowrap">
+          <app:display field="$description" value="'notBlank'" autoIndex="true" visible="true">
+            <app:autocomplete styleId="low_level_2term" db="VeDDRA" #if ($roles_can_edit && !$roles_can_edit.isEmpty()) canEdit="$roles_can_edit" #end requireChangeReason="$require_change_reason" valueKey="low_level_2term" size="30" changesState="false" label="Low Level Term"/>
+            <app:displayToggleControl attributeName="codes2" scope="session" autoIndex="true"/>
+          </app:display>
+        </span>
+        <app:displayToggle makeHidden="true" attributeName="codes2" autoIndex="true" scope="session">
+          <p class="label smallish_font width50"><app:label field="low_level_2code">Low Level Code</app:label></p>
+          <p class="nowrap width70"> <app:line valueKey="low_level_2code" readonly="true" styleClass="width_95"/> </p>
+          <p class="label smallish_font width50"><app:label field="preferred_2term">Preferred Term</app:label></p>
+          <p class="nowrap width70"> <app:line valueKey="preferred_2term" readonly="true" styleClass="width_95"/> </p>
+          <p class="label smallish_font width50"><app:label field="preferred_2code">Preferred Code</app:label></p>
+          <p class="nowrap width70"> <app:line valueKey="preferred_2code" readonly="true" styleClass="width_95"/> </p>
+          <p class="label smallish_font width50"><app:label field="high_level_2term">High Level Term</app:label></p>
+          <p class="width70"> <app:line valueKey="high_level_2term" readonly="true" styleClass="width_95" /> </p>
+          <p class="label smallish_font width50"><app:label field="high_level_2code">High Level Code</app:label></p>
+          <p class="width70"> <app:line valueKey="high_level_2code" readonly="true" styleClass="width_95" /> </p>
+          <p class="label smallish_font width50"><app:label field="soc_2term">SOC Term</app:label></p>
+          <p class="width70"> <app:line valueKey="soc_2term" readonly="true" styleClass="width_95" /> </p>
+          <p class="label smallish_font width50"><app:label field="soc_2code">SOC Code</app:label></p>
+          <p class="width70"> <app:line valueKey="soc_2code" readonly="true" styleClass="width_95" /> </p>
+        </app:displayToggle>
+        <app:constraint id="in the dictionary" type="matchDictionary" autoIndex="true" fields="low_level_2term" db="VeDDRA" errorHandle="warning"/>
+        <calculate:dbLookup calculatedField="soc_2term" fields="low_level_2term" autoIndex="true" db="VeDDRA" customArg="System Organ Class (SOC) Term" priority="-2"/>
+        <calculate:dbLookup calculatedField="soc_2code" fields="low_level_2term" autoIndex="true" db="VeDDRA" customArg="SOC Key" priority="-2"/>
+        <calculate:dbLookup calculatedField="preferred_2term" fields="low_level_2term" autoIndex="true" db="VeDDRA" customArg="Preferred Term (PT)" priority="-2"/>
+        <calculate:dbLookup calculatedField="preferred_2code" fields="low_level_2term" autoIndex="true" db="VeDDRA" customArg="PT Key" priority="-2"/>
+        <calculate:dbLookup calculatedField="high_level_2term" fields="low_level_2term" autoIndex="true" db="VeDDRA" customArg="High Level Term (HLT)" priority="-2"/>
+        <calculate:dbLookup calculatedField="high_level_2code" fields="low_level_2term" autoIndex="true" db="VeDDRA" customArg="HLT Key" priority="-2"/>
+        <calculate:dbLookup calculatedField="low_level_2code" fields="low_level_2term" autoIndex="true" db="VeDDRA" customArg="LLT Key" priority="-2"/>
+        <calculate:setBlank calculatedField="low_level_2term" autoIndex="true" priority="-1" initializeBlank="false">
+          <app:trigger type="fieldChanged" fields="$description" autoIndex="true"/>
+        </calculate:setBlank>
+        <br/>
+        <span class="nowrap">
+          <app:display field="$description" value="'notBlank'" autoIndex="true" visible="true">
+            <app:autocomplete styleId="low_level_3term" db="VeDDRA" #if ($roles_can_edit && !$roles_can_edit.isEmpty()) canEdit="$roles_can_edit" #end requireChangeReason="$require_change_reason" valueKey="low_level_3term" size="30" changesState="false" label="Low Level Term"/>
+            <app:displayToggleControl attributeName="codes3" scope="session" autoIndex="true"/>
+          </app:display>
+        </span>
+        <app:displayToggle makeHidden="true" attributeName="codes3" autoIndex="true" scope="session">
+          <p class="label smallish_font width50"><app:label field="low_level_3code">Low Level Code</app:label></p>
+          <p class="nowrap width70"> <app:line valueKey="low_level_3code" readonly="true" styleClass="width_95"/> </p>
+          <p class="label smallish_font width50"><app:label field="preferred_3term">Preferred Term</app:label></p>
+          <p class="nowrap width70"> <app:line valueKey="preferred_3term" readonly="true" styleClass="width_95"/> </p>
+          <p class="label smallish_font width50"><app:label field="preferred_3code">Preferred Code</app:label></p>
+          <p class="nowrap width70"> <app:line valueKey="preferred_3code" readonly="true" styleClass="width_95"/> </p>
+          <p class="label smallish_font width50"><app:label field="high_level_3term">High Level Term</app:label></p>
+          <p class="width70"> <app:line valueKey="high_level_3term" readonly="true" styleClass="width_95" /> </p>
+          <p class="label smallish_font width50"><app:label field="high_level_3code">High Level Code</app:label></p>
+          <p class="width70"> <app:line valueKey="high_level_3code" readonly="true" styleClass="width_95" /> </p>
+          <p class="label smallish_font width50"><app:label field="soc_3term">SOC Term</app:label></p>
+          <p class="width70"> <app:line valueKey="soc_3term" readonly="true" styleClass="width_95" /> </p>
+          <p class="label smallish_font width50"><app:label field="soc_3code">SOC Code</app:label></p>
+          <p class="width70"> <app:line valueKey="soc_3code" readonly="true" styleClass="width_95" /> </p>
+        </app:displayToggle>
+        <app:constraint id="in the dictionary" type="matchDictionary" autoIndex="true" fields="low_level_3term" db="VeDDRA" errorHandle="warning"/>
+        <calculate:dbLookup calculatedField="soc_3term" fields="low_level_3term" autoIndex="true" db="VeDDRA" customArg="System Organ Class (SOC) Term" priority="-2"/>
+        <calculate:dbLookup calculatedField="soc_3code" fields="low_level_3term" autoIndex="true" db="VeDDRA" customArg="SOC Key" priority="-2"/>
+        <calculate:dbLookup calculatedField="preferred_3term" fields="low_level_3term" autoIndex="true" db="VeDDRA" customArg="Preferred Term (PT)" priority="-2"/>
+        <calculate:dbLookup calculatedField="preferred_3code" fields="low_level_3term" autoIndex="true" db="VeDDRA" customArg="PT Key" priority="-2"/>
+        <calculate:dbLookup calculatedField="high_level_3term" fields="low_level_3term" autoIndex="true" db="VeDDRA" customArg="High Level Term (HLT)" priority="-2"/>
+        <calculate:dbLookup calculatedField="high_level_3code" fields="low_level_3term" autoIndex="true" db="VeDDRA" customArg="HLT Key" priority="-2"/>
+        <calculate:dbLookup calculatedField="low_level_3code" fields="low_level_3term" autoIndex="true" db="VeDDRA" customArg="LLT Key" priority="-2"/>
+        <calculate:setBlank calculatedField="low_level_3term" autoIndex="true" priority="-1" initializeBlank="false">
+          <app:trigger type="fieldChanged" fields="$description" autoIndex="true"/>
+        </calculate:setBlank>
+      #end
+    </td>
+  </tr>
+</table>
+<%--Calculations to push coding information to project level coding form--%>
+<%--account for missing form(s) to maintain backward compatibility--%>
+
+<c:set var="studyFormName" value="ae.form.name.ae.coding"/>
+<c:if test="${theStudy.configHasForm(studyFormName)}">
+  <app:present form="study:info.form.name.admin" field="ae_project_coding">
+    <%--LLT #1 --%>
+    <% String ownerId = currentForm.getOwner().getUniqueId();
+    pageContext.setAttribute("ownerId", ownerId);
+    %>
+    <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/low_level_term_${ownerId}"
+                        fields="low_level_term" autoIndex="true" priority="2" initializeBlank="false">
+      <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_term"/>
+    </calculate:setValue>
+    <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/low_level_code_${ownerId}"
+                        fields="low_level_code" autoIndex="true" priority="2" initializeBlank="false">
+      <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_term"/>
+    </calculate:setValue>
+    <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/preferred_term_${ownerId}"
+                        fields="preferred_term" autoIndex="true" priority="2" initializeBlank="false">
+      <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_term"/>
+    </calculate:setValue>
+    <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/preferred_code_${ownerId}"
+                        fields="preferred_code" autoIndex="true" priority="2" initializeBlank="false">
+      <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_term"/>
+    </calculate:setValue>
+    <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/high_level_term_${ownerId}"
+                        fields="high_level_term" autoIndex="true" priority="2" initializeBlank="false">
+      <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_term"/>
+    </calculate:setValue>
+    <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/high_level_code_${ownerId}"
+                        fields="high_level_code" autoIndex="true" priority="2" initializeBlank="false">
+      <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_term"/>
+    </calculate:setValue>
+    <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/soc_term_${ownerId}"
+                        fields="soc_term" autoIndex="true" priority="2" initializeBlank="false">
+      <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_term"/>
+    </calculate:setValue>
+    <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/soc_code_${ownerId}"
+                        fields="soc_code" autoIndex="true" priority="2" initializeBlank="false">
+      <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_term"/>
+    </calculate:setValue>
+
+    #if(${additional_coding})
+      <%-- LLT #2 --%>
+      <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/low_level_2term_${ownerId}"
+                          fields="low_level_2term" autoIndex="true" priority="2" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_2term"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/low_level_2code_${ownerId}"
+                          fields="low_level_2code" autoIndex="true" priority="2" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_2term"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/preferred_2term_${ownerId}"
+                          fields="preferred_2term" autoIndex="true" priority="2" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_2term"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/preferred_2code_${ownerId}"
+                          fields="preferred_2code" autoIndex="true" priority="2" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_2term"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/high_level_2term_${ownerId}"
+                          fields="high_level_2term" autoIndex="true" priority="2" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_2term"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/high_level_2code_${ownerId}"
+                          fields="high_level_2code" autoIndex="true" priority="2" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_2term"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/soc_2term_${ownerId}"
+                          fields="soc_2term" autoIndex="true" priority="2" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_2term"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/soc_2code_${ownerId}"
+                          fields="soc_2code" autoIndex="true" priority="2" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_2term"/>
+      </calculate:setValue>
+
+      <%-- LLT #3 --%>
+      <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/low_level_3term_${ownerId}"
+                          fields="low_level_3term" autoIndex="true" priority="2" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_3term"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/low_level_3code_${ownerId}"
+                          fields="low_level_3code" autoIndex="true" priority="2" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_3term"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/preferred_3term_${ownerId}"
+                          fields="preferred_3term" autoIndex="true" priority="2" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_3term"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/preferred_3code_${ownerId}"
+                          fields="preferred_3code" autoIndex="true" priority="2" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_3term"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/high_level_3term_${ownerId}"
+                          fields="high_level_3term" autoIndex="true" priority="2" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_3term"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/high_level_3code_${ownerId}"
+                          fields="high_level_3code" autoIndex="true" priority="2" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_3term"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/soc_3term_${ownerId}"
+                          fields="soc_3term" autoIndex="true" priority="2" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_3term"/>
+      </calculate:setValue>
+      <calculate:setValue calculatedField="study:ae.form.name.ae.coding/C${ownerId}/soc_3code_${ownerId}"
+                          fields="soc_3code" autoIndex="true" priority="2" initializeBlank="false">
+        <app:trigger type="fieldChanged" autoIndex="true" fields="low_level_3term"/>
+      </calculate:setValue>
+    #end
+  </app:present>
+</c:if>

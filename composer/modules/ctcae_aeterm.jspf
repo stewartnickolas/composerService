@@ -1,0 +1,68 @@
+
+<%
+    int rowNumber = ((Integer) pageContext.getAttribute("i")).intValue();
+    final com.perceptivec.utils.Context context = new com.perceptivec.utils.Context(pageContext);
+    final String eventTermText = context.category.findOrMakeField("aeterm", rowNumber).showText();
+    final String relativeDbPath = theStudy.getAttribute("CTCAEdictionary");
+    final java.io.File dbFile = new java.io.File(context.getStudy().resolveFilePath(relativeDbPath));
+    final com.bobbingsoftware.autocomplete.DB dB = com.bobbingsoftware.autocomplete.DB.cached(dbFile, "DB");
+    final String[] grades = new String[5];
+    if (!eventTermText.isEmpty() && dB.isExactKey(eventTermText)) {
+        final com.bobbingsoftware.table.Table.Row tableRow = dB.getDataRow(eventTermText);
+        for (int i = 0; i < grades.length; i++) {
+            final int columnNumber = i + 3;
+            grades[i] = tableRow.get(columnNumber);
+        }
+    }
+%>
+
+  <div class="column" style="width:3%">&nbsp;</div> <%-- margin gap --%>
+  <div class="column" style="width:94%;">
+    <p class="smallish_font"><app:label field="aeterm">Medical-Event Term</app:label></p>
+    <app:constraint id="in the dictionary" type="matchDictionary" autoIndex="true" fields="aeterm" db="CTCAEdictionary"/>
+    <% final String attributeName = "moreinfo(" + Integer.toString(rowNumber) + ")";%>
+    <p class="nowrap">
+      <app:autocomplete db="CTCAEdictionary" styleId="aeterm" valueKey="aeterm" styleClass="width_90" controlsDisplay="true"/><app:displayToggleControl attributeName='<%=attributeName%>' scope="session" image="/vision/images/openClose.png"/>
+      <app:display field="aeterm" value="match:Other, specify" autoIndex="true">
+        <br/>&raquo;<app:text valueKey="aeterm_other_specify"/>
+      </app:display>
+      <app:constraint type="and" fields="aeterm_other_specify">
+        <app:trigger type="contains" fields="aeterm" value="Other, specify"/>
+      </app:constraint>
+    </p>
+    <app:calculate type="dbLookup" db="CTCAEdictionary" fields="aeterm" calculatedField="meddra_code" customArg="MedDRA Code" priority="1" autoIndex="true"/>
+    <app:calculate type="dbLookup" db="CTCAEdictionary" fields="aeterm" calculatedField="system_organ_class" customArg="MedDRA SOC" priority="1" autoIndex="true"/>
+    <app:calculate type="dbLookup" db="CTCAEdictionary" fields="aeterm" calculatedField="event_definition" customArg="Definition" priority="1" autoIndex="true"/>
+    <calculate:setBlank calculatedField="grade" initializeBlank="false" autoIndex="true" priority="5">
+      <app:trigger type="blank" fields="aeterm"/>
+    </calculate:setBlank>
+    <p class="label smallish_font"><app:label field="grade">Grade</app:label><span class="italic"><br/>(Hover over each grade selection for description(s) after term is entered)</span></p>
+    <p class="heading_low smallish_font">
+      <%
+          for (int i = 0; i < grades.length; i++) {
+              final String levelName = Integer.toString(i + 1);
+              final String titleText = grades[i];
+              final boolean isTooShort = titleText == null || titleText.length() <= 1; // "Death".length();
+              if (isTooShort) {
+      %>
+      <span class="nowrap" title="<%=levelName + "- not applicable"%>">
+        <app:radio valueKey="grade" value="<%=levelName%>" disabled="true" readonly="true" dataType="integer"/><%=levelName%>&nbsp;&nbsp;
+      </span>
+      <% } else {%>
+      <span class="nowrap" title="<%=titleText%>">
+        <app:radio valueKey="grade" value="<%=levelName%>" dataType="integer"/><%=levelName%>&nbsp;&nbsp;
+      </span>
+      <% }
+          }%>
+    </p>
+    <app:displayToggle makeHidden="true" attributeName='<%=attributeName%>' scope="session">
+      <p class="smallish_font"><br/><app:label field="meddra_code">MedDRA Code</app:label></p>
+      <p class="smallish_font"> <app:text valueKey="meddra_code" readonly="true" styleClass="width_95"/> </p>
+      <p class="smallish_font"><app:label field="system_organ_class">System Organ Class</app:label></p>
+      <p class="smallish_font"> <app:line valueKey="system_organ_class" readonly="true" styleClass="width_95" /> </p>
+      <p class="smallish_font"><app:label field="event_definition">Event Definition</app:label></p>
+      <p class="nowrap"> <app:textarea valueKey="event_definition" readonly="true" styleClass="width_95 smallish_font"/> </p>
+    </app:displayToggle>      
+    </p>
+  </div>
+  <div class="column" style="width:3%">&nbsp;</div> <%-- margin gap --%>

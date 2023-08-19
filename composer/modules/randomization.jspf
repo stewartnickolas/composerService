@@ -1,0 +1,9 @@
+    <table class="normal_no_bottom_border">
+      <app:category name="Randomization">
+        <tr>
+          <td class="lightly_boxed">
+            <jsp:include page="/defaults/patient/randomizationImpl.jsp"/>
+          </td>
+        </tr>
+      </app:category>
+    </table>

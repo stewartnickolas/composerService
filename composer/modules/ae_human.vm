@@ -1,0 +1,50 @@
+<table class="center">
+    <tr>
+        <td class="left">
+            <app:text valueKey="$description" #if ($cdash && !$cdash.isEmpty()) cdash="$cdash" #end #if ($roles_can_edit_field && !$roles_can_edit_field.isEmpty()) canEdit="$roles_can_edit_field" #end size="30" controlsDisplay="true" onchange="submit();"/>
+        </td>
+    </tr>
+    <tr>
+        <td class="left">
+            <span class="small_text"><app:label>Coded Low Level Term</app:label></span><br/>
+            <span class="nowrap">
+             <app:display field="$description" value="'notBlank'" autoIndex="true" visible="true">
+               <app:autocomplete styleId="low_level_term" db="MedDRA" #if ($roles_can_edit && !$roles_can_edit.isEmpty()) canEdit="$roles_can_edit" #end valueKey="low_level_term" changesState="false" size="30"/>
+               <app:displayToggleControl attributeName="codes" scope="session" autoIndex="true"/>
+             </app:display>
+            </span>
+            <app:displayToggle makeHidden="true" attributeName="codes" autoIndex="true" scope="session">
+                <p class="label smallish_font"><app:label>Low Level Code</app:label></p>
+                <p class="nowrap"> <app:line valueKey="low_level_code" readonly="true" styleClass="width_95"/> </p>
+                <p class="label smallish_font"><app:label>Preferred Term</app:label></p>
+                <p class="nowrap"> <app:line valueKey="preferred_term" readonly="true" styleClass="width_95"/> </p>
+                <p class="label smallish_font"><app:label>Preferred Code</app:label></p>
+                <p class="nowrap"> <app:line valueKey="preferred_code" readonly="true" styleClass="width_95"/> </p>
+                <p class="label smallish_font"><app:label>High Level Term</app:label></p>
+                <p> <app:line valueKey="high_level_term" readonly="true" styleClass="width_95" /> </p>
+                <p class="label smallish_font"><app:label>High Level Code</app:label></p>
+                <p> <app:line valueKey="high_level_code" readonly="true" styleClass="width_95" /> </p>
+                <p class="label smallish_font"><app:label>High Level Group Term</app:label></p>
+                <p> <app:line valueKey="hlgt_term" readonly="true" styleClass="width_95" /> </p>
+                <p class="label smallish_font"><app:label>High Level Group Code</app:label></p>
+                <p> <app:line valueKey="hlgt_code" readonly="true" styleClass="width_95" /> </p>
+                <p class="label smallish_font"><app:label>SOC Term</app:label></p>
+                <p> <app:line valueKey="soc_term" readonly="true" styleClass="width_95" /> </p>
+                <p class="label smallish_font"><app:label>SOC Code</app:label></p>
+                <p> <app:line valueKey="soc_code" readonly="true" styleClass="width_95" /> </p>
+            </app:displayToggle>
+            <calculate:dbLookup calculatedField="soc_term" fields="low_level_term" autoIndex="true" db="MedDRA" customArg="SOC Name" priority="1"/>
+            <calculate:dbLookup calculatedField="soc_code" fields="low_level_term" autoIndex="true" db="MedDRA" customArg="SOC Code" priority="1"/>
+            <calculate:dbLookup calculatedField="high_level_term" fields="low_level_term" autoIndex="true" db="MedDRA" customArg="HLT Name" priority="1"/>
+            <calculate:dbLookup calculatedField="high_level_code" fields="low_level_term" autoIndex="true" db="MedDRA" customArg="HLT Code" priority="1"/>
+            <calculate:dbLookup calculatedField="preferred_term" fields="low_level_term" autoIndex="true" db="MedDRA" customArg="PT Name" priority="1"/>
+            <calculate:dbLookup calculatedField="preferred_code" fields="low_level_term" autoIndex="true" db="MedDRA" customArg="PT Code" priority="1"/>
+            <calculate:dbLookup calculatedField="low_level_code" fields="low_level_term" autoIndex="true" db="MedDRA" customArg="LLT Code" priority="1"/>
+            <calculate:dbLookup calculatedField="hlgt_term" fields="low_level_term" autoIndex="true" db="MedDRA" customArg="HLGT Name" priority="1"/>
+            <calculate:dbLookup calculatedField="hlgt_code" fields="low_level_term" autoIndex="true" db="MedDRA" customArg="HLGT Code" priority="1"/>
+            <calculate:setBlank calculatedField="low_level_term" autoIndex="true" priority="2" initializeBlank="false">
+                <app:trigger type="fieldChanged" fields="$description" autoIndex="true"/>
+            </calculate:setBlank>
+        </td>
+    </tr>
+</table>

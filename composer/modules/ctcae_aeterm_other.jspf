@@ -1,0 +1,64 @@
+
+<%
+    int rowNumber = ((Integer) pageContext.getAttribute("i")).intValue();
+    final com.perceptivec.utils.Context context = new com.perceptivec.utils.Context(pageContext);
+    final String eventTermText = context.category.findOrMakeField("aeterm_other", rowNumber).showText();
+    final String relativeDbPath = theStudy.getAttribute("CTCAEdictionary");
+    final java.io.File dbFile = new java.io.File(context.getStudy().resolveFilePath(relativeDbPath));
+    final com.bobbingsoftware.autocomplete.DB dB = com.bobbingsoftware.autocomplete.DB.cached(dbFile, "DB");
+    final String[] grades = new String[5];
+    if (!eventTermText.isEmpty() && dB.isExactKey(eventTermText)) {
+        final com.bobbingsoftware.table.Table.Row tableRow = dB.getDataRow(eventTermText);
+        for (int i = 0; i < grades.length; i++) {
+            final int columnNumber = i + 3;
+            grades[i] = tableRow.get(columnNumber);
+        }
+    }
+%>
+<app:calculate type="setBlank" calculatedField="event_other" priority="1" autoIndex="true" initializeBlank="false">
+  <app:trigger type="fieldChanged" fields="aeterm_other" autoIndex="true"/>
+</app:calculate>
+<app:constraint type="and" fields="event_other" autoIndex="true">
+  <app:trigger type="contains" fields="aeterm_other" value="specify" autoIndex="true"/>
+</app:constraint>
+  <div class="column" style="width:3%">&nbsp;</div> <%-- margin gap --%>
+  <div class="column" style="width:94%;">
+    <p class="smallish_font"><app:label field="aeterm_other">Medical-Event Term</app:label></p>
+    <app:constraint id="in the dictionary" type="matchDictionary" autoIndex="true" fields="aeterm_other" db="CTCAEdictionary"/>
+    <% final String attributeName = "moreinfo(" + Integer.toString(rowNumber) + ")";%>
+    <p class="nowrap">
+      <app:autocomplete db="CTCAEdictionary" styleId="aeterm_other" valueKey="aeterm_other" styleClass="width_80" controlsDisplay="true"/><app:displayToggleControl attributeName='<%=attributeName%>' scope="session" image="/vision/images/openClose.png"/>
+    </p>
+    <app:calculate type="dbLookup" db="CTCAEdictionary" fields="aeterm_other" calculatedField="meddra_code_other" customArg="MedDRA Code" priority="1" autoIndex="true"/>
+    <app:calculate type="dbLookup" db="CTCAEdictionary" fields="aeterm_other" calculatedField="system_organ_class_other" customArg="MedDRA SOC" priority="1" autoIndex="true"/>
+    <app:calculate type="dbLookup" db="CTCAEdictionary" fields="aeterm_other" calculatedField="event_definition_other" customArg="Definition" priority="1" autoIndex="true"/>
+    <p class="label smallish_font"><app:label field="grade">Grade</app:label></p>
+    <p class="heading_low smallish_font">
+      <%
+          for (int i = 0; i < grades.length; i++) {
+              final String levelName = Integer.toString(i + 1);
+              final String titleText = grades[i];
+              final boolean isTooShort = titleText == null || titleText.length() <= 1; // "Death".length();
+              if (isTooShort) {
+      %>
+      <span class="nowrap" title="<%=levelName + "- not applicable"%>">
+        <app:radio valueKey="grade_other" value="<%=levelName%>" disabled="true" readonly="true" dataType="integer"/><%=levelName%>&nbsp;&nbsp;
+      </span>
+      <% } else {%>
+      <span class="nowrap" title="<%=titleText%>">
+        <app:radio valueKey="grade_other" value="<%=levelName%>" dataType="integer"/><%=levelName%>&nbsp;&nbsp;
+      </span>
+      <% }
+          }%>
+    </p>
+    <app:displayToggle makeHidden="true" attributeName='<%=attributeName%>' scope="session">
+      <p class="smallish_font"><br/><app:label field="meddra_code_other">MedDRA Code</app:label></p>
+      <p class="smallish_font"> <app:text valueKey="meddra_code_other" readonly="true" styleClass="width_95"/> </p>
+      <p class="smallish_font"><app:label field="system_organ_class_other">System Organ Class</app:label></p>
+      <p class="smallish_font"> <app:line valueKey="system_organ_class_other" readonly="true" styleClass="width_95" /> </p>
+      <p class="smallish_font"><app:label field="event_definition_other">Event Definition</app:label></p>
+      <p class="nowrap"> <app:textarea valueKey="event_definition_other" readonly="true" styleClass="width_95 smallish_font"/> </p>
+    </app:displayToggle>      
+    </p>
+  </div>
+  <div class="column" style="width:3%">&nbsp;</div> <%-- margin gap --%>

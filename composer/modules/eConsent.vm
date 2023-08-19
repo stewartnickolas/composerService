@@ -1,0 +1,186 @@
+<div class="rowPublish center" id="row_7">
+    <table class="editTable" style="text-align: left; width: 100%; " id="table_6">
+        <tr>
+            <td class="heading_medium">Select Consent Version w/ Effective Date</td>
+        </tr>
+        <tr>
+            <td class="tableCellPublish " style="text-align: center;  ">
+                <v:selectFromOwner valueKey="consent_version" layoutOrientation="vertical"
+                                   optionsFromOwnerView="current" optionsFromOwnerForm="$uploadLevel:$pdfForm"
+                                   optionsFromOwnerField="consent_version_available()" canEdit="$roles_can_edit"
+                                   onchange="submit();">
+                </v:selectFromOwner>
+                <app:hidden valueKey="effective_date"/>
+                <app:hidden valueKey="consent_level" value="$uploadLevel" canExport="false"/>
+                <app:hidden valueKey="enable_consent_withdraw" value="$enableWithdraw" canExport="false" reinitialize="true"/>
+                <!--
+                     table = the site level form
+                     keyField = site level field being matched to
+                     keyColumn = patient field used to match to keyField
+                     valueColumn = patient field that's being updated
+                     -->
+                <app:equal field="consent_level" value="site">
+                <calculate:setFromSiteLookup calculatedField="effective_date" keyField="consent_version" keyColumn="consent_version" valueColumn="effective_date" table="$pdfForm" priority="-10">
+                    <app:trigger type="notBlank" fields="consent_version"/>
+                </calculate:setFromSiteLookup>
+                </app:equal>
+                <app:equal field="consent_level" value="study">
+                <calculate:setFromStudyLookup calculatedField="effective_date" keyField="consent_version" keyColumn="consent_version" valueColumn="effective_date" table="$pdfForm" priority="-10">
+                    <app:trigger type="notBlank" fields="consent_version"/>
+                </calculate:setFromStudyLookup>
+                </app:equal>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="rowPublish center" id="row_7">
+    <table class="editTable" style="text-align: left; width: 100%; " id="table_6">
+        <tr>
+            <td class="heading_medium">Consent Document</td>
+        </tr>
+        <tr>
+            <td class="lightly_boxed center">
+                <app:hidden valueKey="show_consent_1"/>
+                <app:hidden valueKey="show_consent_2"/>
+                <app:hidden valueKey="show_consent_3"/>
+                <app:hidden valueKey="show_consent_4"/>
+                <app:hidden valueKey="show_consent_5"/>
+                <app:hidden valueKey="show_consent_6"/>
+                <app:hidden valueKey="show_consent_7"/>
+                <app:hidden valueKey="show_consent_8"/>
+                <app:hidden valueKey="show_consent_9"/>
+                <app:hidden valueKey="show_consent_10"/>
+                <calculate:setValue calculatedField="show_consent_1" value="true" priority="-9" initializeBlank="true">
+                    <app:trigger type="match" fields="effective_date,$uploadLevel:$pdfForm/effective_date(1)"/>
+                    <app:trigger type="match" fields="consent_version,$uploadLevel:$pdfForm/consent_version(1)"/>
+                </calculate:setValue>
+                <calculate:setValue calculatedField="show_consent_2" value="true" priority="-9" initializeBlank="true">
+                    <app:trigger type="match" fields="effective_date,$uploadLevel:$pdfForm/effective_date(2)"/>
+                    <app:trigger type="match" fields="consent_version,$uploadLevel:$pdfForm/consent_version(2)"/>
+                </calculate:setValue>
+                <calculate:setValue calculatedField="show_consent_3" value="true" priority="-9" initializeBlank="true">
+                    <app:trigger type="match" fields="effective_date,$uploadLevel:$pdfForm/effective_date(3)"/>
+                    <app:trigger type="match" fields="consent_version,$uploadLevel:$pdfForm/consent_version(3)"/>
+                </calculate:setValue>
+                <calculate:setValue calculatedField="show_consent_4" value="true" priority="-9" initializeBlank="true">
+                    <app:trigger type="match" fields="effective_date,$uploadLevel:$pdfForm/effective_date(4)"/>
+                    <app:trigger type="match" fields="consent_version,$uploadLevel:$pdfForm/consent_version(4)"/>
+                </calculate:setValue>
+                <calculate:setValue calculatedField="show_consent_5" value="true" priority="-9" initializeBlank="true">
+                    <app:trigger type="match" fields="effective_date,$uploadLevel:$pdfForm/effective_date(5)"/>
+                    <app:trigger type="match" fields="consent_version,$uploadLevel:$pdfForm/consent_version(5)"/>
+                </calculate:setValue>
+                <calculate:setValue calculatedField="show_consent_6" value="true" priority="-9" initializeBlank="true">
+                    <app:trigger type="match" fields="effective_date,$uploadLevel:$pdfForm/effective_date(6)"/>
+                    <app:trigger type="match" fields="consent_version,$uploadLevel:$pdfForm/consent_version(6)"/>
+                </calculate:setValue>
+                <calculate:setValue calculatedField="show_consent_7" value="true" priority="-9" initializeBlank="true">
+                    <app:trigger type="match" fields="effective_date,$uploadLevel:$pdfForm/effective_date(7)"/>
+                    <app:trigger type="match" fields="consent_version,$uploadLevel:$pdfForm/consent_version(7)"/>
+                </calculate:setValue>
+                <calculate:setValue calculatedField="show_consent_8" value="true" priority="-9" initializeBlank="true">
+                    <app:trigger type="match" fields="effective_date,$uploadLevel:$pdfForm/effective_date(8)"/>
+                    <app:trigger type="match" fields="consent_version,$uploadLevel:$pdfForm/consent_version(8)"/>
+                </calculate:setValue>
+                <calculate:setValue calculatedField="show_consent_9" value="true" priority="-9" initializeBlank="true">
+                    <app:trigger type="match" fields="effective_date,$uploadLevel:$pdfForm/effective_date(9)"/>
+                    <app:trigger type="match" fields="consent_version,$uploadLevel:$pdfForm/consent_version(9)"/>
+                </calculate:setValue>
+                <calculate:setValue calculatedField="show_consent_10" value="true" priority="-9" initializeBlank="true">
+                    <app:trigger type="match" fields="effective_date,$uploadLevel:$pdfForm/effective_date(10)"/>
+                    <app:trigger type="match" fields="consent_version,$uploadLevel:$pdfForm/consent_version(10)"/>
+                </calculate:setValue>
+                <app:notPresent field="$completeConsent">
+                    <app:equal field="show_consent_1" value="true">
+                        <app:img form="$uploadLevel:$pdfForm" field="upload_consent(1)" width="70%" height="700px"/>
+                        <br/>
+                        <app:file valueKey="$completeConsent" onchange="submit();" readonly="true"/>
+                    </app:equal>
+                </app:notPresent>
+                <app:notPresent field="$completeConsent">
+                    <app:equal field="show_consent_2" value="true">
+                        <app:img form="$uploadLevel:$pdfForm" field="upload_consent(2)" width="70%" height="700px"/>
+                        <br/>
+                        <app:file valueKey="$completeConsent" onchange="submit();" readonly="true"/>
+                    </app:equal>
+                </app:notPresent>
+                <app:notPresent field="$completeConsent">
+                    <app:equal field="show_consent_3" value="true">
+                        <app:img form="$uploadLevel:$pdfForm" field="upload_consent(3)" width="70%" height="700px"/>
+                        <br/>
+                        <app:file valueKey="$completeConsent" onchange="submit();" readonly="true"/>
+                    </app:equal>
+                </app:notPresent>
+                <app:notPresent field="$completeConsent">
+                    <app:equal field="show_consent_4" value="true">
+                        <app:img form="$uploadLevel:$pdfForm" field="upload_consent(4)" width="70%" height="700px"/>
+                        <br/>
+                        <app:file valueKey="$completeConsent" onchange="submit();" readonly="true"/>
+                    </app:equal>
+                </app:notPresent>
+                <app:notPresent field="$completeConsent">
+                    <app:equal field="show_consent_5" value="true">
+                        <app:img form="$uploadLevel:$pdfForm" field="upload_consent(5)" width="70%" height="700px"/>
+                        <br/>
+                        <app:file valueKey="$completeConsent" onchange="submit();" readonly="true"/>
+                    </app:equal>
+                </app:notPresent>
+                <app:notPresent field="$completeConsent">
+                    <app:equal field="show_consent_6" value="true">
+                        <app:img form="$uploadLevel:$pdfForm" field="upload_consent(6)" width="70%" height="700px"/>
+                        <br/>
+                        <app:file valueKey="$completeConsent" onchange="submit();" readonly="true"/>
+                    </app:equal>
+                </app:notPresent>
+                <app:notPresent field="$completeConsent">
+                    <app:equal field="show_consent_7" value="true">
+                        <app:img form="$uploadLevel:$pdfForm" field="upload_consent(7)" width="70%" height="700px"/>
+                        <br/>
+                        <app:file valueKey="$completeConsent" onchange="submit();" readonly="true"/>
+                    </app:equal>
+                </app:notPresent>
+                <app:notPresent field="$completeConsent">
+                    <app:equal field="show_consent_8" value="true">
+                        <app:img form="$uploadLevel:$pdfForm" field="upload_consent(8)" width="70%" height="700px"/>
+                        <br/>
+                        <app:file valueKey="$completeConsent" onchange="submit();" readonly="true"/>
+                    </app:equal>
+                </app:notPresent>
+                <app:notPresent field="$completeConsent">
+                    <app:equal field="show_consent_9" value="true">
+                        <app:img form="$uploadLevel:$pdfForm" field="upload_consent(9)" width="70%" height="700px"/>
+                        <br/>
+                        <app:file valueKey="$completeConsent" onchange="submit();" readonly="true"/>
+                    </app:equal>
+                </app:notPresent>
+                <app:notPresent field="$completeConsent">
+                    <app:equal field="show_consent_10" value="true">
+                        <app:img form="$uploadLevel:$pdfForm" field="upload_consent(10)" width="70%" height="700px"/>
+                        <br/>
+                        <app:file valueKey="$completeConsent" onchange="submit();" readonly="true"/>
+                    </app:equal>
+                </app:notPresent>
+                <app:equal field="enable_consent_withdraw" value="enable">
+                    <app:present field="$completeConsent">
+                        <app:notPresent field="$completeConsentWithdraw">
+                            <app:img form='<%= currentForm.getName()%>' field="$completeConsent" width="70%"
+                                     height="700px"/>
+                            <br/>
+                            <app:file valueKey="$completeConsentWithdraw" onchange="submit();" readonly="true"/>
+                        </app:notPresent>
+                    </app:present>
+                    <app:present field="$completeConsentWithdraw">
+                        <app:img form='<%= currentForm.getName()%>' field="$completeConsentWithdraw" width="70%"
+                                 height="700px"/>
+                    </app:present>
+                </app:equal>
+                <app:equal field="enable_consent_withdraw" value="disable">
+                    <app:present field="$completeConsent">
+                            <app:img form='<%= currentForm.getName()%>' field="$completeConsent" width="70%"
+                                     height="700px"/>
+                    </app:present>
+                </app:equal>
+            </td>
+        </tr>
+    </table>
+</div>

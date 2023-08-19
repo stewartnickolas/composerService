@@ -1,9 +1,33 @@
 <!DOCTYPE html>
+
 <html>
     <head>
+        <link rel="stylesheet" type="text/css" href="https://dev-dc2-vis02.preludedynamics.com/vision/interface/formBuilder.css">
+        <link rel="stylesheet" type="text/css" href="https://dev-dc2-vis02.preludedynamics.com/vision/vision8.css">
+        <link rel="stylesheet" type="text/css" href="https://dev-dc2-vis02.preludedynamics.com/vision/vision/spectrum.css">
+        <link rel="stylesheet" type="text/css" href="https://dev-dc2-vis02.preludedynamics.com/vision/interface/interface.css">
+        <link rel="stylesheet" type="text/css" href="https://dev-dc2-vis02.preludedynamics.com/vision/interface/themes/blue/blue_theme.css">
 
+        <link rel="stylesheet" type="text/css" href="/assets/css/jquery-ui.css"/>
+        <script src="/assets/js/jquery-3.3.1.min.js"></script>
+        <script src="/assets/js/jquery-ui.1.11.4.js"></script>
     </head>
     <body>
-        Hello World
+        <script>
+            var _lastFetchTime = Date.now();
+            _viewOnlyMode = false;
+            _showAdvanced = false;
+            _showAdvanced = true;
+        </script>
+      
+        <div id="composerAppContainer"></div>
+        <div id="composerErrors"></div>
+
+        <div id="dialog-root"></div>
+
+        <div id="fieldEditPopup" class="popupFieldInfo"></div>
+        <input type="hidden" name='_refresh=studyUID' value='hello'/>
+
+        <script src="/composerAppDist.js"></script>
     </body>
 </html>

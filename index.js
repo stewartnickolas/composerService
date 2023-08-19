@@ -33,7 +33,7 @@ async function authRequired(req, res, next) {
 };
 
 app.use(express.static('public'));
-app.use('/composer', authRequired, require('./routers/composerRouter'));
+app.use('/vision/composer', authRequired, require('./routers/composerRouter'));
 
 const errorHandler = (error, request, response, next) => {
     // Error handling middleware functionality

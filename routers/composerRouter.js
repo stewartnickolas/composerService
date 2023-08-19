@@ -48,12 +48,14 @@ router.post('/saveForm', (req, res) => {
 });
 
 router.post('/changeFormState', (req, res) => {
+    console.log(req.body);
 });
 
 router.post('/saveStudy', (req, res) => {
 });
 
 router.get('/loadStudy/:studyId', (req, res) => {
+    res.json(require('./cache/study'));
 });
 
 router.post('/addForm', (req, res) => {

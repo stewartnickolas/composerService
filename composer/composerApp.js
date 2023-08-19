@@ -44,22 +44,23 @@ $(document).ready(function(){
     $("#composerEditSiteBtn").addClass("composerBuildModeBtnSelected");
     $("#composerEditPatientBtn").removeClass("composerBuildModeBtnSelected");
   });
-  let stompClient = Stomp.client('ws://' + window.location.host + '/vision/wscomposer');
+  if (false) {
+    let stompClient = Stomp.client('ws://' + window.location.host + '/vision/wscomposer');
 
-  let stompMessageHandler = function(message){
-    Actions.refreshView(JSON.parse(message.body));
-  }
-  //stompClient.debug = null;//Turn off debug messages
-  stompClient.connect({jsessionid: document.cookie.jsessionid},
-    () => {
-      console.log("connected to websocket");
-      stompClient.subscribe("/topic/updates", stompMessageHandler);
-    },
-    (error) => {
-      console.log("Error connecting to websocket: " + error);
-    });
-  stompClient.subscribe("/topic/updates", stompMessageHandler);
- 
+    let stompMessageHandler = function(message){
+      Actions.refreshView(JSON.parse(message.body));
+    }
+    //stompClient.debug = null;//Turn off debug messages
+    stompClient.connect({jsessionid: document.cookie.jsessionid},
+      () => {
+        console.log("connected to websocket");
+        stompClient.subscribe("/topic/updates", stompMessageHandler);
+      },
+      (error) => {
+        console.log("Error connecting to websocket: " + error);
+      });
+    stompClient.subscribe("/topic/updates", stompMessageHandler);
+  } 
 });
 
 

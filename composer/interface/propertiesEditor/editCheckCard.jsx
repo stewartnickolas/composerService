@@ -131,7 +131,7 @@ class EditCheckCard extends React.Component{
                 {!studyStore.readonlyMode && (
                   <ButtonBase size="small" onClick={this.handleDuplicate}>
                     <img
-                      src={"/vision/global/composer/images/copy.png"}
+                      src={"/global/composer/images/copy.png"}
                       width="15"
                       height="15"
                     />

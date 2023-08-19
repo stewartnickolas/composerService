@@ -65,7 +65,7 @@ class Tool extends React.Component{
           iconComponent = <CodeIcon />;
           className = classes.svgIconContainer;
         } else {
-          icon = {background : 'url(/vision/global/composer/images/' + this.props.icon + '.png) no-repeat',
+          icon = {background : 'url(/global/composer/images/' + this.props.icon + '.png) no-repeat',
                     width: '30px',
                     height: '30px',
                     backgroundSize: 'cover'};

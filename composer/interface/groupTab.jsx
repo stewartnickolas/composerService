@@ -94,7 +94,7 @@ class GroupTab extends React.Component{
                           }
                         >
                           <img
-                            src={"/vision/global/composer/images/edit2.png"}
+                            src={"/global/composer/images/edit2.png"}
                             width="10"
                             height="10"
                           />

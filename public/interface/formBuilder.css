@@ -1,0 +1,1534 @@
+#toolbox{
+  position: absolute;
+  top: 0px;
+  width: 84px;
+  right: 0px;
+  bottom: 0px;
+  background-color: #555;
+  box-shadow: 5px 5px 10px rgba(0,0,0,0.4) inset;
+}
+.toolboxDivider{
+  background-image: url('../global/composer/images/divider.png');
+  width: 70px;
+  margin: 4px 0px 4px 8px;
+  height: 3px;
+  box-shadow: 5px 5px 10px rgba(0,0,0,0.4) inset;
+}
+#trash{
+  position: absolute;
+  display: block;
+  bottom: 20px;
+  right: 23px;
+  width: 40px;
+  height: 40px;
+  z-index: 1;
+}
+
+.trash-empty{
+  background: url('../global/composer/images/delete.png');
+  background-size: cover;
+}
+
+.trash-hover{
+  background: url('../global/composer/images/delete_hover.png');
+  background-size: cover;
+}
+#layoutAreaWrapper{
+  position: absolute;
+  top: 34px;
+  bottom: 0px;
+  left: 204px;
+  right: 82px;
+  background-color: #FFF;
+  color: #000;
+  overflow: hidden;
+}
+#layoutArea{
+  position: absolute;
+  height: 100%;
+  left: 0px;
+  right: 0px;
+  background-color: #FFF;
+  color: #000;
+  overflow-y: auto;
+  transition: right .2s ease-in 0s;
+}
+.formWrapper{
+    opacity: 0;
+    transition: opacity .2s;
+}
+#propertiesEditor{
+    display: block;
+    position: absolute;
+    background: #EEE;
+    width: 400px;
+    transition: right .2s ease-in 0s;
+    right: -400px;
+    bottom: 0px;
+    top: 0px;
+    overflow: hidden;
+    border: 2px solid #999;
+    border-right: none;
+    border-bottom: none;
+
+}
+#propertiesEditorInset{
+    background: #F4F4F4;
+    position: absolute;
+    top: 60px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    padding: 20px;
+    overflow: scroll;
+}
+.propertiesIcon{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    vertical-align: middle;
+    background: #DDD
+}
+.formComponent{
+    width: max-content;
+    height: 100%;
+    min-width: 100%;
+    display: table;
+}
+.readOnlyBkg{
+  background-color: #D7D7D7;
+}
+.controlledByBkg{
+  background-color: #fafafa;
+}
+.readOnlyBackground{
+    background-color: #DBDBDB;
+    background-repeat: repeat;
+    background-color: #CCCCCC;
+    background-image: linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)), url(./img/bgHash2.png);
+}
+.toolIcon, .categoryIcon, .rowIcon, .tableIcon{
+  position: relative;
+  color: #000;
+  display: inline-block;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  margin: 4px;
+  border-radius: 6px;
+  text-align: center;
+  vertical-align: middle;
+  border: 2px solid rgba(50,50,50,1);
+  box-shadow: 5px 5px 10px rgba(0,0,0,0.4);
+}
+.toolIcon:hover, toolIconWide:hover, .categoryIcon:hover, .rowIcon:hover, .tableIcon:hover{
+  border: 2px solid rgba(200, 200, 200, 0.8);
+}
+
+.composerBackground{
+  display: table;
+  background: #FFF;
+  position: relative;
+  min-width: 100%;
+  overflow: auto;
+}
+
+.section{
+  position: relative;
+  width: 100%;
+  display: inline-block;
+  min-height: 80px;
+}
+
+.sectionWrapper{
+  display: block;
+}
+
+.newTable{
+  width: 200px;
+  height: 100px;
+}
+.editField, .editForm, .previewForm, .editConstraints, .editCalculations, .editTableCell, .editTableBtn, .editColumnHeader{
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  display: inline-block;
+  background: url('../global/composer/images/edit2.png') no-repeat center;
+  background-size: 10px 10px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.editForm{
+  width: 16px;
+  height: 16px;
+  padding-right: 10px;
+  border: none;
+  vertical-align: middle
+}
+
+.editTableBtn{
+  float: left;
+  margin: 0px;
+  margin-left: 28px;
+  position: absolute;
+  background: url('../global/composer/images/edit2.png') no-repeat center;
+  background-size: 16px 16px;
+  width: 22px;
+  height: 22px;
+  z-index: 5;
+}
+
+.previewForm{
+  width: 16px;
+  height: 16px;
+  padding-right: 10px;
+  border: none;
+  vertical-align: middle;
+  background: url('../global/composer/images/preview.png') no-repeat center;
+}
+
+.editConstraints{
+  background-color: #FF8;
+}
+.editCalculations{
+  background-color: #8F8;
+}
+.tableCell{
+  position: relative;
+  min-width: 200px;
+  height: 80px;
+  vertical-align: middle;
+}
+.tableCellPublish{
+  position: relative;
+  vertical-align: middle;
+}
+.tableCellIndex{
+  position: relative;
+  text-align: center;
+  width:  20px;
+  height: 80px;
+  padding: 0 0.5rem;
+}
+.editTableCell{
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+}
+.editColumnHeader{
+  float: right;
+}
+.fieldEditRow{
+    text-align: right;
+}
+.fieldEditWrapper{
+  padding: 6px;
+  margin: 10px;
+  display: inline-block;
+  z-index: 2;
+}
+.fieldWrapper{
+  padding: 4px;
+  margin: 6px;
+  display: inline-table;
+  vertical-align: middle;
+  transition: 1s;
+  white-space: normal;
+}
+
+.fieldWrapperPublish{
+  padding: 4px;
+  margin: 2px;
+  display: inline-table;
+  vertical-align: middle;
+  transition: 1s;
+  white-space: normal;
+}
+.fieldWrapperVertical{
+  display: block;
+  padding: 0px;
+  margin: 0px;
+}
+.fieldInnerWrapper{
+  vertical-align: middle;
+  /*padding: 2px;*/
+  display: inline-flex;
+}
+.fieldInnerWrapperEdit{
+  border-radius: 6px;
+  padding: 6px 4px 4px 4px;
+  margin: 4px;
+  position: relative;
+  background: rgba(0,0,0,0.02);
+  border: 1px solid #DDD;
+}
+.fieldInnerWrapperVertical{
+  vertical-align: middle;
+  text-align: right;
+  background-color: #EEF;
+  padding: 2px;
+  clear: both;
+}
+.fieldInnerWrapperHorizontal{
+  vertical-align: middle;
+  text-align: right;
+  background-color: #EEF;
+  padding: 4px;
+  display: inline-block;
+  clear: both;
+}
+.popupFieldInfo{
+  position: absolute;
+  z-index: 100;
+  border-color: rgba(0,0,0,0.5);
+  background-color: #DDD;
+  color: #000;
+}
+#fieldEditPopup{
+  display: none;
+  background-color: #FFF;
+  border: 4px solid #222;
+  border-radius: 8px;
+  box-shadow: 6px 6px 10px rgba(0,0,0,0.7);
+  max-height: 600px;
+}
+.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.titleBar{
+  background-color: #222;
+  position: relative;
+  padding: 5px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-size: 1.2em;
+  color: #FFF;
+  cursor: move;
+}
+.closeDialog{
+  background-color: #666;
+  padding: 5px;
+  margin: 0px;
+  display: inline-block;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  border-radius: 0px 6px 0px 0px;
+  cursor: pointer;
+}
+.dialogContent{
+  position: relative;
+  padding: 20px;
+  max-height: 300px;
+  overflow: auto;
+}
+
+.dialogContent table{
+  margin-left: auto;
+  margin-right: auto;
+}
+.dialogContent td{
+  padding: 6px;
+}
+.popupFieldInfo input[type], .popupFieldInfo textarea{
+  margin: 4px;
+}
+.row{
+  width: 100%;
+  min-height: 80px;
+}
+.rowPublish{
+  width: 100%;
+}
+.rowEdit{
+  border: 1px dashed #DDF;
+  width: 100%;
+  min-height: 80px;
+}
+.rowHandle{
+  background-image: url("../global/composer/images/drag_handle1.svg");
+  position: absolute;
+  display: inline-block;
+  float:left;
+  width: 20px;
+  height: 30px;
+  cursor: move;
+  z-index: 5;
+}
+.tableHandle{
+  background: url("../global/composer/images/table.png");
+  background-size: cover;
+  position: absolute;
+  display: inline-block;
+  float:left;
+  width: 20px;
+  height: 20px;
+  cursor: move;
+  z-index: 5;
+}
+.tableEditBtn{
+  background: url('../global/composer/images/edit2.png') no-repeat center;
+  background-size: cover;
+  position: absolute;
+  display: inline-block;
+  margin-left: 24px;
+  margin-top: 4px;
+  width: 10px;
+  height: 10px;
+  cursor: pointer;
+  z-index: 5;
+}
+.tableCellHolder{
+  position: relative;
+  min-height: 80px;
+  min-width: 200px;
+  width: 100%;
+  height: 100%;
+}
+.showCells{
+  border: 1px solid #CCC;
+}
+.showCellsDashed{
+  border: 1px dashed #DDD;
+}
+.fieldHandle{
+  position: relative;
+  background: #AAF;
+  opacity: 0.9;
+  left: 0px;
+  top: 0px;
+  width: 20px;
+  height: 20px;
+  cursor: move;
+}
+.simple_button{
+    padding: 6px;
+    margin: 4px;
+    font-size: 1.2em;
+    background-color: #E1E1E1;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.7);
+    border: 1px solid #666;
+    color: black;
+}
+.simple_button:hover{
+  background-color: #AEA;
+}
+
+.dialog_buttons{
+  display: block;
+  width: 100%;
+  text-align: center;
+  border-top: 1px solid #DDD;
+  padding: 10px 0px 10px 0px;
+}
+
+#calculationEditorWrapper{
+  width: 100%;
+  height: 200px;
+  position: relative;
+  background-color: #FFF;
+  bottom: 0px;
+  left: 0px;
+}
+
+#calculationEditor{
+  width: 100%;
+  height: 100%;
+}
+
+#calculationEditorTitleBar{
+  width: 100%;
+  background-color: #AAA;
+  display: inline-block;
+}
+
+.calculationEditorTitle{
+  padding: 8px;
+  border-right: 2px solid #666;
+  background-color: #CCC;
+  display: inline-block;
+  cursor: pointer;
+}
+
+#calculationEditorContent{
+  background-color: #FFF;
+  position: relative;
+  overflow: auto;
+}
+
+#hideCalculationEditor{
+  float: right;
+  padding-top: 4px;
+  padding-right: 8px;
+  cursor: pointer;
+}
+#calculationEditorDivider{
+  width: 100%;
+  height: 4px;
+  background-color: #555;
+  cursor: s-resize;
+}
+
+.linker{
+  display: inline-block;
+  vertical-align: middle;
+  background-color: #8F8;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  z-index: 5;
+  cursor: move;
+}
+
+.linkerLine{
+  background-color: #8F8;
+  width: 5px;
+  height: 5px;
+  display: block;
+}
+
+.linkedFieldWrapper{
+  background-color: #DDD;
+  padding: 2px;
+  border-radius: 2px;
+  margin: 1px;
+  display: inline-block;
+}
+.unlinkField{
+  background-color: #AAA;
+  padding: 2px 4px 2px 4px;
+  margin: 4px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.tooltip{
+  background-color: #FFF !important;
+  opacity: 1 !important;
+  transition: .3s !important;
+}
+
+.labelTop{
+  display: block;
+  /*padding-top: 6px;*/
+  margin: 4px 0 4px 0;
+  text-align: left;
+  font-size: 1.1em;
+  max-width: 400px;
+}
+
+.labelLeft{
+  display: inline-block;
+  margin: 4px;
+  font-size: 1.1em;
+  max-width: 400px;
+}
+.labelRight{
+  display: inline-block;
+  margin: 4px;
+  font-size: 1.1em;
+}
+
+.labelHidden {
+  /*display: none;*/
+  font-style: italic;
+  color: #abaaff;
+  margin-right: 4px;
+}
+
+.tableLeft{
+  float: left;
+}
+.tableRight{
+  position: absolute;
+  right: 0px;
+}
+.labelHolder{
+  display: inline-table;
+  white-space: normal;
+  max-width: 600px;
+}
+
+.labelHolder.horizontal {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  max-width: 100%;
+  justify-content: start;
+  align-items: center;
+  text-align: start;
+}
+
+.textLabel{
+  color: #666;
+  padding: 10px;
+  font-size: 1.1em;
+  margin: 4px 0 4px 0;
+}
+
+.displayBlock{
+  display: block;
+}
+
+.radiosHorizontal{
+  /*white-space: nowrap;*/
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.radiosHorizontal .radioLabel:not(:last-child){
+  padding-right: 15px;
+}
+
+.radiosVertical{
+  display: block;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  margin-right: 2px;
+}
+
+.radiosSameLine{
+  display: flex;
+  flex-flow: row;
+  align-items: flex-start;
+}
+
+.radioLabel{
+  display: inline-block;
+  text-align: left;
+}
+.radioTable{
+  display: inline-block;
+  text-align: left;
+  margin: 4px 2px; /* matches the wrapping materialize imposes on normal text fields */
+}
+.radioTable input[type="radio"] {
+  margin-top: -1px;
+  vertical-align: middle;
+}
+.radioTable.composerBuild input[type="radio"]{
+  margin-top: 2px;
+}
+
+.checkbox-tag-wrapper {
+  margin: 4px 2px; /* matches the wrapping materialize imposes on normal text fields */
+}
+
+.changeOptions{
+  max-height: 150px;
+  overflow: auto;
+  border: 1px solid #333;
+  min-width: 500px;
+}
+.changeOptionsTable{
+  width: 100%;
+}
+.changeOptions input[type]{
+  margin: 0px;
+}
+.optionRow{
+    display: table-row;
+    white-space: nowrap;
+    display: flex;
+    white-space: nowrap;
+    vertical-align: middle;
+    justify-content: center;
+    vertical-align: bottom;
+    background: #EEE;
+    border-radius: 10px;
+    padding: 0px 10px 10px 10px;
+    margin: 4px;
+}
+.optionRowRemove{
+    background-image: url('../global/composer/images/x.svg');
+    background-size: 16px;
+    width: 16px !important;
+    height: 16px !important;
+    display: block;
+    cursor: pointer;
+    opacity: .6;
+    display: inline-flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 26px;
+}
+.calcInfoTab{
+  padding: 20px;
+  text-align: center;
+}
+.errorsAndWarnings{
+  padding: 4px;
+}
+
+.icon-text-small{
+  display: block;
+  background-image: url('../global/composer/images/text.png');
+  background-size: 20px 20px;
+  width: 20px;
+  height: 20px;
+}
+.icon-radio-small{
+  display: block;
+  background-image: url('../global/composer/images/radio.png');
+  background-size: 20px 20px;
+  width: 20px;
+  height: 20px;
+}
+.icon-select-small{
+  display: block;
+  background-image: url('../global/composer/images/select.png');
+  background-size: 20px 20px;
+  width: 20px;
+  height: 20px;
+}
+.icon-combo-small{
+  display: block;
+  background-image: url('../global/composer/images/combo.png');
+  background-size: 20px 20px;
+  width: 20px;
+  height: 20px;
+}
+.icon-checkbox-small{
+  display: block;
+  background-image: url('../global/composer/images/checkbox.png');
+  background-size: 20px 20px;
+  width: 20px;
+  height: 20px;
+}
+.icon-label-small{
+  display: block;
+  background-image: url('../global/composer/images/label.png');
+  background-size: 20px 20px;
+  width: 20px;
+  height: 20px;
+}
+.icon-textarea-small{
+  display: block;
+  background-image: url('../global/composer/images/textarea.png');
+  background-size: 20px 20px;
+  width: 20px;
+  height: 20px;
+}
+.icon-integer-small{
+  display: block;
+  background-image: url('../global/composer/images/integer.png');
+  background-size: 20px 20px;
+  width: 20px;
+  height: 20px;
+}
+.icon-numeric-small{
+  display: block;
+  background-image: url('../global/composer/images/numeric.png');
+  background-size: 20px 20px;
+  width: 20px;
+  height: 20px;
+}
+.icon-date-small, .icon-set-today-small{
+  display: block;
+  background-image: url('../global/composer/images/date.png');
+  background-size: 20px 20px;
+  width: 20px;
+  height: 20px;
+}
+.icon-time-small, .icon-set-now-small{
+  display: block;
+  background-image: url('../global/composer/images/time.png');
+  background-size: 20px 20px;
+  width: 20px;
+  height: 20px;
+}
+.icon-repeatingTable-small{
+  display: block;
+  background-image: url('../global/composer/images/repeating_table.png');
+  background-size: 24px 24px;
+  width: 24px;
+  height: 24px;
+}
+.icon-normalTable-small{
+  display: block;
+  background-image: url('../global/composer/images/table.png');
+  background-size: 24px 24px;
+  width: 24px;
+  height: 24px;
+}
+.icon-file-small{
+  display: block;
+  background-image: url('../global/composer/images/file.png');
+  background-size: 20px 20px;
+  width: 20px;
+  height: 20px;
+}
+.icon-hidden-small{
+  display: block;
+  background-image: url('../global/composer/images/hidden.png');
+  background-size: 20px 20px;
+  width: 20px;
+  height: 20px;
+}
+.icon-module-small{
+  display: block;
+  background-image: url('../global/composer/images/moduleIcon.svg');
+  background-size: 20px 20px;
+  width: 20px;
+  height: 20px;
+}
+.icon-vas-small{
+  display: block;
+  background-image: url('../global/composer/images/vas.png');
+  background-size: 20px 20px;
+  width: 20px;
+  height: 20px;
+}
+.publish_button{
+  color: #FFF;
+  font-weight: bold;
+  padding:1em 2em 1em 2em;
+  text-transform: uppercase;
+  border: 1px solid #71892B;
+  background: #B2D243; /* Old browsers */
+  background: -moz-linear-gradient(top,  #F50C2B 5%, #E85D6F 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(5%,#F50C2B), color-stop(100%,#E85D6F)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #F50C2B 5%,#E85D6F 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #F50C2B 5%,#E85D6F 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #F50C2B 5%,#E85D6F 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #F50C2B 5%,#E85D6F 100%); /* W3C */
+  /* filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F50C2B', endColorstr='#E85D6F',GradientType=0 ); IE6-9 */
+}
+.value_key{
+  color: #66F;
+  vertical-align: top;
+  margin: 4px;
+}
+
+.fieldWithInfo {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: flex-end;
+  width: 100%;
+}
+
+.textField{
+  width: 85%;
+}
+
+/*
+Necessary to match the alignment of material-ui <TextField> tags
+*/
+.textField .autoComplete {
+  margin-left: 10px;
+  margin-right: -10px;
+}
+
+.fieldWithInfo .infoIcon {
+  margin-bottom: 1rem;
+  margin: 20px;
+}
+
+.textField .autoComplete .infoIcon {
+  margin-bottom: 1rem;
+  margin: 5px;
+}
+
+.infoIcon{
+  background: url('../global/composer/images/iconInfo.svg') no-repeat center;
+  background-size: 14px;
+  margin: 4px;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.infoIconBlue{
+  background: url('../global/composer/images/iconInfoBlue.svg') no-repeat center;
+  background-size: 14px;
+  margin: 2px;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  vertical-align: text-bottom;
+  cursor: pointer;
+}
+
+.infoIconOrange{
+  background: url('../images/orangeInfo.svg') no-repeat center;
+  background-size: 26px;
+  margin: 4px;
+  width: 26px;
+  height: 26px;
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.infoIconMessage{
+  display: none;
+}
+
+.kbIcon{
+  background: url('../interface/themes/icons/help_blue_filled.svg') no-repeat center;
+  background-size: 14px;
+  margin: 2px;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  vertical-align: text-bottom;
+  cursor: pointer;
+}
+
+.kbIcon:hover{
+  background: url('../interface/themes/icons/help_blue_filled_dark.svg') no-repeat center;
+  background-size: 14px;
+  margin: 2px;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  vertical-align: text-bottom;
+  cursor: pointer;
+}
+
+.infoIconBackground{
+    padding: 20px;
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.4);
+    display: block;
+}
+
+.basicAdvancedTab{
+  padding: 6px;
+  margin-top:6px;
+  display: inline-block;
+  position: relative;
+  border-radius: 4px 4px 0px 0px;
+  border: 1px solid #777;
+  border-bottom: none;
+  font-weight: bold;
+  font-size: 1.1em;
+  cursor: pointer;
+  background-color: #DDD;
+}
+.tab-active{
+  background-color: #FFF;
+}
+
+.appDisplayBackground{
+  background-color: #d7d7d7;
+  display: inline-block;
+  position: relative;
+}
+.appDisplayBackgroundTable{
+  background: url(./img/app_display2b.png) repeat;
+}
+.appDisplayBackground.fieldWrapperVertical{
+  display: block;
+}
+.formLibraryFolders{
+  max-height: 227px;
+  overflow: auto;
+  border: 1px solid #AAA;
+  box-shadow: #222 4px 4px 4px inset;
+  padding: 10px;
+}
+.formLibraryItem{
+    display: block;
+    padding: 10px;
+    color: #444;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+.formLibraryItem:hover{
+    color: #004D9C;
+    background: #DEF;
+}
+.formLibraryItemSelected{
+    background-color: #004D9C;
+    color: #EEE;
+}
+
+.formLibraryStudy{
+  display: block;
+  padding: 10px;
+  color: #FFF;
+  font-weight: bold;
+  background: #6b6b6b;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+.formLibraryStudy:hover{
+  color: #ffffff;
+  background: #51829c;
+}
+
+.fixedIndexCount{
+  position: absolute;
+  margin-top: -20px;
+  margin-left: 0px;
+  font-size: 8pt;
+  padding: 4px;
+  background-color: #222;
+  color: #EEE;
+  font-weight: bold;
+  border-radius: 3px 3px 0px 0px;
+  cursor: pointer;
+}
+
+#composerAppContainer{
+    position: absolute;
+    top: 56px;
+    left:0px;
+    right: 0px;
+    bottom: 0px;
+    display: block;
+    background: #FFF;
+    overflow: hidden;
+    transform: translateZ(0);
+}
+.composerAppWrapper{
+    position: absolute;
+    top: 0px;
+    left:0px;
+    right: 0px;
+    bottom: 0px;
+    display: block;
+    background: #FFF;
+}
+.modeBar{
+    position: absolute;
+    top: 0px;
+    bottom: 30px;
+    left: 0px;
+    right: 0px;
+    display: block;
+    background: #FFF;
+}
+
+#composerSideMenu{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    background: #DDD;
+    width: 200px;
+    display: block;
+    overflow: auto;
+}
+
+#composerSubMenu{
+    position: absolute;
+    top: 0px;
+    left: 204px;
+    right: 84px;
+    display: inline-block;
+    white-space: nowrap;
+    height: 40px;
+}
+#composerSubMenu table{
+  position: relative;
+  transition: .3s;
+}
+#composerSubMenu .arrow{
+  position: absolute;
+  width: 30px;
+  height: 34px;
+  cursor: pointer;
+  transition: .3s;
+}
+#composerSubMenu .arrow.left:hover,
+#composerSubMenu .arrow.right:hover{
+ background-color: #DDD;
+}
+
+#composerSubMenu .arrow.left{
+  left: 0px;
+  background: url("../interface/img/left_arrow.png") no-repeat center;
+  background-color: #CCC;
+}
+#composerSubMenu .arrow.right{
+  right: 0px;
+  background: url("../interface/img/right_arrow.png") no-repeat center;
+  background-color:#CCC;
+}
+
+#composerSubMenuTabs{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  overflow: hidden;
+}
+#composerSubMenuTabs.showArrows{
+  left: 30px;
+  right: 60px;
+}
+.composerFormTab{
+    display: inline-table;
+    height: 30px;
+    padding-left:10px;
+    font-size: 1.2em;
+    text-align: left;
+    background: #AAA;
+    cursor: pointer;
+    transition: .3s ease-in-out;
+    border-left: 2px solid #888;
+}
+.composerGroupTab{
+    display: table;
+    height: 30px;
+    padding-left:10px;
+    font-size: 1.2em;
+    text-align: left;
+    background: #AAA;
+    cursor: pointer;
+    transition: .3s ease-in-out;
+    position: relative;
+}
+
+.composerFormTab:hover, .composerGroupTab:hover{
+    background: #CCC;
+}
+
+.composerGroupTabOver{
+    background: #99F;
+}
+
+.composerFormTabSelected{
+    background: #DDD;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+.addGroupTab{
+    position: relative;
+    background: #AAF;
+    color: #FFF;
+    display: table;
+    width: 100%;
+    height: 34px;
+    background: #666;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: bold;
+    font-size: 2em;
+    cursor: pointer;
+}
+
+.addFormTab{
+    color: #FFF;
+    display: inline-block;
+    width: 30px;
+    height: 34px;
+    background: #666;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: bold;
+    font-size: 2em;
+    cursor: pointer;
+}
+.addFormTab.arrow{
+  position: absolute;
+  right: 30px;
+}
+
+.addGroupTab:hover, .addFormTab:hover{
+    background: #99F;
+}
+.groupTabBtn{
+    display: table-cell;
+    vertical-align: middle;
+    text-align: left;
+    width: 180px;
+}
+.formTabBtn{
+    display: table-cell;
+    vertical-align: middle;
+    text-align: left;
+    padding-left: 10px;
+    /*padding-right: 10px;*/ /* Handled in jsx (have to account for edit icon) */
+}
+.formTabHandle{
+  background-image: url("../global/composer/images/drag_handle1.svg");
+  position: relative;
+  width: 20px;
+  height: 34px;
+  cursor: move;
+  left:-10px;
+  top: 0px;
+}
+.formTabMenuIcon{
+    display: table-cell;
+    right: 0px;
+    width: 20px;
+    height: 30px;
+    text-align: right;
+    vertical-align: middle;
+    padding-top: 4px;
+}
+.errorMsg{
+    display: block;
+    font-weight: bold;
+    font-size: 1.1em;
+    padding: 6px;
+    color: #F22;
+}
+
+.editCheckCard{
+    display: block;
+    box-shadow: 0 0 4px #000;
+    margin-left: 10px;
+    margin-right: 10px;
+    background: #FFF;
+    margin: 10px;
+    min-width: 200px;
+    position: relative;
+}
+.editCheckCardRemove{
+    background-image: url('../global/composer/images/x.svg');
+    background-size: 12px;
+    width: 12px;
+    height: 12px;
+    display: block;
+    cursor: pointer;
+    position: absolute;
+    right: 8px;
+    top: 8px;
+}
+.propertiesEditorClose{
+    background-image: url('../global/composer/images/x.svg');
+    background-size: 16px;
+    width: 16px !important;
+    height: 16px !important;
+    display: block;
+    cursor: pointer;
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    z-index: 2;
+    opacity: .6;
+}
+.autoCompleteOptions{
+    display: block;
+    z-index: 100;
+    background: #FFF;
+    position: absolute;
+    box-shadow: 4px 4px 8px #000;
+}
+.autoComplete{
+    position: relative;
+    display: block;
+    padding: 8px;
+}
+.autoComplete::before{
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    content: "";
+    position: absolute;
+    transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    pointer-events: none;
+    background-color: rgba(0, 0, 0, 0.42);
+}
+.autoComplete::after{
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    content: "";
+    position: absolute;
+    transform: scaleX(0);
+    transition: transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
+    pointer-events: none;
+    background-color: #303f9f;
+}
+.heading_high{
+    margin-top: 0;
+}
+.buildModeSelect{
+    display: inline-flex;
+    white-space: nowrap;
+    background-color: #115b87;
+    padding: 4px;
+    border-radius: 4px;
+    margin-right: 16px;
+}
+.buildModeUnselected{
+  display: inline-flex;
+  white-space: nowrap;
+  background-color: #13689a;
+  padding: 4px;
+  border-radius: 4px;
+  margin-right: 16px;
+}
+.iconConstraints{
+    background-image: url('../global/composer/images/constraintsIcon.svg');
+    background-size: cover;
+    margin-top: 6px;
+    width: 22px;
+    height: 22px;
+}
+.iconConstraintsTool{
+    background: url('../global/composer/images/constraintsIcon.svg') no-repeat center #AAA;
+    background-size: 22px;
+    width: 30px;
+    height: 30px;
+}
+.iconCalculations{
+    background-image: url('../global/composer/images/calculationsIcon.svg');
+    background-size: cover;
+    margin-top: 6px;
+    width: 22px;
+    height: 22px;
+}
+.iconCalculationsTool{
+    background: url('../global/composer/images/calculationsIcon.svg') no-repeat center #AAA;
+    background-size: 22px;
+    width: 30px;
+    height: 30px;
+}
+.iconFormProps{
+    background-image: url('../global/composer/images/settings.svg');
+    background-size: cover;
+    background-position-y: 5px;
+    width: 36px;
+    height: 36px;
+}
+.iconFormPropsTool{
+    background: url('../global/composer/images/settings.svg') no-repeat center #AAA;
+    background-size: 34px 34px;
+    background-position: -3px -2px;
+    width: 30px;
+    height: 30px;
+}
+.iconGroupProps{
+    background-image: url('../global/composer/images/groupProps.svg');
+    background-size: cover;
+    width: 22px;
+    height: 30px;
+}
+.iconFormDetails{
+    background: url('../global/composer/images/publish.svg') no-repeat;
+    background-size: 24px 24px;
+    background-position: 0px 6px;
+    width: 30px;
+    height: 30px;
+}
+.iconFormDetailsTool{
+    background: url('../global/composer/images/details2.svg') no-repeat center #AAA;
+    background-size: 66px 26px;
+    width: 70px;
+    margin: 6px;
+    height: 30px;
+}
+.propsTabHolder{
+  display: table;
+  width: 100%;
+  vertical-align: bottom;
+  height: 60px;
+  background: #666;
+}
+.propsTab{
+  display: table-cell;
+  width: 60px;
+  height: 40px;
+  text-align: center;
+  background: #CCC;
+  transition: .3s;
+  cursor: pointer;
+}
+.propsTab:hover{
+  background: #F4F4F4;
+}
+.propsTabIcon{
+  display: inline-block;
+}
+.propsTabSelected{
+  display: table-cell;
+  width: 60px;
+  height: 40px;
+  background: #F4F4F4;
+  text-align: center;
+  cursor: pointer;
+}
+.statusIndicator{
+    display: inline-block;
+    border-radius: 7px;
+    width: 10px;
+    height: 10px;
+    margin-bottom: 10px;
+    border: 2px solid #555;
+    margin-right: 8px;
+
+}
+.statusIndicatorLarge{
+    text-align: center;
+    vertical-align: middle;
+     width: 20px;
+     height: 20px;
+     border-radius: 20px;
+     color: #000;
+}
+.composerLink{
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #339;
+    cursor: pointer;
+}
+.fieldFinderMatch:hover{
+    background: #CCF;
+}
+.fieldFinderCharMatch{
+    color: #4a7ef6;
+    transition: .5s;
+}
+.fieldFinderMatchBtn{
+  width: 100%;
+}
+.fieldFinderExpand{
+  display: inline-block;
+  position: relative;
+  right: 0px;
+  text-align: center;
+  line-height: 20px;
+  vertical-align: middle;
+  width: 20px;
+  height: 20px;
+  background: #4a7ef6;
+  color: #FFF;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+.fieldHiddenPlaceholder{
+    display: block;
+    border: 2px dashed #666;
+}
+.formOverviewData{
+    font-weight: bold;
+    font-size: 1.1em;
+    padding: 6px;
+    padding-left: 16px;
+    color: #666;
+}
+.formOverviewData:after{
+    font-weight: bold;
+    font-size: 1.1em;
+    padding: 6px;
+    color: #666;
+}
+.composerBuildModeBtn{
+    background: #9E9E9E;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    margin-left: 4px;
+    padding: 3px;
+    opacity: .6;
+    user-select: none;
+}
+.composerBuildModeBtn img{
+    user-select: none;
+}
+.composerBuildModeBtnSelected{
+   box-shadow: 0px 0px 4px #bffffb;
+    border: 1px solid #fff;
+    background: #FFF;
+}
+.fieldGroup{
+    border-radius: 10px;
+    padding: 10px;
+    display: block;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    border: 2px solid #AAA;
+}
+.shareRulesBtn{
+  background: url('../global/composer/images/shareIcon.svg') no-repeat center;
+  background-size: 14px;
+  margin: 4px;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.shareRulesBtnField{
+  background: url('../global/composer/images/shareIcon.svg') no-repeat center;
+  background-size: 14px;
+  margin: 4px;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  vertical-align: top;
+  cursor: pointer;
+}
+
+.shareRulesBtnTable{
+  background: url('../global/composer/images/shareIcon.svg') no-repeat center;
+  background-size: 14px;
+  margin: 2px;
+  width: 100px;
+  height: 14px;
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.modulePlaceholder{
+  border: 4px solid #CCC;
+  border-radius: 2px;
+  background: #EEE;
+  padding: 10px;
+  cursor: move;
+}
+
+.vasWrapper{
+  display: block;
+}
+
+.vasLabelWrapper{
+  display: flex;
+  width: 100%;
+  color: #666;
+  padding: 0px 20px 20px 20px;
+  margin-top: -9px;
+}
+
+/* On smaller screens, sacrifice design in favor of usability */
+@media (max-width: 1000px){
+  #composerAppContainer{
+    top: 56px;
+  }
+}
+
+/* SortBy on Table Edit Dialog */
+.sortByField .autoComplete {
+  padding: 0;
+}
+
+.sortByField {
+  margin-bottom: 12px; /* match alignment with other fields */
+}
+
+.moveColumn {
+  height: 0px;
+  cursor: move;
+  float: right;
+  z-index: 5;
+  position: relative; /* needed for "cursor: move" with z indexing*/
+}

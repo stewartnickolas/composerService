@@ -1,58 +1,81 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const FormRefSchema = new Schema({
+    name:String,
+    label:String,
+    formStatus:String,
+    formType:String, // TODO: Enum?, normal provided, ..?
+    refIf:mongoose.ObjectId,
+    includeInFormLibrary:{type:Boolean, default:false},
+    _type:{type:String, default:'formRef'},
+    lastPublishedName:String,
+    lastPublishedLabel:String,
+    onDemand:Boolean,
+    isOriginal:Boolean
+
+});
+FormRefSchema.set('toJSON', {
+    virtuals: true
+});
+
+const GroupSchema = new Schema({
+    name:String,
+    label:String,
+    onDemand:Boolean,
+    _type:{type:String, default:'group'},
+    formRefs: [FormRefSchema],
+});
+
+GroupSchema.set('toJSON', {
+    virtuals: true
+});
+
+const ViewSchema = new Schema({
+    _type:{type:String, default:'view'},
+    _id:String,
+    groups: [GroupSchema]
+})
+ViewSchema.set('toJSON', {
+    virtuals: true
+});
+
 const ComposerStudy = new Schema({
 
     _id:String,
     name:String,
-    views:[
-        {
-            _id: String,
-            groups: [
-                {
-                    name:mongoose.ObjectId,
-                    label:String,
-                    onDemand:Boolean,
-                    formRefs: [
-                        {
-                            name:mongoose.ObjectId,
-                            label:String,
-                            formStatus:String,
-                            formType:String, // TODO: Enum?, normal provided, ..?
-                            refIf:mongoose.ObjectId,
-                            includeInFormLibrary:Boolean,
-                            _type:{type:String, default:'formRef'}
-                        }
-                    ]
-
-                }
-            ]
-        }
-    ],
+    views:[ViewSchema],
     roles: [
         {
             code:String,
             name:String,
             shortName:String,
-            edits:String 
+            edits:String,
+            _type:{type:String, default:"role"}
         }
     ],
     studyAttributes: [
         {
             name:String,
             value:String,
-            _type:String,
+            _type:{type:String,default:'studyAttribute'}
         }
     ],
     prefs: {
         defaultSiteCanDos:Schema.Types.Mixed,
         defaultPatientCanDos: Schema.Types.Mixed
     },
+    _type:{type:String, default:"study"},
     lastPublishedTime:Number,
     lastPublishedBy:String,
+    requireChangeReason:{type:Boolean, default:true},
     _class:String // TODO: Do we need this?
 
 }, { timestamps:true, collection: 'studies' });
+
+ComposerStudy.set('toJSON', {
+    virtuals: true
+});
 
 const ShareRule = {
         type:String, // TODO Enum none...?

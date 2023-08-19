@@ -63,7 +63,8 @@ router.get('/loadStudy/:studyId', async (req, res, next) => {
         } else {
             const fs = require('fs');
             fs.writeFileSync(__dirname + '/foo.js', 'module.exports = ' + JSON.stringify(study.toJSON(), null, 4));
-            res.json(study);
+            res.json(require('./foo.js'));
+            // res.json(require('./cache/study'));
         }
     } catch (err) {
         log.error(err);

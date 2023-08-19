@@ -1,0 +1,176 @@
+/*BEGIN THEME CSS*/
+ body {
+    font-family: 'Droid Sans', sans-serif;
+    background: #C05800;
+}
+/* background color for the header */
+.subMenuItem:hover, .currentSubMenuItem {
+    background-color: #FFFFFF;
+    border-color: #FFFFFF;
+}
+#headerInfo{
+  background-color: #EEEEEE;
+}
+
+#listHeaderInfo{
+  background-color: #CDE;
+  color: #000;
+}
+
+.headerInfoItem{
+  background-color: #DDDDDD;
+}
+
+#virtualWindow{
+  background-color: #AAAAAA;
+  border: 5px solid #AAAAAA;
+}
+
+#virtualWindowList #virtualWindow{
+  background-color: #64b7b4;
+  border: 5px solid #64b7b4;
+}
+.dropMenuScroller{
+  background-color: #3AA;
+}
+
+.dropMenuScroller:hover{
+  background-color: #DDDDDD;
+}
+
+.currentStudySiteDropdown{
+  background-color: #F2F2F2;
+}
+
+
+#currentForm{
+  color: #333333;
+  color: rgba(0,0,0,0.5);
+}
+
+/*unselected button/menu item*/
+#menuScrollBar, #menuWrapper {
+    background-color: #777777;
+    color: #FFFFFF;
+}
+.menuItem{
+  background-color: #515151;
+  color: #FFFFFF;
+}
+/* menu slider and navigation buttons */
+#menuScrollUp, #menuScrollDown, #subMenuButtonLeft, #subMenuButtonRight {
+    background-color: #777777;
+    color: #000000;
+}
+
+#menuScroller{
+  background-color: #444444;
+}
+
+#menuScroller:hover, #menuScrollUp:hover, #menuScrollDown:hover{
+  background-color: #AAAAAA;
+}
+
+/* hover / selected menu item */
+ .menuItem:hover, .currentMenuItem {
+    background-color: #FFFFFF;
+    border: 1px solid #224444;
+    padding: 4px;
+    color: #000000;
+}
+
+.subMenuItem{
+  background-color: #777777;
+  color: #FFF;
+}
+
+#iconBar{
+  background-color: #111111;
+}
+
+.studySiteSelect{
+  margin: 0;
+  padding: 6px;
+  background: #f8f8f8;
+  font-family: 'Droid Sans';
+  color:#222222;
+  border:none;
+  outline:none;
+}
+
+/* a defalut border color for interface elements */
+.subMenuItem, #subMenuButtonLeft, #subMenuButtonRight{
+  border-color: #999999;
+  border-color: rgba(0,0,0,0.3);
+}
+
+.crfButton, .iconOn, .iconOff, #user-account .roundbox, #currentLocationBar{
+  background-color: #111111;
+}
+/*END THEME CSS*/
+
+td.top_row_no_bold{
+  background: #DDDDDD;
+  color: #222222;
+}
+
+.normal_no_bottom_border, .normal_table{
+  background-color: #FFFFFF;
+}
+
+td.column_header{
+  border: none;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  background-color: #FF9418;
+  color: #000;
+}
+
+
+td.column_header_select{
+  background-color: #365687;
+  border: none;
+  color: #FFF;
+}
+
+.sortableHeader{
+  color: #000000;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  cursor: pointer;
+  background-color: #EEEEEE;
+  color: #000000;
+  border-radius: 3px;
+}
+
+.currentSortableHeader{
+  color: #000000;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  cursor: pointer;
+  background-color: #AACCFF;
+  color: #000000;
+  border-radius: 3px;
+}
+
+.sortableHeader:hover{
+  background-color: #FFFFFF;
+}
+
+.lightly_boxed{
+  border-bottom: solid #CCCCCC .75pt;
+  border-left: solid #CCCCCC .75pt;
+  border-right: solid #CCCCCC .75pt;
+}
+
+td.top_row{
+  background-color: #8EB5BD;
+  color: #000;
+  font-weight: bold;
+}
+
+.heading{
+  background: #C05800;
+  font-weight: bold;
+}
+

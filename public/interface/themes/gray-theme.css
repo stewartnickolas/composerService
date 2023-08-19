@@ -1,0 +1,161 @@
+/* LAYOUT  web/interface/themes/theme.css.vm */
+
+
+
+
+
+/*BEGIN THEME CSS*/
+body {color:#111111; background-color:#c4c4c4; border-color:#b2b2b2;
+  font-family: 'Droid Sans', sans-serif;
+}
+.label {color:#000000; background-color:#dddddd; border-color:#c7c7c7;
+background-color: transparent;
+}
+#mainContent{color:#111111; background-color:#c4c4c4; border-color:#b2b2b2; }
+#menu{color:#eeeeee; background-color:#555555; border-color:#646464;}
+.currentSubMenuItem { color:#eeeeee; background-color:#555555; border-color:#646464; }
+#headerInfo{color:#eeeeee; background-color:#555555; border-color:#646464;}
+#listHeaderInfo{color:#eeeeee; background-color:#555555; border-color:#646464;}
+.headerInfoItem{
+  color: #222222;
+  background-color: #dddddd;
+}
+#virtualWindow{
+  background-color: #777777;
+  border: 5px solid #777777;
+}
+#virtualWindowList #virtualWindow{color:#eeeeee; background-color:#555555; border-color:#646464;
+  border-width: 5px;
+}
+.currentStudySiteDropdown{background-color:#555555; border-color:#646464;}
+#currentForm{color:#eeeeee; background-color:#555555; border-color:#646464;}
+/*unselected button/menu item*/
+#menuScrollBar, #menuWrapper {
+  background-color: #777777;
+  color: #ffffff;
+}
+/* menu slider and navigation buttons */
+#menuScrollUp, #menuScrollDown, #subMenuButtonLeft, #subMenuButtonRight {
+  background-color: #777777;
+  color: #000000;
+}
+#menuScroller{
+  background-color: #444444;
+}
+#menuScroller:hover, #menuScrollUp:hover, #menuScrollDown:hover{
+  background-color: #aaaaaa;
+}
+#iconBar{color:#eeeeee; background-color:#555555; border-color:#646464;}
+.studySiteSelect{
+  margin: 0;
+  padding: 6px;
+  background: #f8f8f8;
+  font-family: 'Droid Sans';
+  color:#222222;
+  border:none;
+  outline:none;
+}
+/* a defalut border color for interface elements */
+.subMenuItem, #subMenuButtonLeft, #subMenuButtonRight{
+  border-color: #999999;
+  border-color: rgba(0,0,0,0.3);
+}
+.crfButton, .iconOn, .iconOff, #user-account .roundbox, #currentLocationBar{color:#eeeeee; background-color:#555555; border-color:#646464;}
+/*END THEME CSS*/
+
+td.top_row_no_bold{
+  background: #dddddd;
+  color: #222222;
+}
+.normal_no_bottom_border, .normal_table{
+  background-color: #ffffff;
+}
+td.column_header{
+  color:#111111; background-color:#c4c4c4; border-color:#b2b2b2;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+td.column_header_select{
+  color:#111111; background-color:#bbbbbb; border-color:#aaaaaa;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+td.top_row{color:#eeeeee; background-color:#555555; border-color:#646464;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+.sortableHeader{
+  color:#eeeeee; background-color:#555555; border-color:#646464;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.sortableHeader:hover{color:#eeeeee; background-color:#333333; border-color:#464646;}
+.currentSortableHeader{color:#eeeeee; background-color:#333333; border-color:#464646; }
+.currentSortableHeader:hover{color:#eeeeee; background-color:#333333; border-color:#464646;}
+.lightly_boxed{
+  border-bottom: solid #cccccc .75pt;
+  border-left: solid #cccccc .75pt;
+  border-right: solid #cccccc .75pt;
+}
+td.top_row{ color:#111111; background-color:#c4c4c4; border-color:#b2b2b2; }
+.heading{ color:#111111; background-color:#c4c4c4; border-color:#b2b2b2; }
+.widgets{ color:#000000; background-color:#dddddd; border-color:#c7c7c7; }
+.contrast_low{ color:#000000; background-color:#dddddd; border-color:#c7c7c7; }
+.contrast_medium{ color:#111111; background-color:#c4c4c4; border-color:#b2b2b2; }
+.contrast_high{ color:#eeeeee; background-color:#555555; border-color:#646464; }
+.heading_low{ color:#000000; background-color:#dddddd; border-color:#c7c7c7; }
+.heading_medium{ color:#111111; background-color:#c4c4c4; border-color:#b2b2b2; }
+.heading_high{ color:#eeeeee; background-color:#555555; border-color:#646464; }
+
+.list_row_odd { color:#000000; background-color:#dddddd; border-color:#c7c7c7; }
+.list_row_even { color:#000000; background-color:#d5d5d5; border-color:#c0c0c0; }
+.list_row_neutral { color:#000000; background-color:#dddddd; border-color:#c7c7c7; }
+.list_row_link_odd { color:#000000; background-color:#dddddd; border-color:#c7c7c7; }
+.list_row_link_even { color:#000000; background-color:#d5d5d5; border-color:#c0c0c0; }
+.highlight { color:#111111; background-color:#c4c4c4; border-color:#b2b2b2; } /* used for currently selected row, sort of */
+.list_row_link_odd:hover { color:#000000; background-color:#eeeeee; border-color:#d6d6d6; }
+.list_row_link_even:hover { color:#000000; background-color:#eeeeee; border-color:#d6d6d6; }
+.list_row_odd_muted {color:#000000; background-color:#dddddd; border-color:#c7c7c7;}
+.list_row_slightly_dark {color:#000000; background-color:#cccccc; border-color:#b8b8b8;}
+.list_row_dark {color:#000000; background-color:#aaaaaa; border-color:#999999;}
+.list_row_even_muted {color:#000000; background-color:#d5d5d5; border-color:#c0c0c0;}
+.highlight:hover {color:#111111; background-color:#dddddd; border-color:#c9c9c9;}
+
+.list_item {
+}
+.list_item_current {
+}
+
+/* all-tab colors */
+#showAllTabsButton{ color:#111111; background-color:#c4c4c4; border-color:#b2b2b2; }
+#showAllTabsButton:hover{ color:#111111; background-color:#dddddd; border-color:#c9c9c9; }
+.subMenuItem{ color:#111111; background-color:#c4c4c4; border-color:#b2b2b2; }
+.subMenuItem:hover{ color:#111111; background-color:#dddddd; border-color:#c9c9c9; }
+#allTabsMenu{
+  background-color: #555;
+  background-color: rgba(0,0,0,.7);
+  border-color: #000;
+}
+.allTabItem{ color:#111111; background-color:#c4c4c4; border-color:#b2b2b2; }
+.allTabItem:hover{ color:#111111; background-color:#dddddd; border-color:#c9c9c9; }
+.allTabsCol{ border-color: #CCC; }
+
+.today_now_button{color:#111111; background-color:#c4c4c4; border-color:#b2b2b2;}
+.today_now_button_error{
+  /* todo include error colors in properties */
+}
+.today_now_button_warning{
+  /* todo include warning colors in properties */
+}
+.normal_table {color:#eeeeee; background-color:#555555; border-color:#646464;}
+.border_left_right_bottom {color:#eeeeee; background-color:#555555; border-color:#646464;}
+.first_under_tabs { color:#eeeeee; background-color:#555555; border-color:#646464; }
+.first_under_tabs_bottom_border { color:#eeeeee; background-color:#555555; border-color:#646464; }
+.first_under_tabs_bottom_border_no_print_border { color:#eeeeee; background-color:#555555; border-color:#646464; }
+
+.ownerName{color:#eeeeee; background-color:#555555; border-color:#646464;}
+.ownerNameSelect{color:#eeeeee; background-color:#555555; border-color:#646464;}
+.ownerType{color:#eeeeee; background-color:#555555; border-color:#646464;}
+ 

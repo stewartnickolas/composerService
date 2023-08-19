@@ -54,8 +54,21 @@ router.post('/changeFormState', (req, res) => {
 router.post('/saveStudy', (req, res) => {
 });
 
-router.get('/loadStudy/:studyId', (req, res) => {
-    res.json(require('./cache/study'));
+router.get('/loadStudy/:studyId', async (req, res, next) => {
+    try {   
+        const study = await composerService.loadStudy(req.params.studyId);
+        if (! study) {
+            const msg =  "No study found for id: " + req.query.studyId;
+            res.status(BAD_REQUEST).send(msg);
+        } else {
+            const fs = require('fs');
+            fs.writeFileSync(__dirname + '/foo.js', 'module.exports = ' + JSON.stringify(study.toJSON(), null, 4));
+            res.json(study);
+        }
+    } catch (err) {
+        log.error(err);
+        res.status(BAD_REQUEST).send(err);
+    }
 });
 
 router.post('/addForm', (req, res) => {

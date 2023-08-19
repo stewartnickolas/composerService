@@ -3,9 +3,11 @@ const Schema = mongoose.Schema;
 
 const ComposerStudy = new Schema({
 
+    _id:String,
     name:String,
     views:[
         {
+            _id: String,
             groups: [
                 {
                     name:mongoose.ObjectId,
@@ -18,7 +20,8 @@ const ComposerStudy = new Schema({
                             formStatus:String,
                             formType:String, // TODO: Enum?, normal provided, ..?
                             refIf:mongoose.ObjectId,
-                            includeInFormLibrary:Boolean
+                            includeInFormLibrary:Boolean,
+                            _type:{type:String, default:'formRef'}
                         }
                     ]
 
@@ -37,7 +40,8 @@ const ComposerStudy = new Schema({
     studyAttributes: [
         {
             name:String,
-            value:String
+            value:String,
+            _type:String,
         }
     ],
     prefs: {

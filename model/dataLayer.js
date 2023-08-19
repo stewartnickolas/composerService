@@ -75,6 +75,7 @@ module.exports = {
     findById,
     model: {
         ComposerForm:'ComposerForm',
-        ComposerSnapshot:'ComposerSnapshot'
+        ComposerSnapshot:'ComposerSnapshot',
+        ComposerStudy:'ComposerStudy'
     }
 }

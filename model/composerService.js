@@ -90,8 +90,16 @@ async function loadSnapshot(snapshotId) {
     }
     throw new Error(`${dataLayer.model.ComposerSnapshot} not found`);
 }
+async function loadStudy(studyId) {
+    const ComposerStudyModel = await dataLayer.getModel("vision",dataLayer.model.ComposerStudy);
+    if (ComposerStudyModel) {
+        return ComposerStudyModel.findOne({_id:studyId});
+    }
+    throw new Error(`${dataLayer.model.ComposerStudy} not found`);
+}
 
 module.exports = {
     loadFormId,
-    loadSnapshot
+    loadSnapshot,
+    loadStudy
 }

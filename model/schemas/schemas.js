@@ -38,6 +38,7 @@ ViewSchema.set('toJSON', {
     virtuals: true
 });
 
+
 const ComposerStudy = new Schema({
 
     _id: String,
@@ -60,8 +61,8 @@ const ComposerStudy = new Schema({
         }
     ],
     prefs: {
-        defaultSiteCanDos: Schema.Types.Mixed,
-        defaultPatientCanDos: Schema.Types.Mixed
+        defaultSiteCanDos: {type:Schema.Types.Mixed, default:{}},
+        defaultPatientCanDos: {type:Schema.Types.Mixed, default:{}}
     },
     _type: { type: String, default: "study" },
     lastPublishedTime: Number,
@@ -69,7 +70,7 @@ const ComposerStudy = new Schema({
     requireChangeReason: { type: Boolean, default: true },
     _class: String // TODO: Do we need this?
 
-}, { timestamps: true, collection: 'studies' });
+}, { timestamps: true, collection: 'studies', minimize: false  });
 
 ComposerStudy.set('toJSON', {
     virtuals: true

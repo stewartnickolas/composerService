@@ -79,9 +79,22 @@ router.get('/loadStudy/:studyId', async (req, res, next) => {
     }
 });
 
-router.post('/addForm', (req, res) => {
-    console.log(req.body);
-    // req.query.formRefId
+/**
+ * req.body - a ComposerForm structure (see schemas.js)
+ * 
+ */
+router.post('/addForm', async (req, res) => {
+    try {
+        const formRef = await composerService.addForm(req.body);
+        if (formRef && formRef._id) {
+            res.json(formRef._id);
+        } else {
+            res.status(BAD_REQUEST).send(err);
+        }
+    } catch (err) {
+        log.error(err);
+        res.status(BAD_REQUEST).send(err);
+    }
 });
 
 router.post('/addGroup', (req, res) => {

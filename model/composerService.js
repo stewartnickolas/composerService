@@ -119,6 +119,16 @@ async function changeFormState(data) {
     // String state = data.state;
 }
 
+/**
+ * 
+ * 1) Load the study associated with the request, we need the study.name, and client.id attribute from the study
+ * 2) Create the form based on the study, 
+ * @param {ComposerForm JSON} form 
+ */
+async function addForm(studyId, form) {
+    
+}
+
 function collectTypes(object, propName, propValue, result = []) {
     if (! object) return;
     if (Array.isArray(object)) {

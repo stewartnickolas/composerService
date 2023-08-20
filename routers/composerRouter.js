@@ -15,8 +15,8 @@ router.get('/loadForm/:formId', async (req, res, next) => {
             const msg =  "No form found for id: " + req.params.formId;
             res.status(BAD_REQUEST).send(msg);
         } else {
-            const fs = require('fs');
-            fs.writeFileSync(__dirname + '/form.js', 'module.exports = ' + JSON.stringify(form, null, 4));
+            // const fs = require('fs');
+            // fs.writeFileSync(__dirname + '/form.js', 'module.exports = ' + JSON.stringify(form, null, 4));
             res.json(form);
         }
     } catch (err) {
@@ -89,6 +89,7 @@ router.post('/addGroup', (req, res) => {
 
 router.get('/predefinedForms', (req, res) => {
     // req.query.view
+    res.json({});
 });
 
 router.get('/listFields', (req, res) => {

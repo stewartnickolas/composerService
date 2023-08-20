@@ -108,7 +108,15 @@ async function loadSnapshot(snapshotId) {
 async function loadStudy(studyId) {
     const ComposerStudyModel = await dataLayer.getModel("vision",dataLayer.model.ComposerStudy);
     if (ComposerStudyModel) {
-        return ComposerStudyModel.findOne({_id:studyId});
+        let study = await ComposerStudyModel.findOne({_id:studyId});
+        study = study && study.toJSON ? study.toJSON() : study;
+        if (study && ! study.prefs) {
+            study.prefs =  {
+                "defaultSiteCanDos": {},
+                "defaultPatientCanDos": {}
+            };        
+        }
+        return study;
     }
     throw new Error(`${dataLayer.model.ComposerStudy} not found`);
 }

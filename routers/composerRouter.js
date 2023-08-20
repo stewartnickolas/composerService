@@ -80,11 +80,14 @@ router.get('/loadStudy/:studyId', async (req, res, next) => {
 });
 
 router.post('/addForm', (req, res) => {
+    console.log(req.body);
     // req.query.formRefId
 });
 
 router.post('/addGroup', (req, res) => {
     // req.query.formRefId
+    console.log('here');
+
 });
 
 router.get('/predefinedForms', (req, res) => {

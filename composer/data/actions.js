@@ -810,6 +810,19 @@ class Actions {
   @action forceFormRefresh(){
     console.log("forcing a refresh")
     this.formStore.refreshId = Math.random();//force a refresh
+    const composerAppContainer = document.getElementById('composerAppContainer');
+    if (composerAppContainer) {
+        const formComponent = document.querySelector('[class="formComponent"]');
+        console.log(formComponent);
+        window.parent.postMessage(JSON.stringify({
+            message:'dimensions',
+            data:{
+                width:composerAppContainer.offsetWidth,
+                height:formComponent.offsetHeight + 300
+            }
+        }));
+        console.log('sent message');
+    }
   }
 
 }

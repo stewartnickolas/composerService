@@ -123,10 +123,34 @@ async function changeFormState(data) {
  * 
  * 1) Load the study associated with the request, we need the study.name, and client.id attribute from the study
  * 2) Create the form based on the study, 
+ * 3) Error if creation failure
+ * 4) If the new form is shared
+ *      Load the ComposerStudy
+ *      Iterate over each view over each group over each formRef and update other referenece as in-work
  * @param {ComposerForm JSON} form 
  */
 async function addForm(studyId, form) {
-    
+    // Study study = StudyService.findStudyInSession(session).orElse(null);
+    // FormRef formRef = db.addForm(study, req.data, req.path, req.templateId, req.firstInstance);
+    // if(formRef == null) {
+    //     return ResponseEntity.badRequest().build();
+    // }
+    // StudyDataDoc studyDoc = db.getStudyDataDoc(study.getUniqueId());
+    // //update status for all places the form exists if it's a shared form
+    // if(formRef.formType.equals("shared")) {
+    //     for (ViewData view : studyDoc.getViews()) {
+    //         for (FormGroupData group : view.groups) {
+    //             for (FormRef sharedForm : group.formRefs) {
+    //                 if(formRef.refId.equals(sharedForm.refId) && !formRef.getId().equals(sharedForm.getId())) {
+    //                     changeFormStateToInWork(sharedForm, studyDoc, req.data);
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+    // pushStudyUpdate(req.path.getId(LayoutPath.Id.STUDY));
+    // return ResponseEntity.ok(new IdResponse(formRef.getId()));
+
 }
 
 function collectTypes(object, propName, propValue, result = []) {
@@ -150,5 +174,6 @@ module.exports = {
     loadFormId,
     loadSnapshot,
     loadStudy,
-    changeFormState
+    changeFormState,
+    addForm
 }

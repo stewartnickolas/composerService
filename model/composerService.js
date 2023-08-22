@@ -130,6 +130,7 @@ async function changeFormState(data) {
  * @param {ComposerForm JSON} form 
  */
 async function addForm(studyId, form) {
+    // const study = study
     // Study study = StudyService.findStudyInSession(session).orElse(null);
     // FormRef formRef = db.addForm(study, req.data, req.path, req.templateId, req.firstInstance);
     // if(formRef == null) {

@@ -80,8 +80,7 @@ router.get('/loadStudy/:studyId', async (req, res, next) => {
 });
 
 /**
- * req.body - a ComposerForm structure (see schemas.js)
- * 
+ * req.body -
  */
 router.post('/addForm', async (req, res) => {
     try {

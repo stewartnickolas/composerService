@@ -7,6 +7,7 @@ const log = require('../logs')(module);
 const BAD_REQUEST = 400;
 
 const composerService = require('../model/composerService');
+const LayoutPath = require('../model/LayoutPath');
 
 router.get('/loadForm/:formId', async (req, res, next) => {
     try {
@@ -95,9 +96,40 @@ router.post('/addForm', async (req, res) => {
         res.status(BAD_REQUEST).send(err);
     }
 });
-
-router.post('/addGroup', (req, res) => {
+/**
+{
+    "data": {
+        "_type": "group",
+        "name": "hello",
+        "label": "Hello",
+        "onDemand": true,
+        "formRefs": []
+    },
+    "path": {
+        "path": [
+            "Prelude_Animal_Demo_Training",
+            "patient"
+        ],
+        "targetType": "view",
+        "rootType": "study"
+    },
+    "tabId": "tid0.7842853455738072"
+} * 
+ */
+router.post('/addGroup', async (req, res) => {
     // req.query.formRefId
+    try {
+        const formRef = await composerService.addGroup(req.body.data, new LayoutPath(req.body.path));
+        if (formRef && formRef._id) {
+            res.json(formRef._id);
+        } else {
+            res.status(BAD_REQUEST).send(err);
+        }
+    } catch (err) {
+        log.error(err);
+        res.status(BAD_REQUEST).send(err);
+    }
+
     console.log('here');
 
 });

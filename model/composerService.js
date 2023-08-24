@@ -1,4 +1,7 @@
+const LayoutPath = require("./LayoutPath");
 const dataLayer = require("./dataLayer")
+
+const {ComposerStudy} = require('./schemas/schemas');
 
 /* *******************************************************************************
     * Null Row Patching
@@ -154,6 +157,10 @@ async function addForm(studyId, form) {
 
 }
 
+async function addGroup(formGroupData, path) {
+    const study = await ComposerStudy.findById(path.getId(LayoutPath.IDs.STUDY));
+    console.log(study);
+}
 function collectTypes(object, propName, propValue, result = []) {
     if (! object) return;
     if (Array.isArray(object)) {
@@ -176,5 +183,6 @@ module.exports = {
     loadSnapshot,
     loadStudy,
     changeFormState,
-    addForm
+    addForm,
+    addGroup
 }

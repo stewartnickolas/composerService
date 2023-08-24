@@ -119,9 +119,9 @@ router.post('/addForm', async (req, res) => {
 router.post('/addGroup', async (req, res) => {
     // req.query.formRefId
     try {
-        const formRef = await composerService.addGroup(req.body.data, new LayoutPath(req.body.path));
-        if (formRef && formRef._id) {
-            res.json(formRef._id);
+        const formId = await composerService.addGroup(req.body.data, new LayoutPath(req.body.path));
+        if (formId) {
+            res.json(formId);
         } else {
             res.status(BAD_REQUEST).send(err);
         }
@@ -129,8 +129,6 @@ router.post('/addGroup', async (req, res) => {
         log.error(err);
         res.status(BAD_REQUEST).send(err);
     }
-
-    console.log('here');
 
 });
 

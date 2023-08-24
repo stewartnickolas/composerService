@@ -158,8 +158,23 @@ async function addForm(studyId, form) {
 }
 
 async function addGroup(formGroupData, path) {
+    const ComposerStudy = await dataLayer.getModel('vision', dataLayer.model.ComposerStudy);
     const study = await ComposerStudy.findById(path.getId(LayoutPath.IDs.STUDY));
-    console.log(study);
+    if (study) {
+        let view = study.views.filter(v => v._id === path.getPath()[1]);
+        if (view && view.length === 1) {
+            view = view[0];
+            formGroupData._id = dataLayer.makeId();
+            formGroupData.onDemand = formGroupData.onDemand === true;
+            view.groups.push(formGroupData);
+            const wasSaved =  await study.save();
+            // TODO What if not saved
+            return formGroupData._id;
+        }
+        throw new Error(`Study not found _id=${path.getId(LayoutPath.IDs.STUDY)}, view=${path.getPath()[1]}`);
+
+    }
+    throw new Error(`Study not found _id=${path.getId(LayoutPath.IDs.STUDY)}`);
 }
 function collectTypes(object, propName, propValue, result = []) {
     if (! object) return;

@@ -14,8 +14,9 @@ const DEFAULT_DATA_BASE = 'vision';
 function makeId(id) {
     if (typeof id === 'string') {
         return new ObjectId(id);
+    } else {
+        return new ObjectId();
     }
-    return id;
 }
 
 async function getConnection(dbName) {
@@ -56,14 +57,6 @@ function createMongoID(id) {
 }
 
 
-async function findById(id, modelName, projection, options) {
-    const model = await getModelFromId(id, modelName);
-    if (!model) {
-        throw new Error(`Model not found ${modelName}`);
-    }
-    return model.findById(id, projection, options);
-}
-
 
 module.exports = {
     init,
@@ -72,7 +65,6 @@ module.exports = {
     getModel,
     nativeDriver,
     createMongoID,
-    findById,
     model: {
         ComposerForm:'ComposerForm',
         ComposerSnapshot:'ComposerSnapshot',

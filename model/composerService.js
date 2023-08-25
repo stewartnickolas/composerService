@@ -1,3 +1,4 @@
+const { log } = require("winston");
 const LayoutPath = require("./LayoutPath");
 const dataLayer = require("./dataLayer")
 
@@ -132,28 +133,39 @@ async function changeFormState(data) {
  *      Iterate over each view over each group over each formRef and update other referenece as in-work
  * @param {ComposerForm JSON} form 
  */
-async function addForm(studyId, form) {
-    // const study = study
-    // Study study = StudyService.findStudyInSession(session).orElse(null);
-    // FormRef formRef = db.addForm(study, req.data, req.path, req.templateId, req.firstInstance);
-    // if(formRef == null) {
-    //     return ResponseEntity.badRequest().build();
-    // }
-    // StudyDataDoc studyDoc = db.getStudyDataDoc(study.getUniqueId());
-    // //update status for all places the form exists if it's a shared form
-    // if(formRef.formType.equals("shared")) {
-    //     for (ViewData view : studyDoc.getViews()) {
-    //         for (FormGroupData group : view.groups) {
-    //             for (FormRef sharedForm : group.formRefs) {
-    //                 if(formRef.refId.equals(sharedForm.refId) && !formRef.getId().equals(sharedForm.getId())) {
-    //                     changeFormStateToInWork(sharedForm, studyDoc, req.data);
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-    // pushStudyUpdate(req.path.getId(LayoutPath.Id.STUDY));
-    // return ResponseEntity.ok(new IdResponse(formRef.getId()));
+async function addForm(clientId, studyId, form, path, templateId, firstInstance, jwtToken) {
+    try {
+        // TODO datbase name
+        const ComposerStudy = await dataLayer.getModel('vision', dataLayer.model.ComposerStudy);
+        const study = await edcClient.getStudy(studyId, clientId, jwtToken);
+        if (! study) throw new Error(`Study not found studyId=${studyId}, clientId=${clientId}`);
+
+        const studyDoc = await ComposerStudy.findById(path.getId(LayoutPath.IDs.STUDY));
+        if (! studyDoc) throw new Error(`ComposerStudy not found _id=${path.getId(LayoutPath.IDs.STUDY)}`);
+
+        // FormRef formRef = db.addForm(study, req.data, req.path, req.templateId, req.firstInstance);
+        // if(formRef == null) {
+        //     return ResponseEntity.badRequest().build();
+        // }
+        // StudyDataDoc studyDoc = db.getStudyDataDoc(study.getUniqueId());
+        // //update status for all places the form exists if it's a shared form
+        // if(formRef.formType.equals("shared")) {
+        //     for (ViewData view : studyDoc.getViews()) {
+        //         for (FormGroupData group : view.groups) {
+        //             for (FormRef sharedForm : group.formRefs) {
+        //                 if(formRef.refId.equals(sharedForm.refId) && !formRef.getId().equals(sharedForm.getId())) {
+        //                     changeFormStateToInWork(sharedForm, studyDoc, req.data);
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+        // pushStudyUpdate(req.path.getId(LayoutPath.Id.STUDY));
+        // return ResponseEntity.ok(new IdResponse(formRef.getId()));
+    } catch (err)  {
+        log.error(`addForm clientId=${clientId}, studyId=${studyId}, form=${JSON.stringify(form)}, path=${JSON.stringify(path)}, templateId=${templateId}, firstInstance=${firstInstance}, err=${err.message}`);
+        throw err;
+    }
 
 }
 

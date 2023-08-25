@@ -1,11 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
-const { restCall } = require('./utils');
-const log = require('../logs')(module);
-
 const BAD_REQUEST = 400;
-
 const composerService = require('../model/composerService');
 const LayoutPath = require('../model/LayoutPath');
 
@@ -85,7 +81,8 @@ router.get('/loadStudy/:studyId', async (req, res, next) => {
  */
 router.post('/addForm', async (req, res) => {
     try {
-        const formRef = await composerService.addForm(req.body);
+        const body = req.body || {};
+        const formRef = await composerService.addForm(body.data, new LayoutPath(body.path), req.templateId,req.firstInstance);
         if (formRef && formRef._id) {
             res.json(formRef._id);
         } else {

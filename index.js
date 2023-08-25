@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const PORT = process.env['COMPOSER_PORT'] || 8090;
 const app = express();
 
-const log = require('./logs')(module);
+const log = require('techbytes').logger(module);
 // Allow cors so we'll work with our client web app hosted in another domain
 app.use(cors());
 // Compress the output (helps a lot for download large amounts of data)

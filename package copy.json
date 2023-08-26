@@ -26,7 +26,7 @@
         "react-draggable": "4.1.0",
         "react-sortable-hoc": "0.6.8",
         "rest": "1.3.1",
-        // "techbytes": "git@github.com:preludedynamics/techbytes.git",
+        "techbytes": "git@github.com:preludedynamics/techbytes.git",
         "webpack": "4.11.1",
         "webpack-cli": "3.0.2",
         "winston": "^3.10.0"

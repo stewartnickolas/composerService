@@ -46,7 +46,7 @@ async function getStudy(studyId, accessId, token, options = {}) {
     }
 }
 
-module.export = {
+module.exports = {
     connect,
     getStudy
 }

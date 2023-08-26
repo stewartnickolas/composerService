@@ -4,6 +4,7 @@ const router = express.Router();
 const BAD_REQUEST = 400;
 const composerService = require('../model/composerService');
 const LayoutPath = require('../model/LayoutPath');
+const log = require('techbytes').logger(module);
 
 router.get('/loadForm/:formId', async (req, res, next) => {
     try {
@@ -40,10 +41,12 @@ router.get('/formHistory', async (req, res, next) => {
 
 router.post('/revertFormToRevision/:studyId/:formRefId', (req, res) => {
     // req.query.snapshotId
+    console.log('here');
 });
 
 router.post('/saveForm', (req, res) => {
     // req.query.formRefId
+    console.log('here');
 });
 
 router.post('/changeFormState', async (req, res, next) => {
@@ -56,6 +59,7 @@ router.post('/changeFormState', async (req, res, next) => {
 });
 
 router.post('/saveStudy', (req, res) => {
+    console.log('here');
 });
 
 router.get('/loadStudy/:studyId', async (req, res, next) => {
@@ -65,10 +69,7 @@ router.get('/loadStudy/:studyId', async (req, res, next) => {
             const msg =  "No study found for id: " + req.query.studyId;
             res.status(BAD_REQUEST).send(msg);
         } else {
-            // const fs = require('fs');
-            // fs.writeFileSync(__dirname + '/foo.js', 'module.exports = ' + JSON.stringify(study.toJSON(), null, 4));
             res.json(study);
-            // res.json(require('./cache/study'));
         }
     } catch (err) {
         log.error(err);
@@ -82,9 +83,14 @@ router.get('/loadStudy/:studyId', async (req, res, next) => {
 router.post('/addForm', async (req, res) => {
     try {
         const body = req.body || {};
-        const formRef = await composerService.addForm(body.data, new LayoutPath(body.path), req.templateId,req.firstInstance);
+        // TODO: passed on request
+        const clientId = '64e4ea5713562534c41c5775';
+        const studyId = '64e4e6e3dc3b0653e705905b';
+
+        const formRef = await composerService.addForm(clientId, studyId, body.data, new LayoutPath(body.path), body.templateId,body.firstInstance);
         if (formRef && formRef._id) {
-            res.json(formRef._id);
+            // pushStudyUpdate(req.path.getId(LayoutPath.Id.STUDY));
+            res.json({id:formRef._id});
         } else {
             res.status(BAD_REQUEST).send(err);
         }
@@ -126,7 +132,6 @@ router.post('/addGroup', async (req, res) => {
         log.error(err);
         res.status(BAD_REQUEST).send(err);
     }
-
 });
 
 router.get('/predefinedForms', (req, res) => {
@@ -136,13 +141,38 @@ router.get('/predefinedForms', (req, res) => {
 
 router.get('/listFields', (req, res) => {
     // req.query.studyId, viewId, skipCategory,includeFieldIndex
+    console.log('here');
 });
 
 router.get('/listFieldsForForm', (req, res) => {
     // req.query.studyId, viewId, formRefIf
+    console.log('here');
 });
 
-router.get('/formLibraryOptions', (req, res) => {
+router.get('/formLibraryOptions', async (req, res) => {
+    try {
+        const clientId = '64e4ea5713562534c41c5775';
+        const studyId = '64e4e6e3dc3b0653e705905b';
+        const jwtToken = null;
+
+        const options = await composerService.formLibraryOptions(clientId, studyId, jwtToken);
+        if (options) {
+            res.json(options);
+        } else {
+            res.status(BAD_REQUEST).send(err);
+        }
+    } catch (err) {
+        log.error(err);
+        res.status(BAD_REQUEST).send(err);
+    }
+
+    // Study study = StudyService.findStudyInSession(session).orElse(null);
+
+    // final String studiesVal = study.getAttribute("form.library.studies", "");
+    // final String clientsVal = study.getAttribute("form.library.clients", "");
+    // final List<String> studies = splitCSV(studiesVal);
+    // final List<String> clients = splitCSV(clientsVal);
+    // return ResponseEntity.ok(db.getFormLibraryOptions(clients, studies));
 });
 
 router.get('/user', (req, res) => {
@@ -156,13 +186,19 @@ router.get('/translations', (req, res) => {
 });
 
 router.get('/availableModules', (req, res) => {
+    console.log('here');
+
 });
 
 router.post('/publishStudy', (req, res) => {
     // req.query.pass, publishLive
+    console.log('here');
+
 });
 router.post('/uploadFieldImage', (req, res) => {
     // req.query file
+    console.log('here');
+
 });
 
 

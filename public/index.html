@@ -4,6 +4,10 @@
     <head>
     </head>
     <body>
+        <!--
+            if we aren't logged in display username and password
+            if we are logged in display the composer
+         -->
         <iframe id="composer"  src="/composer.html" width="100%" height="1000px"></iframe>
         <script>
             window.addEventListener('message', function (e) {
@@ -13,11 +17,12 @@
                     case 'dimensions': {
                         console.log(message.data);
                         const frame = document.getElementById('composer');
-                        frame.style.height = message.data.height + 'px';
+                        // frame.style.height = message.data.height + 'px';
                     }
                 }
-
-            });            
+            });  
+            
+            // once composer is loaded, we transfer state data
         </script>
     </body>
 </html>

@@ -6,7 +6,7 @@ const FormRefSchema = new Schema({
     label: String,
     formStatus: String,
     formType: String, // TODO: Enum?, normal provided, ..?
-    refIf: mongoose.ObjectId,
+    refId: String,
     includeInFormLibrary: { type: Boolean, default: false },
     _type: { type: String, default: 'formRef' },
     lastPublishedName: String,
@@ -77,12 +77,8 @@ ComposerStudy.set('toJSON', {
 });
 
 const ShareRule = {
-    type: String, // TODO Enum none...?
-    instances: [
-        {
-            // TODO??
-        }
-    ]
+    type: {type:String, enum:['include','eclude']},
+    instances: [String]
 }
 const Component = new Schema({
     _id: String,

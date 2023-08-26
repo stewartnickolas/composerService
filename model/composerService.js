@@ -1,9 +1,8 @@
-const { log } = require("winston");
 const LayoutPath = require("./LayoutPath");
 const dataLayer = require("./dataLayer")
 
-const {ComposerStudy} = require('./schemas/schemas');
-
+const edcClient = require('../clients/edcClient')
+const log = require('techbytes').logger(module);
 /* *******************************************************************************
     * Null Row Patching
     */
@@ -123,6 +122,79 @@ async function changeFormState(data) {
     // String state = data.state;
 }
 
+function getFormGroupById(studyDoc, viewId, groupId) {
+    if (! Array.isArray(studyDoc.views)) return null;
+    const views = studyDoc.views.filter(v => v._id === viewId);
+    if (views.length !== 1 || ! Array.isArray(views[0].groups)) return null;
+    for (let i = 0; i < views[0].groups.length; i++) {
+        if (views[0].groups[i]._id && views[0].groups[i]._id.toString() === groupId) {
+            return views[0].groups[i];
+        }
+    }
+    return null;
+}
+
+async function initForm(clientId, templateId) {
+    if (templateId != null && templateId !== '') {
+        const ComposerForm = await dataLayer.getModel('vision', dataLayer.model.ComposerForm);
+        return ComposerForm.findById(templateId).lean();
+    }
+    const form = {
+        "formName": "name",
+        "formLabel": "label",
+        "id": "id",
+        "clientId": "",
+        "studyId": "",
+        "onDemand": false,
+        "studyName": "",
+        "sections": [
+            {
+                "id": "section_0",
+                "sectionName": "section_1",
+                "sectionLabel": "Section 1",
+                "indexed": false,
+                "rows": [
+                    {
+                        "id": "row_0",
+                        "rowName": "",
+                        "rowLabel": "",
+                        "tables": [
+                            {
+                                "id": "table0",
+                                "numRows": "1",
+                                "numCols": "1",
+                                "width": "100%",
+                                "alignment": "tableLeft",
+                                "autoNumber": false,
+                                "showBorders": false,
+                                "tableRows": [
+                                    {
+                                        "id": "table0_row0",
+                                        "cells": [
+                                            {
+                                                "id": "table0_row0_cell0",
+                                                "align": "center",
+                                                "layoutOrientation": "vertical",
+                                                "components": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+        }]
+    };
+    return form;
+}
+const FormRef = {
+    FORM_TYPE_SHARED:'shared',
+    FORM_TYPE_NORMAL: 'normal',
+    FORM_STATUS_IN_WORK:'in-work'
+}
+
+
 /**
  * 
  * 1) Load the study associated with the request, we need the study.name, and client.id attribute from the study
@@ -137,31 +209,86 @@ async function addForm(clientId, studyId, form, path, templateId, firstInstance,
     try {
         // TODO datbase name
         const ComposerStudy = await dataLayer.getModel('vision', dataLayer.model.ComposerStudy);
+        const ComposerForm = await dataLayer.getModel('vision', dataLayer.model.ComposerForm);
+        jwtToken = jwtToken || await edcClient.connect('administrator@preludeedc.com', 'superMo9');
+
         const study = await edcClient.getStudy(studyId, clientId, jwtToken);
         if (! study) throw new Error(`Study not found studyId=${studyId}, clientId=${clientId}`);
 
         const studyDoc = await ComposerStudy.findById(path.getId(LayoutPath.IDs.STUDY));
         if (! studyDoc) throw new Error(`ComposerStudy not found _id=${path.getId(LayoutPath.IDs.STUDY)}`);
+        form.studyId = studyId;
+        form.clientId = clientId;
+        form.studyName = study.ui;
+        const group = getFormGroupById(studyDoc, path.getPath()[1], path.getPath()[2]);;
+        if (! group) {
+            throw new Error(`Group not found composerStudy=${studyDoc._id}, path=${JSON.stringify(path)}`);
+        }
+        let id = null;
+        if (! FormRef.FORM_TYPE_SHARED !== form.formType || (FormRef.FORM_TYPE_SHARED === form.formType && firstInstance)) {
+            id = dataLayer.makeId();
+            form._id = id;
+            form.id = id.toString();
+            if (FormRef.FORM_TYPE_PROVIDED !== form.formType) {
+                let template = await initForm(clientId, templateId);
+                if (! template) throw new Error(`Could not initialize form template templateId=${tempalteId}`);
+                Object.keys(form).forEach(k => {
+                    // if for form has a key and its not array of length 0, from win
+                    const v = form[k];
+                    if (v && !(Array.isArray(v) && v.length == 0)) {
+                        template[k] = v;
+                    }
+                });
+                ['sections', 'calculations', 'constraints'].forEach(lValue => {
+                    (template[lValue] || []).forEach(item => {
+                        if (! item.shareRules) {
+                            item.shareRules =  {
+                                instances:[]
+                            }
+                        }
+                    })
+                });
+                // TODO return?
+                await ComposerForm.create(template);
+            } else {
+                form.providedJspPath = templateId;
+                // TODO return?
+                await ComposerForm.create(form);
+            }
+        }
+        const idStr = id == null ? templateId : id.toString();
 
-        // FormRef formRef = db.addForm(study, req.data, req.path, req.templateId, req.firstInstance);
-        // if(formRef == null) {
-        //     return ResponseEntity.badRequest().build();
-        // }
-        // StudyDataDoc studyDoc = db.getStudyDataDoc(study.getUniqueId());
-        // //update status for all places the form exists if it's a shared form
-        // if(formRef.formType.equals("shared")) {
-        //     for (ViewData view : studyDoc.getViews()) {
-        //         for (FormGroupData group : view.groups) {
-        //             for (FormRef sharedForm : group.formRefs) {
-        //                 if(formRef.refId.equals(sharedForm.refId) && !formRef.getId().equals(sharedForm.getId())) {
-        //                     changeFormStateToInWork(sharedForm, studyDoc, req.data);
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+        const formRef = {
+            _id:dataLayer.makeId().toString(),
+            name:form.formName,
+            label:form.formLabel,   
+            formType:form.formType,
+            onDemand:!!form.onDemand,
+            refId:idStr,
+            isOriginal:!!firstInstance,
+            includeInFormLibrary:false,
+            formStatus:FormRef.FORM_STATUS_IN_WORK,
+        }
+        group.formRefs.push(formRef);
+
+        // This was from ComposerController NOT ComposerMongo
+        if(formRef.formType === FormRef.FORM_TYPE_SHARED) {
+            (studyDoc.views || []).forEach(view => {
+                (view.groups || []).forEach(group => {
+                    (group.formRefs || []).forEach(sharedForm => {
+                        if (formRef.refId === sharedForm.refId && formRef._id !== sharedForm._id.toString()) {
+                            sharedForm.formStatus = FormRef.FORM_STATUS_IN_WORK;
+                            // TODO: The old code resaved the form which tagged the last edit to logged in user and time
+                        }
+                    });
+                })
+            });
+        }
+        // TODO: No save?
+        await studyDoc.save();
+        // TODO: publish edit?
         // pushStudyUpdate(req.path.getId(LayoutPath.Id.STUDY));
-        // return ResponseEntity.ok(new IdResponse(formRef.getId()));
+        return formRef;
     } catch (err)  {
         log.error(`addForm clientId=${clientId}, studyId=${studyId}, form=${JSON.stringify(form)}, path=${JSON.stringify(path)}, templateId=${templateId}, firstInstance=${firstInstance}, err=${err.message}`);
         throw err;
@@ -205,11 +332,22 @@ function collectTypes(object, propName, propValue, result = []) {
     }
     return result;
 }
+
+async function formLibraryOptions(clientId, studyId, jwtToken) {
+    // const study = await edcClient.getStudy(studyId, clientId, jwtToken);
+    // if (! study) throw new Error(`Study not found studyId=${studyId}, clientId=${clientId}`);
+    return {
+        client:['Prelude'],
+        studies:[]
+    }
+}
+
 module.exports = {
     loadFormId,
     loadSnapshot,
     loadStudy,
     changeFormState,
     addForm,
-    addGroup
+    addGroup,
+    formLibraryOptions
 }

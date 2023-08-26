@@ -77,7 +77,7 @@ ComposerStudy.set('toJSON', {
 });
 
 const ShareRule = {
-    type: {type:String, enum:['include','eclude']},
+    type: {type:String, enum:['include','exlude', 'none']},
     instances: [String]
 }
 const Component = new Schema({

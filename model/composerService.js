@@ -3,6 +3,13 @@ const dataLayer = require("./dataLayer")
 
 const edcClient = require('../clients/edcClient')
 const log = require('techbytes').logger(module);
+
+const FormRef = {
+    FORM_TYPE_SHARED:'shared',
+    FORM_TYPE_NORMAL: 'normal',
+    FORM_STATUS_IN_WORK:'in-work'
+}
+
 /* *******************************************************************************
     * Null Row Patching
     */
@@ -70,50 +77,51 @@ function patchNullRows(form) {
 
 async function loadFormId(formId, formName) {
     const FormModel = await dataLayer.getModel("vision",dataLayer.model.ComposerForm);
-    if (FormModel) {
-        let form = await FormModel.findById(dataLayer.makeId(formId));
-        if (form) {
-            form = form.toJSON();
-            patchNullRows(form);            
-            (form.sections || []).forEach(section => {
-                section.fields = collectTypes(section, '_type', 'field');
-                (section.fields || []).forEach(f => {
-                    switch (f._class) {
-                        case 'com.preludedynamics.composer.data.elements.Module': {
-                            f._type = 'module';
-                            break;
-                        }
-                        case 'com.preludedynamics.composer.data.elements.FieldData': {
-                            f._type = 'field';
-                            break;
-                        }
-                    }
-                });
-            })
-            return form;
-        }
+    if (! FormModel) {
+        throw new Error(`${dataLayer.model.ComposerForm} not found`);
     }
-    throw new Error(`${dataLayer.model.ComposerForm} not found`);
+    let form = await FormModel.findById(dataLayer.makeId(formId));
+    if (! form) return null;
+    form = form.toJSON();
+    patchNullRows(form);            
+    (form.sections || []).forEach(section => {
+        section.fields = collectTypes(section, '_type', 'field');
+        (section.fields || []).forEach(f => {
+            switch (f._class) {
+                case 'com.preludedynamics.composer.data.elements.Module': {
+                    f._type = 'module';
+                    break;
+                }
+                case 'com.preludedynamics.composer.data.elements.FieldData': {
+                    f._type = 'field';
+                    break;
+                }
+            }
+        });
+    });
+    return form;
 }
 async function loadSnapshot(snapshotId) {
     const ComposerSnapshotModel = await dataLayer.getModel("vision",dataLayer.model.ComposerSnapshot);
-    if (ComposerSnapshotModel) {
-        const segments = snapshotId.split('_');
-        if (segments.length === 2) {
-            return ComposerSnapshotModel.findOne({
-                parentId:segments[0],
-                number:Number(segments[1])
-            });
-        }
+    if (! ComposerSnapshotModel) {
+        throw new Error(`${dataLayer.model.ComposerSnapshot} not found`);
+
     }
-    throw new Error(`${dataLayer.model.ComposerSnapshot} not found`);
+    const segments = snapshotId.split('_');
+    if (segments.length === 2) {
+        return ComposerSnapshotModel.findOne({
+            parentId:segments[0],
+            number:Number(segments[1])
+        });
+    }
 }
 async function loadStudy(studyId) {
     const ComposerStudyModel = await dataLayer.getModel("vision",dataLayer.model.ComposerStudy);
-    if (ComposerStudyModel) {
-        return  ComposerStudyModel.findOne({_id:studyId});
+    if (! ComposerStudyModel) {
+        throw new Error(`${dataLayer.model.ComposerStudy} not found`);
     }
-    throw new Error(`${dataLayer.model.ComposerStudy} not found`);
+    return ComposerStudyModel.findOne({_id:studyId});
+
 }
 async function changeFormState(data) {
     console.log(data.refId);
@@ -136,74 +144,26 @@ function getFormGroupById(studyDoc, viewId, groupId) {
 
 async function initForm(clientId, templateId) {
     if (templateId != null && templateId !== '') {
+        // TODO db
         const ComposerForm = await dataLayer.getModel('vision', dataLayer.model.ComposerForm);
-        return ComposerForm.findById(templateId).lean();
+        return ComposerForm.findById(dataLayer.makeId(templateId)).lean();
     }
-    const form = {
-        "formName": "name",
-        "formLabel": "label",
-        "id": "id",
-        "clientId": "",
-        "studyId": "",
-        "onDemand": false,
-        "studyName": "",
-        "sections": [
-            {
-                "id": "section_0",
-                "sectionName": "section_1",
-                "sectionLabel": "Section 1",
-                "indexed": false,
-                "rows": [
-                    {
-                        "id": "row_0",
-                        "rowName": "",
-                        "rowLabel": "",
-                        "tables": [
-                            {
-                                "id": "table0",
-                                "numRows": "1",
-                                "numCols": "1",
-                                "width": "100%",
-                                "alignment": "tableLeft",
-                                "autoNumber": false,
-                                "showBorders": false,
-                                "tableRows": [
-                                    {
-                                        "id": "table0_row0",
-                                        "cells": [
-                                            {
-                                                "id": "table0_row0_cell0",
-                                                "align": "center",
-                                                "layoutOrientation": "vertical",
-                                                "components": []
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-        }]
-    };
-    return form;
-}
-const FormRef = {
-    FORM_TYPE_SHARED:'shared',
-    FORM_TYPE_NORMAL: 'normal',
-    FORM_STATUS_IN_WORK:'in-work'
+    return Object.assign({}, require('./initialFormState'));
 }
 
 async  function initializeAndSaveForm(form, clientId, templateId, firstInstance) {
     if (form.formType ===  FormRef.FORM_TYPE_SHARED  && ! firstInstance)  {
         return null;
     }
-    const id = dataLayer.makeId();
+    // TODO db
+    const ComposerForm = await dataLayer.getModel('vision', dataLayer.model.ComposerForm);
+
+    const id = dataLayer.createMongoID();
     form._id = id;
     form.id = id.toString();
     if (FormRef.FORM_TYPE_PROVIDED !== form.formType) {
         let template = await initForm(clientId, templateId);
-        if (! template) throw new Error(`Could not initialize form template templateId=${tempalteId}`);
+        if (! template) throw new Error(`Could not initialize form template templateId=${templateId}`);
         Object.keys(form).forEach(k => {
             // if for form has a key and its not array of length 0, from wins
             const v = form[k];
@@ -263,7 +223,7 @@ async function addForm(clientId, studyId, form, path, templateId, firstInstance,
         const idStr = savedForm == null ? templateId : savedForm._id.toString();
 
         const formRef = {
-            _id:dataLayer.makeId().toString(),
+            _id:dataLayer.createMongoID().toString(),
             name:form.formName,
             label:form.formLabel,   
             formType:form.formType,
@@ -307,7 +267,7 @@ async function addGroup(formGroupData, path) {
         let view = study.views.filter(v => v._id === path.getPath()[1]);
         if (view && view.length === 1) {
             view = view[0];
-            formGroupData._id = dataLayer.makeId();
+            formGroupData._id = dataLayer.createMongoID();
             formGroupData.onDemand = formGroupData.onDemand === true;
             view.groups.push(formGroupData);
             const wasSaved =  await study.save();

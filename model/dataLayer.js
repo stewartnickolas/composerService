@@ -14,9 +14,10 @@ const DEFAULT_DATA_BASE = 'vision';
 function makeId(id) {
     if (typeof id === 'string') {
         return new ObjectId(id);
-    } else {
-        return new ObjectId();
+    } else if (typeof id === 'object') {
+       return id;
     }
+    throw new Error(`makeId cannot make id out of id=${id}`);
 }
 
 async function getConnection(dbName) {

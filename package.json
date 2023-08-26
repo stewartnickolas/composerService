@@ -34,7 +34,7 @@
     "scripts": {
         "start": "node index.js",        
         "watch": "nodemon index.js",
-        "watch-app": "npx webpack --watch -d",
+        "watch-composer": "npx webpack --watch -d",
         "test": "jest",
         "docker_build": "rm -Rf node_modules && docker build --build-arg SSH_PRIVATE_KEY=\"$(cat $HOME/.ssh/id_rsa)\"  -t ms-study_builder .",
         "docker_remove": "docker rm -f  ms-study_builder",

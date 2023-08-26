@@ -13,8 +13,6 @@ router.get('/loadForm/:formId', async (req, res, next) => {
             const msg =  "No form found for id: " + req.params.formId;
             res.status(BAD_REQUEST).send(msg);
         } else {
-            // const fs = require('fs');
-            // fs.writeFileSync(__dirname + '/form.js', 'module.exports = ' + JSON.stringify(form, null, 4));
             res.json(form);
         }
     } catch (err) {
@@ -24,7 +22,6 @@ router.get('/loadForm/:formId', async (req, res, next) => {
 });
 
 router.get('/formHistory', async (req, res, next) => {
-    // req.query.snapshotId
     try {   
         const snapShot = await composerService.loadSnapshot(req.query.snapshotId);
         if (! snapShot) {
@@ -45,10 +42,19 @@ router.post('/revertFormToRevision/:studyId/:formRefId', (req, res) => {
 });
 
 router.post('/saveForm', (req, res) => {
-    // req.query.formRefId
-    console.log('here');
+    try {   
+        // TODO User in session
+        const form = req.body || {};
+        form.lastEditedBy = "Stewart Nickolas";
+        form.lastEditedDateTime =  new Date();
+        res.json(composerService.saveForm(form));
+    } catch (err) {
+        log.error(err);
+        res.status(BAD_REQUEST).send(err);
+    }
 });
 
+// TODO: Implement
 router.post('/changeFormState', async (req, res, next) => {
     try {   
         res.json(composerService.changeFormState(req.body));
@@ -59,7 +65,18 @@ router.post('/changeFormState', async (req, res, next) => {
 });
 
 router.post('/saveStudy', (req, res) => {
-    console.log('here');
+    try {   
+        const study = composerService.saveStudy(req.body);
+        if (study) {
+            res.json({status:'saved study'})
+        } else {
+            res.status(BAD_REQUEST).send(err);
+        }
+    } catch (err) {
+        log.error(err);
+        res.status(BAD_REQUEST).send(err);
+    }
+
 });
 
 router.get('/loadStudy/:studyId', async (req, res, next) => {
@@ -134,23 +151,38 @@ router.post('/addGroup', async (req, res) => {
     }
 });
 
+// TODO: Implement
 router.get('/predefinedForms', (req, res) => {
     // req.query.view
     res.json({});
 });
 
+// TODO: Implement
 router.get('/listFields', (req, res) => {
     // req.query.studyId, viewId, skipCategory,includeFieldIndex
-    console.log('here');
+    console.log('listFields');
 });
 
-router.get('/listFieldsForForm', (req, res) => {
-    // req.query.studyId, viewId, formRefIf
-    console.log('here');
+// TODO: Implement
+router.get('/listFieldsForForm', async (req, res) => {
+    try {
+        const fieldInfos = await composerService.listFieldsForForm(clientId, req.query.studyId, req.query.viewId, req.query.formRefId)
+        if (fieldInfos) {
+            res.json(fieldInfos);
+        } else {
+            res.status(BAD_REQUEST).send(err);
+        }
+    } catch (err) {
+        log.error(err);
+        res.status(BAD_REQUEST).send(err);
+    }
+
+    console.log('listFieldsForForm');
 });
 
 router.get('/formLibraryOptions', async (req, res) => {
     try {
+        // TODO clientId, studyId
         const clientId = '64e4ea5713562534c41c5775';
         const studyId = '64e4e6e3dc3b0653e705905b';
         const jwtToken = null;
@@ -165,19 +197,13 @@ router.get('/formLibraryOptions', async (req, res) => {
         log.error(err);
         res.status(BAD_REQUEST).send(err);
     }
-
-    // Study study = StudyService.findStudyInSession(session).orElse(null);
-
-    // final String studiesVal = study.getAttribute("form.library.studies", "");
-    // final String clientsVal = study.getAttribute("form.library.clients", "");
-    // final List<String> studies = splitCSV(studiesVal);
-    // final List<String> clients = splitCSV(clientsVal);
-    // return ResponseEntity.ok(db.getFormLibraryOptions(clients, studies));
 });
 
+// TODO: Implement
 router.get('/user', (req, res) => {
     res.json({"roleCode":"A","name":"Stew Nickolas","uniqueId":"administrator"});
 });
+
 router.get('/tldInfo', (req, res) => {
     res.json(require('./cache/tldInfo.js'));
 });
@@ -192,12 +218,12 @@ router.get('/availableModules', (req, res) => {
 
 router.post('/publishStudy', (req, res) => {
     // req.query.pass, publishLive
-    console.log('here');
+    console.log('publishStudy');
 
 });
 router.post('/uploadFieldImage', (req, res) => {
     // req.query file
-    console.log('here');
+    console.log('uploadFieldImage');
 
 });
 

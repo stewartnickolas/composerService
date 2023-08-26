@@ -344,6 +344,64 @@ async function formLibraryOptions(clientId, studyId, jwtToken) {
     ]);
 }
 
+async function saveStudy(newStudy) {
+    const ComposerStudy = await dataLayer.getModel('vision', dataLayer.model.ComposerStudy);
+    const currentStudy = ComposerStudy.findById(newStudy._id);
+    if (! currentStudy) {
+        throw new Error(`saveStudy newStudy._id=${newStudy._id}, not found`);
+    }
+    // TODO: This looks like some patching work
+    // for (ViewData view : newStudy.getViews()) {
+    //     for (FormGroupData group : view.groups) {
+    //         for (FormRef formRef : group.formRefs) {
+    //             FormRef existingRef = (FormRef) currentStudy.findNode(ComposerElement.Type.formRef, formRef.getId());
+    //             if(existingRef == null)
+    //                 continue;
+    //             if(!existingRef.formStatus.equals(formRef.formStatus)) {
+    //                 long currentStatusChangeTime = getStatusChangeTime(currentStudy, existingRef);
+    //                 long newStatusChangeTime = getStatusChangeTime(newStudy, formRef);
+    //                 if(currentStatusChangeTime > newStatusChangeTime) {
+    //                     formRef.formStatus = existingRef.formStatus;
+    //                 }
+    //             }
+
+    //             if(!Objects.equals(formRef.lastPublishedName, existingRef.lastPublishedName)
+    //                     || !Objects.equals(formRef.lastPublishedLabel, existingRef.lastPublishedLabel)) {
+    //                 long existingPubTime = getPublishedTime(existingRef);
+    //                 long newPubTime = getPublishedTime(formRef);
+    //                 if(existingPubTime > newPubTime) {
+    //                     formRef.lastPublishedName = existingRef.lastPublishedName;
+    //                     formRef.lastPublishedLabel = existingRef.lastPublishedLabel;
+    //                 }
+    //             }
+
+    //             // Account for legacy data, which did not have lastPublishedName/Label fields.
+    //             // We initialize those fields now, for forms that are currently published.
+    //             if (formRef.formStatus.equals(FormRef.FORM_STATUS_PUBLISHED)) {
+    //                 if (formRef.lastPublishedName == null) {
+    //                     formRef.lastPublishedName = formRef.name;
+    //                 }
+    //                 if (formRef.lastPublishedLabel == null) {
+    //                     formRef.lastPublishedLabel = formRef.label;
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+
+    return ComposerStudy.replaceOne({_id:newStudy._id}, newStudy);
+}
+
+async function saveForm(form) {
+    // TODO DB name
+    const CompserFormModel = await dataLayer.getModel("vision",dataLayer.model.ComposerForm);
+    return CompserFormModel.replaceOne({_id:dataLayer.makeId(form._id)}, form);
+}
+
+async function listFieldsForForm(clientId, studyId, viewId, formRefId) {
+console.log('ead');
+
+}
 module.exports = {
     loadFormId,
     loadSnapshot,
@@ -351,5 +409,8 @@ module.exports = {
     changeFormState,
     addForm,
     addGroup,
-    formLibraryOptions
+    formLibraryOptions,
+    saveStudy,
+    saveForm,
+    listFieldsForForm
 };

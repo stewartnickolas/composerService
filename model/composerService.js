@@ -194,6 +194,40 @@ const FormRef = {
     FORM_STATUS_IN_WORK:'in-work'
 }
 
+async  function initializeAndSaveForm(form, clientId, templateId, firstInstance) {
+    if (form.formType ===  FormRef.FORM_TYPE_SHARED  && ! firstInstance)  {
+        return null;
+    }
+    const id = dataLayer.makeId();
+    form._id = id;
+    form.id = id.toString();
+    if (FormRef.FORM_TYPE_PROVIDED !== form.formType) {
+        let template = await initForm(clientId, templateId);
+        if (! template) throw new Error(`Could not initialize form template templateId=${tempalteId}`);
+        Object.keys(form).forEach(k => {
+            // if for form has a key and its not array of length 0, from wins
+            const v = form[k];
+            if (v && !(Array.isArray(v) && v.length == 0)) {
+                template[k] = v;
+            }
+        });
+        ['sections', 'calculations', 'constraints'].forEach(lValue => {
+            (template[lValue] || []).forEach(item => {
+                if (! item.shareRules) {
+                    item.shareRules =  {
+                        instances:[]
+                    }
+                }
+            })
+        });
+        // TODO return?
+        return ComposerForm.create(template);
+    } else {
+        form.providedJspPath = templateId;
+        // TODO return?
+        return  ComposerForm.create(form);
+    }
+}
 
 /**
  * 
@@ -224,39 +258,9 @@ async function addForm(clientId, studyId, form, path, templateId, firstInstance,
         if (! group) {
             throw new Error(`Group not found composerStudy=${studyDoc._id}, path=${JSON.stringify(path)}`);
         }
-        let id = null;
-        if (! FormRef.FORM_TYPE_SHARED !== form.formType || (FormRef.FORM_TYPE_SHARED === form.formType && firstInstance)) {
-            id = dataLayer.makeId();
-            form._id = id;
-            form.id = id.toString();
-            if (FormRef.FORM_TYPE_PROVIDED !== form.formType) {
-                let template = await initForm(clientId, templateId);
-                if (! template) throw new Error(`Could not initialize form template templateId=${tempalteId}`);
-                Object.keys(form).forEach(k => {
-                    // if for form has a key and its not array of length 0, from win
-                    const v = form[k];
-                    if (v && !(Array.isArray(v) && v.length == 0)) {
-                        template[k] = v;
-                    }
-                });
-                ['sections', 'calculations', 'constraints'].forEach(lValue => {
-                    (template[lValue] || []).forEach(item => {
-                        if (! item.shareRules) {
-                            item.shareRules =  {
-                                instances:[]
-                            }
-                        }
-                    })
-                });
-                // TODO return?
-                await ComposerForm.create(template);
-            } else {
-                form.providedJspPath = templateId;
-                // TODO return?
-                await ComposerForm.create(form);
-            }
-        }
-        const idStr = id == null ? templateId : id.toString();
+        let savedForm = await initializeAndSaveForm(form, clientId, templateId,firstInstance);
+        // If saveForm is null, that means we saved the nth (n > 1) instance of a shared form
+        const idStr = savedForm == null ? templateId : savedForm._id.toString();
 
         const formRef = {
             _id:dataLayer.makeId().toString(),
@@ -271,7 +275,7 @@ async function addForm(clientId, studyId, form, path, templateId, firstInstance,
         }
         group.formRefs.push(formRef);
 
-        // This was from ComposerController NOT ComposerMongo
+        // This was from ComposerController NOT ComposerMongoDB
         if(formRef.formType === FormRef.FORM_TYPE_SHARED) {
             (studyDoc.views || []).forEach(view => {
                 (view.groups || []).forEach(group => {
@@ -336,10 +340,48 @@ function collectTypes(object, propName, propValue, result = []) {
 async function formLibraryOptions(clientId, studyId, jwtToken) {
     // const study = await edcClient.getStudy(studyId, clientId, jwtToken);
     // if (! study) throw new Error(`Study not found studyId=${studyId}, clientId=${clientId}`);
-    return {
-        client:['Prelude'],
-        studies:[]
-    }
+    // TODO DB name
+    const FormModel = await dataLayer.getModel("vision",dataLayer.model.ComposerForm);
+    const clientIds = ['Prelude'];
+    const studyIds = [];
+    return FormModel.aggregate([
+        // First mmatch all forms whose clientIds are in clientIds or studyId is in studyIds
+        { "$match": { "$or": [{ "clientId": { "$in": clientIds } }, { "studyId": { "$in": studyIds } }] } },
+        // Group by studyName, collect the id (aka name) and formLabel (aka value) in the chuldren arrat
+        {
+            "$group": {
+                "_id": "$studyName",
+                "name":{"$first":"$studyId"},
+                "children": {
+                    "$push": {
+                        "name": "$_id",
+                        "value": "$formLabel"
+                    }
+                }
+            }
+        },
+        //  Sort ascending by _id aaka studName
+        {
+            "$sort": { "_id": 1 }
+        },
+        // Project name, rename _id to value, do not project _id and sort the children by value field ascending
+        {
+            "$project": {
+                name:1,
+                value:"$_id",
+                _id:0,
+                "children": {
+                    "$sortArray": {
+                        "input": "$children",
+                        "sortBy": {
+                            "value": 1
+                        }
+                    }
+                }
+            }
+        }
+
+    ]);
 }
 
 module.exports = {
@@ -350,4 +392,4 @@ module.exports = {
     addForm,
     addGroup,
     formLibraryOptions
-}
+};

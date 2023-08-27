@@ -1,5 +1,7 @@
 const express = require('express');
 
+const { create } = require('express-handlebars');
+
 const compression = require('compression');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -18,6 +20,21 @@ app.use(compression())
 app.use(bodyParser.urlencoded({ limit: '500mb', extended: true }));
 app.use(bodyParser.json({ limit: '500mb', type: 'application/json' }));
 
+// Initialize the handlebars components
+const hbs = create({
+    defaultLayout: 'generic',
+    layoutsDir:'./views/layouts',
+    partialsDir:'./views/partials',
+    helpers: require('./views/helpers/handlebars_helpers.js')
+});
+
+// Configuration the handlebars environment
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
+app.set('views', './views');
+app.set('hbs', hbs);
+
+
 async function authRequired(req, res, next) {
     const headers = req.headers || {};
     if (headers.authorization) {
@@ -32,8 +49,10 @@ async function authRequired(req, res, next) {
     res.sendStatus(401);
 };
 
-app.use(express.static('public'));
+app.use('/embed', require('./routers/embedRouter.js'));
 app.use('/vision/composer', authRequired, require('./routers/composerRouter'));
+app.use('/sample', require('./routers/sampleRouter'));
+app.use(express.static('public'));
 
 const errorHandler = (error, request, response, next) => {
     // Error handling middleware functionality

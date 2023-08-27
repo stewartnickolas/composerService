@@ -1,0 +1,19 @@
+<script>
+    var _lastFetchTime = Date.now();
+    _viewOnlyMode = false;
+    _showAdvanced = false;
+    _showAdvanced = true;
+</script>
+
+<div id="composerAppContainer"></div>
+<div id="composerErrors"></div>
+
+<div id="dialog-root"></div>
+
+<div id="fieldEditPopup" class="popupFieldInfo"></div>
+<input type="hidden" name='_refresh=studyUID' value='Prelude_Animal_Demo_Training'/>
+<input type="hidden" name='token' value='{{token}}'/>
+{{#if token}}
+    <script src="/composerAppDist.js"></script>
+{{/if}}
+

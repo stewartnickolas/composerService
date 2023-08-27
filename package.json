@@ -13,7 +13,9 @@
         "compression": "^1.7.4",
         "cors": "^2.8.5",
         "express": "^4.18.2",
-        "got": "^11.8.6",        
+        "express-handlebars": "^7.1.2",
+        "got": "^11.8.6",
+        "handlebars": "^4.7.8",
         "mobx": "5.0.0",
         "mobx-react": "5.3.4",
         "mobx-react-devtools": "6.1.1",
@@ -32,14 +34,13 @@
         "winston": "^3.10.0"
     },
     "scripts": {
-        "start": "node index.js",        
+        "start": "node index.js",
         "watch": "nodemon index.js",
         "watch-composer": "npx webpack --watch -d",
         "test": "jest",
         "docker_build": "rm -Rf node_modules && docker build --build-arg SSH_PRIVATE_KEY=\"$(cat $HOME/.ssh/id_rsa)\"  -t ms-study_builder .",
         "docker_remove": "docker rm -f  ms-study_builder",
         "docker_start": "scripts/dockerStart.sh"
-
     },
     "devDependencies": {
         "babel-core": "6.26.3",

@@ -253,6 +253,7 @@ const Section = new Schema({
     _id: String,
     _type: { type: String, default: 'section' },
     indexed: Boolean,
+    fixedIndex:Number,
     reversedIndex: Boolean,
     sectionName: String,
     sectionLabel: String,

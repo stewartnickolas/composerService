@@ -89,16 +89,16 @@ module.exports = {
 };
 
 
-(async () => {
-    // const CompserFormModel = await dataLayer.getModel("vision",dataLayer.model.ComposerForm);
-    // const form = await CompserFormModel.findById('62a38b5ddd51862f6851dd98');
-    try {
-        console.log(await getAllFieldsForForm('vision', 'Prelude_Animal_Demo_Training', '62a38b5ddd51862f6851dd9a'));
-        // console.log(findNodesOfType(form, 'field').length);
-        // console.log(findNode(form, 'field', 'form_element_19'));
-    } catch (err) {
-        console.log(err);
-    } finally {
-        process.exit(0);
-    }
-})();
+// (async () => {
+//     // const CompserFormModel = await dataLayer.getModel("vision",dataLayer.model.ComposerForm);
+//     // const form = await CompserFormModel.findById('62a38b5ddd51862f6851dd98');
+//     try {
+//         console.log(await getAllFieldsForForm('vision', 'Prelude_Animal_Demo_Training', '62a38b5ddd51862f6851dd9a'));
+//         // console.log(findNodesOfType(form, 'field').length);
+//         // console.log(findNode(form, 'field', 'form_element_19'));
+//     } catch (err) {
+//         console.log(err);
+//     } finally {
+//         process.exit(0);
+//     }
+// })();

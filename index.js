@@ -49,6 +49,14 @@ async function authRequired(req, res, next) {
     res.sendStatus(401);
 };
 
+app.use((req, res, next) => {
+    const agent = req.headers['user-agent'];
+    if (agent && agent.indexOf('ELB-HealthChecker') !== -1) {
+        res.send("OK");
+    } else {
+        next();
+    }
+});
 app.use('/embed', require('./routers/embedRouter.js'));
 app.use('/vision/composer', authRequired, require('./routers/composerRouter'));
 app.use('/sample', require('./routers/sampleRouter'));
